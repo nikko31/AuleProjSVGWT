@@ -96,6 +96,10 @@ public class AulaCtrl extends Composite {
 
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(SEL_FILL, DEF_FILL);
+                    territoryEl.setAttribute("style", style);
+                    //handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
 
                 }
 
@@ -104,7 +108,7 @@ public class AulaCtrl extends Composite {
                     String style = territoryEl.getAttribute("style");
                     style = style.replace(DEF_FILL, SEL_FILL);
                     territoryEl.setAttribute("style", style);
-                    handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+                    //handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
 
                 }
 
@@ -138,6 +142,8 @@ public class AulaCtrl extends Composite {
             };*/
 
             handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOverEvent.getType()));
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOutEvent.getType()));
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseDownEvent.getType()));
         }
         return handlerRegistrations;
     }
