@@ -3,8 +3,7 @@ package com.auleSVGWT.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.http.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -80,7 +79,49 @@ public class AulaCtrl extends Composite {
         for (String room : svgIdMap.keySet()) {
             final OMElement territoryEl = roomElt.getElementById(room);
 
+            HandlesAllMouseEvents han = new HandlesAllMouseEvents() {
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(DEF_FILL, SEL_FILL);
+                    territoryEl.setAttribute("style", style);
+                    handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
 
+                }
+
+                @Override
+                public void onMouseMove(MouseMoveEvent event) {
+
+                }
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+
+                }
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(DEF_FILL, SEL_FILL);
+                    territoryEl.setAttribute("style", style);
+                    handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+
+                }
+
+                @Override
+                public void onMouseUp(MouseUpEvent event) {
+
+                }
+
+                @Override
+                public void onMouseWheel(MouseWheelEvent event) {
+
+                }
+            };
+
+
+
+            /*
             MouseDownHandler handler = new MouseDownHandler() {
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
@@ -89,8 +130,11 @@ public class AulaCtrl extends Composite {
                     territoryEl.setAttribute("style", style);
                     handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
                 }
-            };
-            handlerRegistrations.add(territoryEl.addDomHandler(handler, MouseDownEvent.getType()));
+
+
+            };*/
+
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOverEvent.getType()));
         }
         return handlerRegistrations;
     }
