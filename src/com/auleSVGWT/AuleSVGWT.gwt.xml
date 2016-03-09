@@ -1,0 +1,16 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="AuleSVGWT">
+
+    <!-- Inherit the core Web Toolkit stuff.                  -->
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="org.vectomatic.libgwtsvg"/>
+
+    <!-- Specify the app entry point class.                   -->
+    <entry-point class='com.auleSVGWT.client.AuleSVGWT'/>
+
+
+    <!-- Specify the app servlets.                   -->
+    <servlet path='/AuleSVGWTService' class='com.auleSVGWT.server.AuleSVGWTServiceImpl'/>
+
+</module>

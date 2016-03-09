@@ -1,0 +1,46 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .redText {
+            font-family: Arial, Sans-serif;
+            color: #FF0000;
+            font-size: 50px;
+            text-align: center;
+        }
+    </ui:style>
+    <g:VerticalPanel>
+        <g:Label styleName="redText">Stanza</g:Label>
+        <g:Grid>
+            <g:row>
+                <g:customCell>
+                    <g:Label>Numero Aula  :</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:Label ui:field="numAula"/>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell>
+                    <g:Label>Numero Posti  :</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:Label ui:field="numPosti"/>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell>
+                    <g:Label>Metri Quadri  :</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:Label ui:field="mtQ"/>
+                </g:customCell>
+            </g:row>
+        </g:Grid>
+
+        <g:FlexTable cellSpacing="0" width="100%" borderWidth="1" title="Docenti" ui:field="table"/>
+        <g:Button ui:field="addButton" >Aggiungi</g:Button>
+
+
+
+    </g:VerticalPanel>
+</ui:UiBinder>
