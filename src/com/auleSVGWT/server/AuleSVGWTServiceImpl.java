@@ -5,6 +5,7 @@ import com.auleSVGWT.client.Persona;
 import com.auleSVGWT.client.Stanza;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -15,8 +16,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<Stanza> stanze = new ArrayList<>();
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -69,8 +70,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<String> roles = new ArrayList<>();
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             ResultSet rs = statement.executeQuery("SELECT ruolo.nome\n" +
@@ -95,8 +96,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         Connection connection = null;
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -114,5 +115,22 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 System.err.println(e);
             }
         }
+    }
+
+
+
+
+    public ArrayList<String>  listaEdiPiani (){
+        File folder = new File("C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\res");
+        File[] listOfFiles =folder.listFiles();
+        ArrayList<String> string = new ArrayList<String>();
+        for(File file :listOfFiles){
+            string.add(file.getName());
+            System.out.println(file.getName());
+        }
+
+        return string;
+
+
     }
 }

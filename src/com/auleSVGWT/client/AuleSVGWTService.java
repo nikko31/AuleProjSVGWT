@@ -11,7 +11,9 @@ public interface AuleSVGWTService extends RemoteService {
     // Sample interface method of remote interface
     ArrayList<Stanza> getMessage(String msg, String aula);
     ArrayList<String> getRoles();
+    ArrayList<String> listaEdiPiani ();
     void addPersona(Persona persona);
+
 
     /**
      * Utility/Convenience class.

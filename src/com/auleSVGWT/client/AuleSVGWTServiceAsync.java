@@ -11,4 +11,5 @@ public interface AuleSVGWTServiceAsync {
     void getMessage(String ed, String aula, AsyncCallback<ArrayList<Stanza>> async);
     void getRoles(AsyncCallback<ArrayList<String>> async);
     void addPersona(Persona persona, AsyncCallback<Void> async);
+    void  listaEdiPiani (AsyncCallback<ArrayList<String>> async);
 }

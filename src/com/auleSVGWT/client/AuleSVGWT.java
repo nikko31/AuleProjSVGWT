@@ -38,10 +38,11 @@ public class AuleSVGWT implements EntryPoint, HandlerInterface {
         piani = new ListBox();
         edifici = new ListBox();
         ListBox mode = new ListBox();
-        piani.addItem("1");
-        piani.addItem("2");
-        edifici.addItem("fac-0");
-        edifici.addItem("fac-1");
+        //piani.addItem("1");
+        //piani.addItem("2");
+        //edifici.addItem("fac-0");
+        //edifici.addItem("fac-1");
+        itemEdiPiani();
         mode.addItem("mappa 1");
         mode.addItem("mappa 2");
         invio.addClickHandler(new ClickHandler() {
@@ -94,6 +95,44 @@ public class AuleSVGWT implements EntryPoint, HandlerInterface {
         }
         dataPnl.setVisible(true);
         mainPnl.add(dataPnl);
+
+    }
+
+
+    public void itemEdiPiani (){
+
+        if (auleSVGWTSvc == null) {
+            auleSVGWTSvc = GWT.create(AuleSVGWTService.class);
+        }
+        AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(ArrayList<String> result) {
+                int index;
+
+
+                for(String stringa : result){
+                    index = 0;
+
+                    for(int i=0; i < stringa.length(); i++){
+                        if(stringa.charAt(i) == '-'){
+                            index = i;
+                        }
+
+                    }
+
+                    if(index != 3 && index!=0){
+                        edifici.addItem(stringa.substring(0, index));
+                        piani.addItem(stringa.substring(index+1, stringa.indexOf('.')));
+                    }
+                }
+
+            }
+        };
+        auleSVGWTSvc.listaEdiPiani(callback);
 
     }
 
