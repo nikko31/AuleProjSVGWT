@@ -4,10 +4,15 @@ import com.auleSVGWT.client.AuleSVGWTService;
 import com.auleSVGWT.client.Persona;
 import com.auleSVGWT.client.Stanza;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.File;
+import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
     // Implementation of sample interface method
@@ -117,7 +122,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }
     }
 
-
+    //aggiunte
 
 
     public ArrayList<String>  listaEdiPiani (){
@@ -133,4 +138,33 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
 
     }
+
+
+    public ArrayList<String> listaAulePiano(String edificiopiano){
+        ArrayList<String> aule = new ArrayList<String>();
+        JSONParser parser = new JSONParser();
+        try{
+
+            Object obj = parser.parse(new FileReader("C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\doc.JSON"));
+            JSONObject jsonObject =(JSONObject) obj;
+
+
+            JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
+
+            Iterator<String> iterator = list.iterator();
+            while(iterator.hasNext()){
+                aule.add(edificiopiano +"-"+iterator.next());
+                //System.out.println(edificiopiano +"-"+iterator.next());
+            }
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
+        return aule;
+    }
+
+
 }

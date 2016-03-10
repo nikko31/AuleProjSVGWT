@@ -8,6 +8,7 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -29,6 +30,8 @@ public class AulaCtrl extends Composite {
     }
 
     private OMSVGSVGElement roomElt;
+    private String pianoaul;
+    private AuleSVGWTServiceAsync auleSVGWTSvc = GWT.create(AuleSVGWTService.class);
     private List<HandlerRegistration> roomHandlers = new ArrayList<>();
     private static final String DEF_FILL = "fill:transparent";
     private static final String SEL_FILL = "fill:red";
@@ -40,6 +43,9 @@ public class AulaCtrl extends Composite {
     HTML roomContainer;
 
     public AulaCtrl(String piano, String aula) {
+        //aggiunt
+        pianoaul = piano + "-" + aula;
+        //
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, "res/" + piano + "-" + aula + ".svg");
         try {
 
@@ -49,7 +55,28 @@ public class AulaCtrl extends Composite {
 
                 public void onResponseReceived(Request request, Response response) {
                     roomElt = org.vectomatic.dom.svg.utils.OMSVGParser.parse(response.getText());
-                    roomHandlers.addAll(addHandlers(Resources.SVG_ID_MAP));
+                    //roomHandlers.addAll(addHandlers(Resources.SVG_ID_MAP));
+
+
+                    //aggiunta
+                    if (auleSVGWTSvc == null) {
+                        auleSVGWTSvc = GWT.create(AuleSVGWTService.class);
+                    }
+                    AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                        }
+
+                        @Override
+                        public void onSuccess(ArrayList<String> result) {
+                            roomHandlers.addAll(addHandlers(result));
+                        }
+                    };
+                    auleSVGWTSvc.listaAulePiano(pianoaul,callback);
+                    //aggiunta
+
+
+
                     roomContainer.getElement().appendChild(roomElt.getElement());
 
                     if (roomElt instanceof OMSVGSVGElement) {
@@ -83,7 +110,7 @@ public class AulaCtrl extends Composite {
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
                     String style = territoryEl.getAttribute("style");
-                    style = style.replace(DEF_FILL, SEL_FILL);
+                    style = style.replace(SEL_FILL,"fill:green");
                     territoryEl.setAttribute("style", style);
                     handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
 
@@ -140,10 +167,84 @@ public class AulaCtrl extends Composite {
 
 
             };*/
-
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseDownEvent.getType()));
             handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOverEvent.getType()));
             handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOutEvent.getType()));
+
+        }
+        return handlerRegistrations;
+    }
+
+    private List<HandlerRegistration> addHandlers(ArrayList<String> string) {
+        List<HandlerRegistration> handlerRegistrations = new ArrayList<>();
+        for (String room : string) {
+            final OMElement territoryEl = roomElt.getElementById(room);
+
+            HandlesAllMouseEvents han = new HandlesAllMouseEvents() {
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(SEL_FILL,"fill:green");
+                    territoryEl.setAttribute("style", style);
+                    handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+
+                }
+
+                @Override
+                public void onMouseMove(MouseMoveEvent event) {
+
+                }
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(SEL_FILL, DEF_FILL);
+                    territoryEl.setAttribute("style", style);
+                    //handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+
+                }
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(DEF_FILL, SEL_FILL);
+                    territoryEl.setAttribute("style", style);
+                    //handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+
+                }
+
+
+
+
+                @Override
+                public void onMouseUp(MouseUpEvent event) {
+
+                }
+
+                @Override
+                public void onMouseWheel(MouseWheelEvent event) {
+
+                }
+            };
+
+
+
+            /*
+            MouseDownHandler handler = new MouseDownHandler() {
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    String style = territoryEl.getAttribute("style");
+                    style = style.replace(DEF_FILL, SEL_FILL);
+                    territoryEl.setAttribute("style", style);
+                    handlerInterface.mouseDownHandler(territoryEl.getAttribute("id"));
+                }
+
+
+            };*/
             handlerRegistrations.add(territoryEl.addDomHandler(han, MouseDownEvent.getType()));
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOverEvent.getType()));
+            handlerRegistrations.add(territoryEl.addDomHandler(han, MouseOutEvent.getType()));
+
         }
         return handlerRegistrations;
     }
