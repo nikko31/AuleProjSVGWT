@@ -15,8 +15,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<Stanza> stanze = new ArrayList<>();
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -69,8 +69,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<String> roles = new ArrayList<>();
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             ResultSet rs = statement.executeQuery("SELECT ruolo.nome\n" +
@@ -95,8 +95,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         Connection connection = null;
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
+            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
