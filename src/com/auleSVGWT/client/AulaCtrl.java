@@ -45,6 +45,7 @@ public class AulaCtrl extends Composite {
     public AulaCtrl(String piano, String aula) {
         //aggiunt
         pianoaul = piano + "-" + aula;
+        System.out.println(piano + "-" + aula);
         //
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, "res/" + piano + "-" + aula + ".svg");
         try {

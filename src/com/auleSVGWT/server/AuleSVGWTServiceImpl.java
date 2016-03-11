@@ -156,10 +156,14 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 aule.add(edificiopiano +"-"+iterator.next());
                 //System.out.println(edificiopiano +"-"+iterator.next());
             }
+            for(String bob: aule){
+                System.out.println(bob);
+            }
 
 
         }
         catch (Exception e){
+
             e.printStackTrace();
 
         }
