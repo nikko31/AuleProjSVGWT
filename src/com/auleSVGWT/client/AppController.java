@@ -182,7 +182,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
                     @Override
                     public void onSuccess() {
-                        new ShowPersonPresenter(eventBus, rpcService, getShowPersonView(), building, floor, number, personDTO)
+                        new ShowPersonPresenter(eventBus, getShowPersonView(), building, floor, number, personDTO)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });
