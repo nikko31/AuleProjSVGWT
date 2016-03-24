@@ -5,8 +5,9 @@
              xmlns:mgwt="urn:import:com.googlecode.mgwt.ui.client.widget" xmlns:m="urn:import:com.googlecode.mgwt.ui.client">
 
     <ui:with field='resources' type='com.auleSVGWT.client.AuleSVGWT' />
-    <g:FlowPanel ui:field="display" width="100%" height="100%">
-        <g:HTML ui:field="roomContainer"/>
+    <g:FlowPanel ui:field="display">
+            <g:Label ui:field="floorLbl" />
+            <g:HTML ui:field="roomContainer"/>
     </g:FlowPanel>
 
 </ui:UiBinder>

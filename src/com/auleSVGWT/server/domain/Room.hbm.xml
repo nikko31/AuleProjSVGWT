@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.auleSVGWT.server.domain.Room" table="room">
+        <id name="id" column="room_id">
+            <generator class="native"/>
+        </id>
+        <property name="floor" column="room_floor"/>
+        <property name="number" column="room_number"/>
+        <property name="maxPeople" column="room_maxPeople"/>
+        <property name="dimension" column="room_dimension"/>
+
+        <many-to-one name="building" class="com.auleSVGWT.server.domain.Building" fetch="select">
+            <column name="building_number" not-null="true" />
+        </many-to-one>
+
+
+        
+
+    </class>
+</hibernate-mapping>

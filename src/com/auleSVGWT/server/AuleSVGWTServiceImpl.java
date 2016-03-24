@@ -1,28 +1,368 @@
 package com.auleSVGWT.server;
 
 import com.auleSVGWT.client.AuleSVGWTService;
-import com.auleSVGWT.client.Persona;
-import com.auleSVGWT.client.Stanza;
+import com.auleSVGWT.client.dto.*;
+import com.auleSVGWT.server.domain.*;
+import com.auleSVGWT.util.HibernateUtil;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.hibernate.Query;
+import org.hibernate.classic.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.File;
 import java.io.FileReader;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
+
 
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
     // Implementation of sample interface method
+
+    //--------------------------ROOM
+
+    @Override
+    public Integer saveRoom(RoomDTO roomDTO) {
+        Room room = new Room(roomDTO);
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.save(room);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : saveRoom method fail ");
+        }
+
+        return room.getId();
+    }
+
+    //---------------------PERSON
+
+    @Override
+    public Integer deletePerson(int id) {
+        deleteOccupyPerson(id);//prima elimino le relazioni
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query q = session.createQuery("delete Person p where p.id = " + id);
+            q.executeUpdate();
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : deletePerson method fail");
+
+        }
+
+
+        return id;
+    }
+
+    @Override
+    public Integer savePerson(PersonDTO personDTO) {
+
+        com.auleSVGWT.server.domain.Person person = new com.auleSVGWT.server.domain.Person(personDTO);
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.save(person);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : savePerson method fail ");
+
+        }
+
+        return person.getId();
+    }
+
+    @Override
+    public Integer updatePerson(PersonDTO personDTO) {
+        com.auleSVGWT.server.domain.Person person = new com.auleSVGWT.server.domain.Person(personDTO);
+
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.update(person);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : updatePerson method fail ");
+
+
+        }
+
+        return person.getId();
+
+    }
+
+    //--------------------------------OCCUPY-
+    /* */
+
+    @Override
+    public Long saveOccupy(OccupyDTO occupyDTO) {
+        Occupy occupy = new Occupy(occupyDTO);
+
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.save(occupy);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : saveOccupy method fail ");
+
+        }
+
+        return occupy.getId();
+    }
+
+    @Override
+    public Long deleteOccupy(Long id) {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query q = session.createQuery("delete Occupy o where o.id = " + id);
+            q.executeUpdate();
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : deleteOccupy method fail ");
+
+        }
+
+        return id;
+    }
+
+    @Override
+    public ArrayList<OccupyDTO> getOccupy() {
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Occupy> occup = new ArrayList<>(session.createQuery("from Occupy ").list());
+
+            for (Occupy occupy : occup) {
+                occupyDTO.add(createOccupyDTO(occupy));
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getOccupy method fail ");
+            e.printStackTrace();
+        }
+
+        return occupyDTO;
+    }
+
+    //-----------------STANZE OCCUPATE------------
+
+    @Override
+    public RoomPeopleDTO getRoomPeople(String building, String floorSt, String numberSt) {
+        int number=Integer.parseInt(numberSt);
+        int floor=Integer.parseInt(floorSt);
+        ArrayList<Long> occId = new ArrayList<>();
+        Room room = new Room();
+        ArrayList<Person> people = new ArrayList<>();
+        RoomPeopleDTO roomPeopleDTO = new RoomPeopleDTO();
+        boolean chek = true;
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Occupy> occupy = new ArrayList<>(session.createQuery("from Occupy ").list());
+
+            for (Occupy i : occupy) {
+
+                System.out.println(i.getRoom().getFloor() + " = " + floor + " " + i.getRoom().getBuilding().getName() + " = " + building + " " + i.getRoom().getNumber() + " " + number + "......................");
+                if ((i.getRoom().getFloor() == floor) && (i.getRoom().getBuilding().getName().equals(building) && (i.getRoom().getNumber() == number))) {
+
+                    if (chek) {
+                        room = i.getRoom();
+                        chek = false;
+                    }
+                    occId.add(i.getId());
+                    people.add(i.getPerson());
+
+                }
+            }
+
+            roomPeopleDTO = createRoomPeopleDTO(room, people, occId);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+
+        }
+
+        return roomPeopleDTO;
+
+
+    }
+
+    //--------------------ROLES
+
+    @Override
+    public ArrayList<RoleDTO> getRoles() {
+        ArrayList<RoleDTO> rolesDTO = new ArrayList<RoleDTO>();
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Role> roles = new ArrayList<>(session.createQuery("from Role").list());
+            rolesDTO.addAll(roles.stream().map(this::createRoleDTO).collect(Collectors.toList()));
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoles method fail ");
+
+        }
+
+
+        return rolesDTO;
+    }
+
+    @Override
+    public ArrayList<String> listaAulePiano(String edificiopiano) {
+        ArrayList<String> aule = new ArrayList<>();
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader("doc.JSON"));
+            JSONObject jsonObject = (JSONObject) obj;
+
+
+            JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
+
+            Iterator<String> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                aule.add(edificiopiano + "-" + iterator.next());
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return aule;
+    }
+
+    public Integer saveRole(RoleDTO roleDTO) {
+        Role role = new Role(roleDTO);
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.save(role);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : saveRole  method fail ");
+
+        }
+
+        return new Integer(role.getId());
+
+    }
+
+    public Integer updateRole(RoleDTO roleDTO) {
+        Role role = new Role(roleDTO);
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.update(role);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : updateRole method fail ");
+
+        }
+
+        return new Integer(role.getId());
+
+    }
+
+    //-------------------------PRIVATE METHOD
+
+    //questo metodo serve perchè se elimino una persona prima devo eliminare tutte le sue relazioni con room
+    private int deleteOccupyPerson(int id) {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query q = session.createQuery("delete Occupy O where O.person.id = " + id);
+            q.executeUpdate();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : deleteOccupyPerson method fail ");
+        }
+
+        return new Integer(id);
+    }
+
+    private RoomPeopleDTO createRoomPeopleDTO(Room room, ArrayList<com.auleSVGWT.server.domain.Person> people, ArrayList<Long> occId) {
+        ArrayList<PersonDTO> peopleDTO = new ArrayList<>();
+
+        for (com.auleSVGWT.server.domain.Person person : people) {
+            peopleDTO.add(createPersonDTO(person));
+        }
+
+        return new RoomPeopleDTO(createRoomDTO(room), peopleDTO, occId);
+
+
+    }
+
+    private OccupyDTO createOccupyDTO(Occupy occupy) {
+        return new OccupyDTO(occupy.getId(), createRoomDTO(occupy.getRoom()), createPersonDTO(occupy.getPerson()));
+    }
+
+    private RoleDTO createRoleDTO(Role role) {
+
+        return new RoleDTO(role.getId(), role.getName(), role.getSqm());
+    }
+
+    private PersonDTO createPersonDTO(com.auleSVGWT.server.domain.Person person) {
+
+        return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
+                createRoleDTO(person.getRole()));
+    }
+
+    private BuildingDTO createBuildingDTO(Building building) {
+
+        return new BuildingDTO(building.getNumber(), building.getName());
+    }
+
+    private RoomDTO createRoomDTO(Room room) {
+
+        return new RoomDTO(room.getId(), room.getNumber(), room.getFloor(),
+                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension());
+    }
+}
+
+/*
+public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
+    @Override
     public ArrayList<Stanza> getMessage(String edificio, String piano) {
         Connection connection = null;
         ArrayList<Stanza> stanze = new ArrayList<>();
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -70,13 +410,115 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         return stanze;
     }
 
+    @Override
+    public ArrayList<PersonDetails> getPersonsDetails(String edificio, String piano) {
+        Connection connection = null;
+        ArrayList<PersonDetails> personDetails = new ArrayList<>();
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome,\n" +
+                            "FROM edificio,stanza,persona\n" +
+                            "WHERE edificio.id=stanza.edificio and stanza.id=persona.stanza \n" +
+                            "and edificio.nome='" + edificio + "' and  stanza.piano='" + piano + "'\n"
+            );
+
+            while (rs.next()) {
+                // read the result set
+                personDetails.add(new PersonDetails(rs.getString("id"), rs.getString("nome") + " " + rs.getString("cognome")));
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }
+        return personDetails;
+    }
+
+    @Override
+    public ArrayList<PersonDetails> getInvadersDetails(String building, String floor, String number) {
+        Connection connection = null;
+        ArrayList<PersonDetails> personDetails = new ArrayList<>();
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome\n" +
+                            "FROM edificio,stanza,persona\n" +
+                            "WHERE edificio.id=stanza.edificio and stanza.id=persona.stanza \n" +
+                            "and edificio.nome='" + building + "' and  stanza.piano='" + floor +
+                            "' and stanza.numero='" + number + "'\n"
+            );
+
+            while (rs.next()) {
+                // read the result set
+                personDetails.add(new PersonDetails(rs.getString("id"), rs.getString("nome") + " " + rs.getString("cognome")));
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }
+        return personDetails;
+    }
+
+    @Override
+    public Person getRoomInvader(String id) {
+        Connection connection = null;
+        Person person = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome,persona.ruolo\n" +
+                            "FROM persona\n" +
+                            "WHERE persona.id='" + id + "'"
+            );
+
+            while (rs.next()) {
+                // read the result set
+                person=new Person(rs.getString("id"), rs.getString("ruolo"), rs.getString("cognome"),rs.getString("nome"));
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }
+        return person;
+    }
+
+    @Override
     public ArrayList<String> getRoles() {
         Connection connection = null;
         ArrayList<String> roles = new ArrayList<>();
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             ResultSet rs = statement.executeQuery("SELECT ruolo.nome\n" +
@@ -97,18 +539,18 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         return roles;
     }
 
-    public void addPersona(Persona persona){
+    @Override
+    public void addPersona(Persona persona) {
         Connection connection = null;
         try {
             // create a database connection
-            //connection = DriverManager.getConnection("jdbc:sqlite:/home/darklinux/IdeaProjects/aulesvgwt/AuleProjSVGWT/war/aule1.db");
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\aule1.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
             ResultSet rs = statement.executeQuery(
                     "INSERT INTO persona (nome,cognome,ruolo)" +
-                            "VALUES ('"+persona.getNome()+"','"+persona.getCognome()+"','"+persona.getRuolo()+"')"
+                            "VALUES ('" + persona.getNome() + "','" + persona.getCognome() + "','" + persona.getRuolo() + "')"
             );
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -124,12 +566,12 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     //aggiunte
 
-
-    public ArrayList<String>  listaEdiPiani (){
-        File folder = new File("C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\res");
-        File[] listOfFiles =folder.listFiles();
+    @Override
+    public ArrayList<String> listaEdiPiani() {
+        File folder = new File("res");
+        File[] listOfFiles = folder.listFiles();
         ArrayList<String> string = new ArrayList<String>();
-        for(File file :listOfFiles){
+        for (File file : listOfFiles) {
             string.add(file.getName());
             System.out.println(file.getName());
         }
@@ -139,30 +581,29 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     }
 
-
-    public ArrayList<String> listaAulePiano(String edificiopiano){
+    @Override
+    public ArrayList<String> listaAulePiano(String edificiopiano) {
         ArrayList<String> aule = new ArrayList<String>();
         JSONParser parser = new JSONParser();
-        try{
+        try {
 
-            Object obj = parser.parse(new FileReader("C:\\Users\\Federico\\IdeaProjects\\aulesvgw\\AuleProjSVGWT\\war\\doc.JSON"));
-            JSONObject jsonObject =(JSONObject) obj;
+            Object obj = parser.parse(new FileReader("doc.JSON"));
+            JSONObject jsonObject = (JSONObject) obj;
 
 
             JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
 
             Iterator<String> iterator = list.iterator();
-            while(iterator.hasNext()){
-                aule.add(edificiopiano +"-"+iterator.next());
+            while (iterator.hasNext()) {
+                aule.add(edificiopiano + "-" + iterator.next());
                 //System.out.println(edificiopiano +"-"+iterator.next());
             }
-            for(String bob: aule){
+            for (String bob : aule) {
                 System.out.println(bob);
             }
 
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
 
@@ -171,4 +612,4 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
 
-}
+}*/

@@ -1,0 +1,37 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+        xmlns:ui="urn:ui:com.google.gwt.uibinder"
+        xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <g:HTMLPanel>
+        <div class="datagrid">
+        <table>
+            <tr>
+                <td>First name:</td>
+                <td>
+                    <g:Label ui:field="firstNameLbl"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Last name:</td>
+                <td>
+                    <g:Label ui:field="lastNameLbl"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <g:Label ui:field="emailLbl"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Role:</td>
+                <td>
+                    <g:Label ui:field="rolesLbl"/>
+                </td>
+            </tr>
+        </table>
+        </div>
+
+        <g:Button ui:field="backButton">Cancel</g:Button>
+    </g:HTMLPanel>
+</ui:UiBinder>

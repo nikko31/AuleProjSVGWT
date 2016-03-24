@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.auleSVGWT.server.domain.Role" table="role">
+        <id name="id" column="role_id">
+        </id>
+        <property name="name" column="role_name"/>
+        <property name="sqm" column="role_sqm"/>
+    </class>
+</hibernate-mapping>
