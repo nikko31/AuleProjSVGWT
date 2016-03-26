@@ -1,8 +1,11 @@
 package com.auleSVGWT.client.view;
 
+import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,16 +19,18 @@ public interface EditRoomView<T> {
 
         void onAddPersonButtonClicked();
 
-        void onItemClicked(T clickedItem);
+        void onItemClicked(PersonDTO clickedItem);
 
-        void onItemSelected(T selectedItem);
+        void onItemSelected(PersonDTO selectedItem);
     }
 
     HasValue<String> getNumSeats();
 
     HasValue<String> getMtQ();
 
-    void setRowData(List<T> rowData);
+    void setRowData(ArrayList<PersonDTO> rowData);
+
+    void setRoomData(RoomDTO roomData);
 
 
     void setPresenter(Presenter<T> presenter);

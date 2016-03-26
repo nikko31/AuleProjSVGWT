@@ -57,6 +57,7 @@ public class RoomPresenter implements Presenter, RoomView.Presenter<PersonDTO> {
             @Override
             public void onSuccess(RoomPeopleDTO result) {
                 selRoomDetails = result;
+
                 view.setRowData(selRoomDetails.getPeopleDTO());
                 view.setRoomData(selRoomDetails.getRoomDTO());
             }
@@ -66,7 +67,7 @@ public class RoomPresenter implements Presenter, RoomView.Presenter<PersonDTO> {
 
     @Override
     public void onEditButtonClicked() {
-        eventBus.fireEvent(new EditRoomEvent());
+        eventBus.fireEvent(new EditRoomEvent(this.selRoomDetails));
     }
 
     @Override

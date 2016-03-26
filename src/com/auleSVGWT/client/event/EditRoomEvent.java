@@ -1,5 +1,6 @@
 package com.auleSVGWT.client.event;
 
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
@@ -7,6 +8,16 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class EditRoomEvent extends GwtEvent<EditRoomEventHandler> {
     public static Type<EditRoomEventHandler> TYPE = new Type<EditRoomEventHandler>();
+
+    private RoomPeopleDTO roomPeopleDTO;
+
+    public EditRoomEvent(RoomPeopleDTO roomPeopleDTO) {
+        this.roomPeopleDTO = roomPeopleDTO;
+    }
+
+    public RoomPeopleDTO getRoomPeopleDTO(){
+        return this.roomPeopleDTO;
+    }
 
     public Type<EditRoomEventHandler> getAssociatedType() {
         return TYPE;

@@ -1,39 +1,52 @@
 package com.auleSVGWT.client.presenter;
 
+import com.auleSVGWT.client.AuleSVGWTServiceAsync;
+import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
+import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.PersonDetails;
+import com.auleSVGWT.client.shared.Room;
 import com.auleSVGWT.client.view.EditRoomView;
+import com.auleSVGWT.client.view.EditRoomViewImpl;
+import com.auleSVGWT.server.domain.Person;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+
+import java.util.ArrayList;
 
 /**
  * Created by darklinux on 16/03/16.
  */
-public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<PersonDetails> {
-   /* private final EventBus eventBus;
-    private List<PersonDetails> personsDetails;
+public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<RoomPeopleDTO> {
+    private ArrayList<PersonDTO> personsDetails;
+    private ArrayList<PersonDTO> selectedPersons;
+    private RoomPeopleDTO roomPeopleDTO;
     private final AuleSVGWTServiceAsync rpcService;
-    EditRoomView<PersonDetails> view;
-    private String building;
-    private String floor;
+    private EditRoomView<RoomPeopleDTO> view;
+    private final EventBus eventBus;
 
+    public EditRoomPresenter(EventBus eventBus, AuleSVGWTServiceAsync rpcService, EditRoomViewImpl editRoomView, RoomPeopleDTO roomPeopleDTO) {
+        selectedPersons=new ArrayList<>();
+        this.rpcService=rpcService;
+        this.eventBus=eventBus;
+        this.roomPeopleDTO=roomPeopleDTO;
+        this.view=editRoomView;
 
-    public EditRoomPresenter(AuleSVGWTServiceAsync rpcService,EventBus eventBus,) {
-
-        this.rpcService = rpcService;
-        this.eventBus = eventBus;
-        this.personsDetails = per;
-        this.view = view;
-        view.setPresenter(this);
     }
- */
+
 
     @Override
     public void onSaveButtonClicked() {
-
     }
 
     @Override
     public void onCancelButtonClicked() {
-
+        eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(),
+                String.valueOf(roomPeopleDTO.getRoomDTO().getFloor()),
+                String.valueOf(roomPeopleDTO.getRoomDTO().getNumber()))
+        );
     }
 
     @Override
@@ -42,17 +55,38 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Pers
     }
 
     @Override
-    public void onItemClicked(PersonDetails clickedItem) {
+    public void onItemClicked(PersonDTO clickedItem) {
 
     }
 
     @Override
-    public void onItemSelected(PersonDetails selectedItem) {
-
+    public void onItemSelected(PersonDTO selectedItem) {
+        if(selectedPersons.contains(selectedItem))
+            selectedPersons.remove(selectedItem);
+        else
+            selectedPersons.add(selectedItem);
     }
 
     @Override
     public void go(HasWidgets mapContainer, HasWidgets infoContainer, HasWidgets headerPnl) {
+        infoContainer.clear();
+        infoContainer.add(view.asWidget());
+        view.setRoomData(this.roomPeopleDTO.getRoomDTO());
+        fetchPersonDetails();
+    }
 
+    private void fetchPersonDetails() {
+        rpcService.getPerson(new AsyncCallback<ArrayList<PersonDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Error fetching contact details");
+            }
+
+            @Override
+            public void onSuccess(ArrayList<PersonDTO> result) {
+                personsDetails=result;
+                view.setRowData(personsDetails);
+            }
+        });
     }
 }

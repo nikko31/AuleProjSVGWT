@@ -22,6 +22,8 @@ public interface AuleSVGWTServiceAsync {
 
     void listaAulePiano(String edificiopiano, AsyncCallback<ArrayList<String>> async);
 
+    void getPerson(AsyncCallback<ArrayList<PersonDTO>> async);
+
 /*    //Map<String, ArrayList<String>> getMessage(String msg, AsyncCallback<String> async);
 
     // Sample interface method of remote interface

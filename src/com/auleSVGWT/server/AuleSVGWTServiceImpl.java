@@ -41,6 +41,26 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     //---------------------PERSON
 
+    public ArrayList<PersonDTO> getPerson() {
+        ArrayList<PersonDTO> personDTO = new ArrayList<>();
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
+
+            for (Person person : persons) {
+                personDTO.add(createPersonDTO(person));
+            }
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getPerson method fail ");
+            e.printStackTrace();
+        }
+        return personDTO;
+    }
+
     @Override
     public Integer deletePerson(int id) {
         deleteOccupyPerson(id);//prima elimino le relazioni

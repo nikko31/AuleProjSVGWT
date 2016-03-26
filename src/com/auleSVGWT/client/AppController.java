@@ -2,6 +2,7 @@ package com.auleSVGWT.client;
 
 
 import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.*;
 import com.auleSVGWT.client.presenter.*;
 import com.auleSVGWT.client.view.*;
@@ -31,6 +32,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private String floor;
     private String number;
     private PersonDTO personDTO;
+    private RoomPeopleDTO roomPeopleDTO;
 
     public AppController(AuleSVGWTServiceAsync auleSVGWTServiceAsync, SimpleEventBus simpleEventBus) {
         this.eventBus = simpleEventBus;
@@ -59,6 +61,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         eventBus.addHandler(EditRoomEvent.TYPE, new EditRoomEventHandler() {
             @Override
             public void onEditRoom(EditRoomEvent event) {
+                roomPeopleDTO=event.getRoomPeopleDTO();
                 doOnEditRoom();
             }
         });
@@ -74,7 +77,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         eventBus.addHandler(ShowPersonEvent.TYPE, new ShowPersonEventHandler() {
             @Override
             public void onShowPerson(ShowPersonEvent event) {
-                personDTO=event.getPersonDTO();
+                personDTO = event.getPersonDTO();
                 doOnShowPerson(personDTO.getId());
             }
         });
@@ -101,7 +104,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnShowFloor() {
-        History.newItem("showFloor " + building + "-" +floor);
+        History.newItem("showFloor " + building + "-" + floor);
     }
 
     private void doOnShowRoom(String number) {
@@ -142,7 +145,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
-
+            //-----------OK------------
             if (token.startsWith("showFloor")) {
                 GWT.runAsync(new RunAsyncCallback() {
                     @Override
@@ -157,7 +160,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
-
+            //----------OK----------------
             if (token.startsWith("list")) {
                 GWT.runAsync(new RunAsyncCallback() {
                     @Override
@@ -172,7 +175,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
-
+            //----------------OK--------------
             if (token.startsWith("showPerson")) {
                 GWT.runAsync(new RunAsyncCallback() {
                     @Override
@@ -183,6 +186,20 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     @Override
                     public void onSuccess() {
                         new ShowPersonPresenter(eventBus, getShowPersonView(), building, floor, number, personDTO)
+                                .go(mapContainer, infoContainer, headerContainer);
+                    }
+                });
+            }
+            if (token.startsWith("editRoom")) {
+                GWT.runAsync(new RunAsyncCallback() {
+                    @Override
+                    public void onFailure(Throwable reason) {
+                        Window.alert(reason.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        new EditRoomPresenter(eventBus, rpcService, getEditRoomView(), roomPeopleDTO)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });
@@ -224,5 +241,9 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         if (showPersonView == null)
             showPersonView = new ShowPersonViewImpl();
         return showPersonView;
+    }
+
+    public EditRoomViewImpl getEditRoomView() {
+     return new EditRoomViewImpl();
     }
 }

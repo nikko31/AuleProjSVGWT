@@ -1,6 +1,10 @@
 package com.auleSVGWT.client.view;
 
+import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomDTO;
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.shared.PersonDetails;
+import com.auleSVGWT.client.shared.Room;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -9,12 +13,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Dark-Linux on 15/03/2016.
  */
-public class EditRoomViewImpl extends Composite implements EditRoomView<PersonDetails> {
+public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeopleDTO> {
 
     @UiTemplate("EditRoomView.ui.xml")
     interface EditRoomViewUiBinder extends UiBinder<Widget, EditRoomViewImpl> {
@@ -36,8 +41,8 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<PersonDe
     Button addPersonButton;
 
     private static EditRoomViewUiBinder ourUiBinder = GWT.create(EditRoomViewUiBinder.class);
-    private EditRoomView.Presenter<PersonDetails> presenter;
-    private List<PersonDetails> rowData;
+    private EditRoomView.Presenter<RoomPeopleDTO> presenter;
+    private List<PersonDTO> rowData;
 
     public EditRoomViewImpl() {
         initWidget(ourUiBinder.createAndBindUi(this));
@@ -53,7 +58,7 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<PersonDe
                 if (cell.getCellIndex() > 0) {
                     presenter.onItemClicked(this.rowData.get(cell.getRowIndex()));
                 } else {
-                    presenter.onItemSelected(rowData.get(cell.getRowIndex()));
+                    presenter.onItemSelected(this.rowData.get(cell.getRowIndex()));
                 }
             }
         }
@@ -90,7 +95,7 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<PersonDe
     }
 
     @Override
-    public void setPresenter(EditRoomView.Presenter<PersonDetails> presenter) {
+    public void setPresenter(EditRoomView.Presenter<RoomPeopleDTO> presenter) {
         this.presenter = presenter;
     }
 
@@ -100,12 +105,18 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<PersonDe
     }
 
     @Override
-    public void setRowData(List<PersonDetails> rowData) {
+    public void setRowData(ArrayList<PersonDTO> rowData) {
         editPersonTable.removeAllRows();
         for (int i = 0; i < rowData.size(); i++) {
             editPersonTable.setWidget(i, 0, new CheckBox());
-            editPersonTable.setText(i, 1, rowData.get(i).getDisplayName());
+            editPersonTable.setText(i, 1, rowData.get(i).getSurname() +" "+rowData.get(i).getName());
         }
         this.rowData = rowData;
+    }
+
+    @Override
+    public void setRoomData(RoomDTO roomData) {
+        numSeatsTxt.setText(String.valueOf(roomData.getMaxPerson()));
+        mtQTxt.setText(String.valueOf(roomData.getDimension()));
     }
 }
