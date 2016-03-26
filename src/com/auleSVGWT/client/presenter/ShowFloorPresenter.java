@@ -47,6 +47,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     @Override
     public void go(HasWidgets mapContainer, HasWidgets infoContainer, HasWidgets headerPnl) {
         mapContainer.clear();
+        infoContainer.clear();
         mapContainer.add(view.asWidget());
         getMap(building, floor);
     }

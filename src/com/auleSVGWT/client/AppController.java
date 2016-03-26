@@ -222,7 +222,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         if (roomView == null) {
             roomView = new RoomViewImpl();
         }
-        return roomView;
+        return new RoomViewImpl();
     }
 
     public FloorSelectionViewImpl getFloorSelectionView() {
