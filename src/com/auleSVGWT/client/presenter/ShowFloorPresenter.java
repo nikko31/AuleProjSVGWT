@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import org.vectomatic.dom.svg.OMElement;
+import org.vectomatic.dom.svg.OMSVGElement;
 import org.vectomatic.dom.svg.OMSVGSVGElement;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private String building;
     private String floor;
     private OMSVGSVGElement roomSVGElt;
+    private OMElement selectedRoom;
 
     private static final String DEF_FILL = "fill:transparent";
     private static final String SEL_FILL = "fill:red";
@@ -36,6 +38,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                               ShowFloorView<FloorDetails> view,
                               String building,
                               String floor) {
+        this.selectedRoom = null;
         this.building = building;
         this.floor = floor;
         this.eventBus = eventBus;
@@ -92,10 +95,18 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
                     String style = roomEl.getAttribute("style");
-                    if (style.contains("fill:green"))
-                        style = style.replace("fill:green", SEL_FILL);
-                    else {
+                    if (style.contains("fill:green")) {
+                        style = style.replace("fill:green", DEF_FILL);
+                        selectedRoom = null;
+                    } else {
+                        if (selectedRoom != null) {
+                            String selStyle = selectedRoom.getAttribute("style");
+                            selStyle = selStyle.replace("fill:green", DEF_FILL);
+                            selectedRoom.setAttribute("style",selStyle);
+                        }
+                        style = style.replace(DEF_FILL, "fill:green");
                         style = style.replace(SEL_FILL, "fill:green");
+                        selectedRoom =  roomEl;
                         eventBus.fireEvent(new ShowRoomEvent(building, floor, String.valueOf(Resources.SVG_ID_MAP.get(roomEl.getAttribute("id")) + 1)));
                     }
                     roomEl.setAttribute("style", style);
