@@ -22,6 +22,7 @@ public interface AuleSVGWTService
     Integer saveRole(RoleDTO roleDTO);
     ArrayList<PersonDTO> getPerson();
     RoomPeopleDTO getRoomPeople(String building, String floor, String number);
+    ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt);
     ArrayList<String> listaAulePiano(String edificiopiano);
 }
 /*

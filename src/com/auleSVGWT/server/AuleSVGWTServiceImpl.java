@@ -191,6 +191,119 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     //-----------------STANZE OCCUPATE------------
 
     @Override
+    public ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt) {
+        int floor=Integer.parseInt(floorSt);
+        ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<RoomPeopleDTO>();
+        ArrayList<Person> people;
+        ArrayList<Long> occ;
+        try{
+            org.hibernate.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Occupy> occupies = new ArrayList<Occupy>(session.createQuery("from Occupy ").list());
+            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("from Room ").list());
+
+            for (Room room : rooms) {
+
+                //System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
+                if ((room.getFloor() == floor) && (room.getBuilding().getName().equals(building))) {
+
+                    people = new ArrayList<Person>();
+                    occ = new ArrayList<Long>();
+                    for (Occupy occupy : occupies) {
+                        //System.out.println("sono nel cilo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
+                        if (occupy.getRoom().getId() == room.getId()) {
+                            people.add(occupy.getPerson());
+                            occ.add(occupy.getId());
+                            System.out.println(people.get(0).getName() + "\n");
+                        }
+                    }
+                    roomPeopleDTO.add(createRoomPeopleDTO(room, people, occ));
+                }
+            }
+            session.getTransaction().commit();
+
+        }catch(Exception e){
+            System.out.println("ERROR : getRoomsPeople method fail ");
+
+        }
+
+        return roomPeopleDTO;
+    }
+
+
+
+
+    @Override
+    public RoomPeopleDTO getRoomPeople(String building, String floorSt, String numberSt) {
+        int number=Integer.parseInt(numberSt);
+        int floor=Integer.parseInt(floorSt);
+        Room room1 = new Room();
+        ArrayList<Long> occ = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
+        RoomPeopleDTO roomPeopleDTO = new RoomPeopleDTO();
+        boolean check = true;
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Occupy> occupies = new ArrayList<Occupy>(session.createQuery("from Occupy ").list());
+            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("from Room ").list());
+
+
+            for (Room room : rooms) {
+
+                System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
+                if ((room.getFloor() == floor) && (room.getBuilding().getName().equals(building) && (room.getNumber() == number))) {
+                    check = false;
+
+                    for (Occupy occupy : occupies) {
+                        System.out.println("sono nel cilo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
+                        if (occupy.getRoom().getId() == room.getId()) {
+                            people.add(occupy.getPerson());
+                            occ.add(occupy.getId());
+                            System.out.println(people.get(0).getName() + "\n");
+                        }
+                    }
+                    room1 = room;
+
+
+
+                }
+            }
+
+
+            if(check){
+
+                roomPeopleDTO = createRoomPeopleDTO(newRoom( building, floorSt,  numberSt, session),people,occ);
+
+            }else{
+                roomPeopleDTO = createRoomPeopleDTO(room1, people, occ);
+            }
+
+
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+
+        return roomPeopleDTO;
+
+
+    }
+
+
+
+
+
+
+    /*
+    @Override
     public RoomPeopleDTO getRoomPeople(String building, String floorSt, String numberSt) {
         int number=Integer.parseInt(numberSt);
         int floor=Integer.parseInt(floorSt);
@@ -220,6 +333,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 }
             }
 
+
             roomPeopleDTO = createRoomPeopleDTO(room, people, occId);
             session.getTransaction().commit();
 
@@ -232,7 +346,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         return roomPeopleDTO;
 
 
-    }
+    }*/
 
     //--------------------ROLES
 
@@ -318,6 +432,49 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
     //-------------------------PRIVATE METHOD
+
+    private Room newRoom(String buildingName, String floorSt, String numberSt, org.hibernate.Session session) {
+        int number = Integer.parseInt(numberSt);
+        int floor = Integer.parseInt(floorSt);
+        Room room = new Room();
+        Building building = new Building();
+        boolean check = true;
+        try {
+
+            ArrayList<Building> buildings= new ArrayList<Building>(session.createQuery("from Building ").list());
+
+            for(Building build : buildings){
+                if(build.getName().equals(buildingName)){
+                    room.setBuilding(build);
+                    room.setFloor(floor);
+                    room.setNumber(number);
+                    room.setMaxPeople(0);
+                    room.setDimension(0);
+                    session.save(room);
+                    check = false;
+                }
+            }
+
+            if(check){
+                building.setName(buildingName);
+                session.save(building);
+                room.setBuilding(building);
+                room.setFloor(floor);
+                room.setNumber(number);
+                room.setMaxPeople(0);
+                room.setDimension(0);
+                session.save(room);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : newRoom method fail ");
+
+        }
+
+        return room;
+
+    }
 
     //questo metodo serve perchè se elimino una persona prima devo eliminare tutte le sue relazioni con room
     private int deleteOccupyPerson(int id) {

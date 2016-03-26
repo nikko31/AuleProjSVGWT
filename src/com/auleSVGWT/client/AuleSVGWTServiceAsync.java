@@ -19,6 +19,8 @@ public interface AuleSVGWTServiceAsync {
     void getRoles(AsyncCallback<ArrayList<RoleDTO>> async);
     void saveRole(RoleDTO roleDTO,AsyncCallback<Integer> async);
     void getRoomPeople (String building, String floor,String number,AsyncCallback<RoomPeopleDTO> async);
+    void getRoomsPeople (String building, String floor,AsyncCallback<RoomPeopleDTO> async);
+
 
     void listaAulePiano(String edificiopiano, AsyncCallback<ArrayList<String>> async);
 
