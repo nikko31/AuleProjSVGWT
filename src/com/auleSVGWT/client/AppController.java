@@ -23,9 +23,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private HasWidgets infoContainer;
     private HasWidgets headerContainer;
 
-    private RoomViewImpl roomView = null;
     private FloorSelectionViewImpl floorSelectionView = null;
-    private EditRoomViewImpl editRoomView = null;
     private ShowFloorViewImpl showFloorView = null;
     private ShowPersonViewImpl showPersonView = null;
     private String building;
@@ -63,6 +61,14 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
             public void onEditRoom(EditRoomEvent event) {
                 roomPeopleDTO=event.getRoomPeopleDTO();
                 doOnEditRoom();
+            }
+        });
+
+        eventBus.addHandler(EditPersonEvent.TYPE, new EditPersonHandler() {
+            @Override
+            public void onEditPerson(EditPersonEvent event) {
+                personDTO=event.getPersonDTO();
+                doOnEditPerson();
             }
         });
 
@@ -126,6 +132,11 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private void doOnEditRoom() {
         History.newItem("editRoom");
     }
+
+    private void doOnEditPerson() {
+        History.newItem("editPerson");
+    }
+
 
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
@@ -204,6 +215,20 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
+            if(token.startsWith("editPerson")){
+                GWT.runAsync(new RunAsyncCallback() {
+                    @Override
+                    public void onFailure(Throwable reason) {
+                        Window.alert(reason.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        new EditPersonPresenter(eventBus,rpcService,getEditPersonView(),personDTO)
+                                .go(mapContainer,infoContainer,headerContainer);
+                    }
+                });
+            }
         }
     }
 
@@ -219,9 +244,6 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     public RoomViewImpl getRoomView() {
-        if (roomView == null) {
-            roomView = new RoomViewImpl();
-        }
         return new RoomViewImpl();
     }
 
@@ -245,5 +267,9 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
     public EditRoomViewImpl getEditRoomView() {
      return new EditRoomViewImpl();
+    }
+
+    public EditPersonViewImpl getEditPersonView() {
+        return new EditPersonViewImpl();
     }
 }

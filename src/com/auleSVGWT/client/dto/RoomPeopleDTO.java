@@ -3,9 +3,6 @@ package com.auleSVGWT.client.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by FEDE on 21/03/2016.
- */
 public class RoomPeopleDTO implements Serializable {
 
     private RoomDTO roomDTO;
@@ -13,13 +10,13 @@ public class RoomPeopleDTO implements Serializable {
     private ArrayList<Long> occId;
 
     public RoomPeopleDTO() {
-        this.peopleDTO = new ArrayList<PersonDTO>();
-        this.occId = new ArrayList<Long>();
+        this.peopleDTO = new ArrayList<>();
+        this.occId = new ArrayList<>();
     }
 
     public RoomPeopleDTO(RoomDTO roomDTO, ArrayList<PersonDTO> peopleDTO, ArrayList<Long> occId) {
-        this.peopleDTO = new ArrayList<PersonDTO>();
-        this.occId = new ArrayList<Long>();//servono altrimenti nonho id della relazione
+        this.peopleDTO = new ArrayList<>();
+        this.occId = new ArrayList<>();//servono altrimenti nonho id della relazione
         this.roomDTO = roomDTO;
         this.peopleDTO.addAll(peopleDTO);
         this.occId.addAll(occId);

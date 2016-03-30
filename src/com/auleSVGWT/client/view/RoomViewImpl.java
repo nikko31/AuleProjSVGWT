@@ -59,6 +59,7 @@ public class RoomViewImpl extends Composite implements RoomView<PersonDTO> {
             if (cell != null)
                 //clicco sul nome del prof
                 presenter.onItemClicked(rowData.get(cell.getRowIndex()));
+
         }
     }
 
@@ -70,8 +71,9 @@ public class RoomViewImpl extends Composite implements RoomView<PersonDTO> {
     @Override
     public void setRowData(ArrayList<PersonDTO> rowData) {
         personTable.removeAllRows();
-        for (int c = 0; c < rowData.size(); c++)
+        for (int c = 0; c < rowData.size(); c++) {
             personTable.setText(c, 0, rowData.get(c).getDetails());
+        }
         this.rowData = rowData;
 
     }

@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.common.MyListBox;
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.shared.Person;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -11,7 +12,7 @@ import com.google.gwt.user.client.ui.*;
 /**
  * Created by Dark-Linux on 15/03/2016.
  */
-public class EditPersonViewImpl extends Composite implements EditPersonView<Person> {
+public class EditPersonViewImpl extends Composite implements EditPersonView<PersonDTO> {
 
     @UiTemplate("EditPersonView.ui.xml")
     interface EditPersonViewUiBinder extends UiBinder<Widget, EditPersonViewImpl> {
@@ -32,7 +33,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     Button cancelButton;
 
     private static EditPersonViewUiBinder ourUiBinder = GWT.create(EditPersonViewUiBinder.class);
-    private EditPersonView.Presenter<Person> presenter;
+    private EditPersonView.Presenter<PersonDTO> presenter;
 
     @Override
     public HasValue<String> getFirstName() {
@@ -55,7 +56,13 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     }
 
     @Override
-    public void setPresenter(Presenter<Person> presenter) {
+    public void setPersonData(PersonDTO personData) {
+        firstNameTxt.setText(personData.getName());
+        lastNameTxt.setText(personData.getSurname());
+    }
+
+    @Override
+    public void setPresenter(Presenter<PersonDTO> presenter) {
         this.presenter = presenter;
     }
 

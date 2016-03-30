@@ -49,9 +49,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             session.beginTransaction();
             ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
 
-            for (Person person : persons) {
-                personDTO.add(createPersonDTO(person));
-            }
+            personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
             session.getTransaction().commit();
 
         } catch (Exception e) {
@@ -193,22 +191,22 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt) {
         int floor=Integer.parseInt(floorSt);
-        ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<RoomPeopleDTO>();
+        ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<>();
         ArrayList<Person> people;
         ArrayList<Long> occ;
         try{
             org.hibernate.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            ArrayList<Occupy> occupies = new ArrayList<Occupy>(session.createQuery("from Occupy ").list());
-            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("from Room ").list());
+            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
+            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room ").list());
 
             for (Room room : rooms) {
 
                 //System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
                 if ((room.getFloor() == floor) && (room.getBuilding().getName().equals(building))) {
 
-                    people = new ArrayList<Person>();
-                    occ = new ArrayList<Long>();
+                    people = new ArrayList<>();
+                    occ = new ArrayList<>();
                     for (Occupy occupy : occupies) {
                         //System.out.println("sono nel cilo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
                         if (occupy.getRoom().getId() == room.getId()) {
@@ -247,8 +245,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
-            ArrayList<Occupy> occupies = new ArrayList<Occupy>(session.createQuery("from Occupy ").list());
-            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("from Room ").list());
+            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
+            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room ").list());
 
 
             for (Room room : rooms) {
@@ -352,7 +350,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     @Override
     public ArrayList<RoleDTO> getRoles() {
-        ArrayList<RoleDTO> rolesDTO = new ArrayList<RoleDTO>();
+        ArrayList<RoleDTO> rolesDTO = new ArrayList<>();
 
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -383,9 +381,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
             JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
 
-            Iterator<String> iterator = list.iterator();
-            while (iterator.hasNext()) {
-                aule.add(edificiopiano + "-" + iterator.next());
+            for (String aList : (Iterable<String>) list) {
+                aule.add(edificiopiano + "-" + aList);
             }
         } catch (Exception e) {
 
@@ -427,7 +424,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         }
 
-        return new Integer(role.getId());
+        return role.getId();
 
     }
 
@@ -489,7 +486,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             System.out.println("ERROR : deleteOccupyPerson method fail ");
         }
 
-        return new Integer(id);
+        return id;
     }
 
     private RoomPeopleDTO createRoomPeopleDTO(Room room, ArrayList<com.auleSVGWT.server.domain.Person> people, ArrayList<Long> occId) {
@@ -530,263 +527,3 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension());
     }
 }
-
-/*
-public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
-    @Override
-    public ArrayList<Stanza> getMessage(String edificio, String piano) {
-        Connection connection = null;
-        ArrayList<Stanza> stanze = new ArrayList<>();
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            ResultSet rs = statement.executeQuery("SELECT stanza.id as idStanza,stanza.numero,persona.id,stanza.num_max_persone,stanza.dimensione,persona.nome,persona.cognome,persona.ruolo\n" +
-                            "FROM edificio,stanza,persona\n" +
-                            "WHERE edificio.id=stanza.edificio and stanza.id=persona.stanza \n" +
-                            "and edificio.nome='" + edificio + "' and  stanza.piano='" + piano + "'\n" +
-                            "ORDER BY stanza.id"
-            );
-
-            while (rs.next()) {
-                // read the result set
-                Integer stanza_num = rs.getInt("numero");
-                int find = -1;
-                //controllo se esiste la stanza nel mio array
-                for (int c = 0; c < stanze.size(); c++) {
-                    if (stanza_num.equals(stanze.get(c).getNumero())) {
-                        Stanza stanza = stanze.get(c);
-                        stanza.addProf(new Persona(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"), rs.getString("ruolo")));
-                        stanze.set(c, stanza);
-                        find = c;
-                        break;
-                    }
-                }
-                //non trovata
-                if (find < 0) {
-                    Stanza stanza = new Stanza(rs.getInt("idStanza"), rs.getInt("numero"), rs.getInt("num_max_persone"), rs.getInt("dimensione"));
-                    stanza.addProf(new Persona(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"), rs.getString("ruolo")));
-                    stanze.add(stanza);
-                }
-
-
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-        return stanze;
-    }
-
-    @Override
-    public ArrayList<PersonDetails> getPersonsDetails(String edificio, String piano) {
-        Connection connection = null;
-        ArrayList<PersonDetails> personDetails = new ArrayList<>();
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome,\n" +
-                            "FROM edificio,stanza,persona\n" +
-                            "WHERE edificio.id=stanza.edificio and stanza.id=persona.stanza \n" +
-                            "and edificio.nome='" + edificio + "' and  stanza.piano='" + piano + "'\n"
-            );
-
-            while (rs.next()) {
-                // read the result set
-                personDetails.add(new PersonDetails(rs.getString("id"), rs.getString("nome") + " " + rs.getString("cognome")));
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-        return personDetails;
-    }
-
-    @Override
-    public ArrayList<PersonDetails> getInvadersDetails(String building, String floor, String number) {
-        Connection connection = null;
-        ArrayList<PersonDetails> personDetails = new ArrayList<>();
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome\n" +
-                            "FROM edificio,stanza,persona\n" +
-                            "WHERE edificio.id=stanza.edificio and stanza.id=persona.stanza \n" +
-                            "and edificio.nome='" + building + "' and  stanza.piano='" + floor +
-                            "' and stanza.numero='" + number + "'\n"
-            );
-
-            while (rs.next()) {
-                // read the result set
-                personDetails.add(new PersonDetails(rs.getString("id"), rs.getString("nome") + " " + rs.getString("cognome")));
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-        return personDetails;
-    }
-
-    @Override
-    public Person getRoomInvader(String id) {
-        Connection connection = null;
-        Person person = null;
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            ResultSet rs = statement.executeQuery("SELECT persona.id,persona.nome,persona.cognome,persona.ruolo\n" +
-                            "FROM persona\n" +
-                            "WHERE persona.id='" + id + "'"
-            );
-
-            while (rs.next()) {
-                // read the result set
-                person=new Person(rs.getString("id"), rs.getString("ruolo"), rs.getString("cognome"),rs.getString("nome"));
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-        return person;
-    }
-
-    @Override
-    public ArrayList<String> getRoles() {
-        Connection connection = null;
-        ArrayList<String> roles = new ArrayList<>();
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            ResultSet rs = statement.executeQuery("SELECT ruolo.nome\n" +
-                            "FROM ruolo"
-            );
-            while (rs.next())
-                roles.add(rs.getString("nome"));
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-        return roles;
-    }
-
-    @Override
-    public void addPersona(Persona persona) {
-        Connection connection = null;
-        try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:aule1.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            ResultSet rs = statement.executeQuery(
-                    "INSERT INTO persona (nome,cognome,ruolo)" +
-                            "VALUES ('" + persona.getNome() + "','" + persona.getCognome() + "','" + persona.getRuolo() + "')"
-            );
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-    }
-
-    //aggiunte
-
-    @Override
-    public ArrayList<String> listaEdiPiani() {
-        File folder = new File("res");
-        File[] listOfFiles = folder.listFiles();
-        ArrayList<String> string = new ArrayList<String>();
-        for (File file : listOfFiles) {
-            string.add(file.getName());
-            System.out.println(file.getName());
-        }
-
-        return string;
-
-
-    }
-
-    @Override
-    public ArrayList<String> listaAulePiano(String edificiopiano) {
-        ArrayList<String> aule = new ArrayList<String>();
-        JSONParser parser = new JSONParser();
-        try {
-
-            Object obj = parser.parse(new FileReader("doc.JSON"));
-            JSONObject jsonObject = (JSONObject) obj;
-
-
-            JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
-
-            Iterator<String> iterator = list.iterator();
-            while (iterator.hasNext()) {
-                aule.add(edificiopiano + "-" + iterator.next());
-                //System.out.println(edificiopiano +"-"+iterator.next());
-            }
-            for (String bob : aule) {
-                System.out.println(bob);
-            }
-
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-        return aule;
-    }
-
-
-}*/

@@ -1,5 +1,6 @@
 package com.auleSVGWT.client.view;
 
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,6 +24,8 @@ public interface EditPersonView<T> {
     HasValue<String> getEmailAddress();
 
     HasValue<String> getRole();
+
+    void setPersonData(T personData);
 
     void setPresenter(Presenter<T> presenter);
 

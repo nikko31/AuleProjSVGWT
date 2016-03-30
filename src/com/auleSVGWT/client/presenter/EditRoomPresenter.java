@@ -3,6 +3,7 @@ package com.auleSVGWT.client.presenter;
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
+import com.auleSVGWT.client.event.EditPersonEvent;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.PersonDetails;
 import com.auleSVGWT.client.shared.Room;
@@ -33,12 +34,14 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
         this.eventBus=eventBus;
         this.roomPeopleDTO=roomPeopleDTO;
         this.view=editRoomView;
+        this.view.setPresenter(this);
 
     }
 
 
     @Override
     public void onSaveButtonClicked() {
+        Window.alert(selectedPersons.get(0).getName()+" 2 "+selectedPersons.get(1).getName());
     }
 
     @Override
@@ -56,7 +59,7 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onItemClicked(PersonDTO clickedItem) {
-
+        eventBus.fireEvent(new EditPersonEvent(clickedItem));
     }
 
     @Override
