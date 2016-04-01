@@ -2,7 +2,6 @@ package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.shared.FloorDetails;
-import com.auleSVGWT.client.shared.PersonDetails;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -26,11 +25,11 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     }
 
     @UiField
-    MyListBox buildingLst;
+    MyListBox<String> buildingLst;
     @UiField
-    MyListBox floorLst;
+    MyListBox<String> floorLst;
     @UiField
-    MyListBox mapLst;
+    MyListBox<String> mapLst;
 
     @UiField
     Button enterBtn;

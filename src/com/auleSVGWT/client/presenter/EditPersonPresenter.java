@@ -2,6 +2,7 @@ package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoleDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.view.EditPersonView;
@@ -36,7 +37,6 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
 
     @Override
     public void onSaveButtonClicked() {
-        Window.alert("ciao pers");
     }
 
     @Override
@@ -48,6 +48,22 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
     public void go(HasWidgets mapContainer, HasWidgets infoContainer, HasWidgets headerPnl) {
         infoContainer.clear();
         infoContainer.add(view.asWidget());
-        //view.setPersonData(personDTO);
+
+        fetchRoles();
+        view.setPersonData(personDTO);
+
+    }
+    public void fetchRoles(){
+        rpcService.getRoles(new AsyncCallback<ArrayList<RoleDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<RoleDTO> result) {
+                view.setRolesData(result);
+            }
+        });
     }
 }

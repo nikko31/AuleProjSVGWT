@@ -2,12 +2,15 @@ package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.dto.PersonDTO;
-import com.auleSVGWT.client.shared.Person;
+import com.auleSVGWT.client.dto.RoleDTO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+
+import java.util.ArrayList;
 
 /**
  * Created by Dark-Linux on 15/03/2016.
@@ -25,7 +28,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     @UiField
     TextBox emailTxt;
     @UiField
-    MyListBox rolesList;
+    MyListBox<RoleDTO> rolesList;
 
     @UiField
     Button saveButton;
@@ -34,6 +37,10 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
 
     private static EditPersonViewUiBinder ourUiBinder = GWT.create(EditPersonViewUiBinder.class);
     private EditPersonView.Presenter<PersonDTO> presenter;
+
+    public EditPersonViewImpl() {
+        initWidget(ourUiBinder.createAndBindUi(this));
+    }
 
     @Override
     public HasValue<String> getFirstName() {
@@ -51,7 +58,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     }
 
     @Override
-    public HasValue<String> getRole() {
+    public MyListBox<RoleDTO> getRole() {
         return rolesList;
     }
 
@@ -59,6 +66,15 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     public void setPersonData(PersonDTO personData) {
         firstNameTxt.setText(personData.getName());
         lastNameTxt.setText(personData.getSurname());
+    }
+
+    @Override
+    public void setRolesData(ArrayList<RoleDTO> rolesData) {
+        for(RoleDTO roleDTO:rolesData){
+            Window.alert(roleDTO.getName());
+            rolesList.addValue(roleDTO);
+        }
+
     }
 
     @Override

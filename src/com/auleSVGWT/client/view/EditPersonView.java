@@ -1,10 +1,11 @@
 package com.auleSVGWT.client.view;
 
-import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.common.MyListBox;
+import com.auleSVGWT.client.dto.RoleDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Dark-Linux on 15/03/2016.
@@ -23,9 +24,11 @@ public interface EditPersonView<T> {
 
     HasValue<String> getEmailAddress();
 
-    HasValue<String> getRole();
+    MyListBox<RoleDTO> getRole();
 
     void setPersonData(T personData);
+
+    void setRolesData(ArrayList<RoleDTO> rolesData);
 
     void setPresenter(Presenter<T> presenter);
 
