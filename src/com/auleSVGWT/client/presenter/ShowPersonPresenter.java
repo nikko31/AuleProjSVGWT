@@ -4,6 +4,7 @@ import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.view.ShowPersonView;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 /**
@@ -46,7 +47,8 @@ public class ShowPersonPresenter implements Presenter, ShowPersonView.Presenter<
 
     @Override
     public void onBackButtonClicked() {
-        eventBus.fireEvent(new ShowRoomEvent(building, floor, number));
+        //eventBus.fireEvent(new ShowRoomEvent(building, floor, number));
+        History.back();
     }
 
 }

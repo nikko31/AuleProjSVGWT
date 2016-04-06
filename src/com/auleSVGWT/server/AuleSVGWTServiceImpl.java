@@ -4,6 +4,7 @@ import com.auleSVGWT.client.AuleSVGWTService;
 import com.auleSVGWT.client.dto.*;
 import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
@@ -84,10 +85,9 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     @Override
     public Integer savePerson(PersonDTO personDTO) {
-
-        com.auleSVGWT.server.domain.Person person = new com.auleSVGWT.server.domain.Person(personDTO);
-
+        Person person = new Person(personDTO);
         try {
+
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
             session.save(person);

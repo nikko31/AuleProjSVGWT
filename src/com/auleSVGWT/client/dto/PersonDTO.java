@@ -14,6 +14,7 @@ public class PersonDTO implements Serializable {
 
 
     public PersonDTO() {
+        this.id = -1;
     }
 
     public PersonDTO(String name, String surname, RoleDTO role) {
@@ -53,7 +54,7 @@ public class PersonDTO implements Serializable {
     }
 
     public void setSurname(String surname) {
-        surname = surname;
+        this.surname = surname;
     }
 
     public String getDetails() {

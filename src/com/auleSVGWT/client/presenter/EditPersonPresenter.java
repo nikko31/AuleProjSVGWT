@@ -3,9 +3,12 @@ package com.auleSVGWT.client.presenter;
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoleDTO;
+import com.auleSVGWT.client.event.EditRoomEvent;
 import com.auleSVGWT.client.view.EditPersonView;
 import com.auleSVGWT.client.view.EditPersonViewImpl;
+import com.auleSVGWT.server.domain.Person;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -33,11 +36,42 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
 
     @Override
     public void onSaveButtonClicked() {
+        //non c'è l id devo creare
+        personDTO.setName(view.getFirstName().getValue());
+        personDTO.setSurname(view.getLastName().getValue());
+        personDTO.setRole(view.getRole().getValue());
+        if(this.personDTO.getId()<0){
+            rpcService.savePerson(personDTO, new AsyncCallback<Integer>() {
+                @Override
+                public void onFailure(Throwable caught) {
+
+                }
+
+                @Override
+                public void onSuccess(Integer result) {
+                    History.back();
+                }
+            });
+        }
+        else {
+            rpcService.updatePerson(personDTO, new AsyncCallback<Integer>() {
+                @Override
+                public void onFailure(Throwable caught) {
+
+                }
+
+                @Override
+                public void onSuccess(Integer result) {
+                    History.back();
+                }
+            });
+        }
     }
 
     @Override
     public void onCancelButtonClicked() {
-        //Window.alert();
+        //eventBus.fireEvent(new EditRoomEvent());
+        History.back();
     }
 
     @Override
@@ -58,7 +92,7 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
 
             @Override
             public void onSuccess(ArrayList<RoleDTO> result) {
-                view.setRolesData(result);
+                view.setRolesData(result,personDTO.getRole());
             }
         });
     }

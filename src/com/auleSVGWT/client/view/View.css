@@ -90,9 +90,6 @@
     color: rgba(255,255,255,0.9);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: url("http://enjoycss.com/bg-img/default/1_2.png"), -webkit-linear-gradient(-225deg, rgba(0,237,3,0.84) 0, rgba(124,188,10,1) 100%);
-    background: url("http://enjoycss.com/bg-img/default/1_2.png"), -moz-linear-gradient(315deg, rgba(0,237,3,0.84) 0, rgba(124,188,10,1) 100%);
-    background: url("http://enjoycss.com/bg-img/default/1_2.png"), linear-gradient(315deg, rgba(0,237,3,0.84) 0, rgba(124,188,10,1) 100%);
     background-position: 50% 50%;
     -webkit-background-origin: padding-box;
     background-origin: padding-box;

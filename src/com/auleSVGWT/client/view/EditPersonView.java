@@ -25,11 +25,11 @@ public interface EditPersonView<T> {
 
     HasValue<String> getEmailAddress();
 
-    RoleDTOListBox getRole();
+    HasValue<RoleDTO> getRole();
 
     void setPersonData(T personData);
 
-    void setRolesData(ArrayList<RoleDTO> rolesData);
+    void setRolesData(ArrayList<RoleDTO> rolesData, RoleDTO role);
 
     void setPresenter(Presenter<T> presenter);
 

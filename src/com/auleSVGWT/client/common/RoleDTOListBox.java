@@ -20,7 +20,7 @@ public class RoleDTOListBox extends ListBox implements HasValue<RoleDTO> {
 
     public void setRoleDTOs(ArrayList<RoleDTO> roleDTOs) {
         this.roleDTOs = roleDTOs;
-        for(RoleDTO roleDTO:roleDTOs){
+        for (RoleDTO roleDTO : roleDTOs) {
             super.addItem(roleDTO.getName());
         }
     }
@@ -32,7 +32,15 @@ public class RoleDTOListBox extends ListBox implements HasValue<RoleDTO> {
 
     @Override
     public void setValue(RoleDTO value) {
-        super.addItem(value.getName());
+        int c=0;
+        for(RoleDTO roleDTO:this.roleDTOs){
+            if(value.getName().equals(roleDTO.getName())) {
+                super.setSelectedIndex(c);
+                break;
+            }
+            c++;
+        }
+
     }
 
     @Override

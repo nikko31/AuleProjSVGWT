@@ -18,7 +18,8 @@ public class Person implements Serializable {
     }
 
     public Person(PersonDTO personDTO){
-        this.id = personDTO.getId();
+        if(personDTO.getId()>=0)
+            this.id = personDTO.getId();
         this.name = personDTO.getName();
         this.surname = personDTO.getSurname();
         this.role = new Role(personDTO.getRole());

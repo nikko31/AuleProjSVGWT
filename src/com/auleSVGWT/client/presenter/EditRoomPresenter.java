@@ -8,6 +8,7 @@ import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.view.EditRoomView;
 import com.auleSVGWT.client.view.EditRoomViewImpl;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -43,15 +44,16 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onCancelButtonClicked() {
-        eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(),
+        /*eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(),
                 String.valueOf(roomPeopleDTO.getRoomDTO().getFloor()),
                 String.valueOf(roomPeopleDTO.getRoomDTO().getNumber()))
-        );
+        );*/
+        History.back();
     }
 
     @Override
     public void onAddPersonButtonClicked() {
-
+        eventBus.fireEvent(new EditPersonEvent(new PersonDTO()));
     }
 
     @Override
