@@ -4,6 +4,7 @@ import com.auleSVGWT.client.dto.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface AuleSVGWTServiceAsync {
     void saveRoom(RoomDTO roomDTO, AsyncCallback<Integer> async);
@@ -34,5 +35,7 @@ public interface AuleSVGWTServiceAsync {
     void getPerson(AsyncCallback<ArrayList<PersonDTO>> async);
 
     void getRoomsPeople(String building, String floorSt, AsyncCallback<ArrayList<RoomPeopleDTO>> async);
+
+    void  getBuildingsFileName(AsyncCallback<HashMap<String,ArrayList<String>>> async);
 
 }

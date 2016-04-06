@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.common.MyListBox;
+import com.auleSVGWT.client.common.RoleDTOListBox;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoleDTO;
 import com.google.gwt.core.client.GWT;
@@ -28,7 +29,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     @UiField
     TextBox emailTxt;
     @UiField
-    MyListBox<RoleDTO> rolesList;
+    RoleDTOListBox rolesList;
 
     @UiField
     Button saveButton;
@@ -58,7 +59,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     }
 
     @Override
-    public MyListBox<RoleDTO> getRole() {
+    public RoleDTOListBox getRole() {
         return rolesList;
     }
 
@@ -70,9 +71,7 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
 
     @Override
     public void setRolesData(ArrayList<RoleDTO> rolesData) {
-        for(RoleDTO roleDTO:rolesData){
-            rolesList.addValue(roleDTO);
-        }
+            rolesList.setRoleDTOs(rolesData);
 
     }
 

@@ -6,6 +6,7 @@ import com.auleSVGWT.client.dto.RoleDTO;
 import com.auleSVGWT.client.view.EditPersonView;
 import com.auleSVGWT.client.view.EditPersonViewImpl;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
@@ -36,7 +37,7 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
 
     @Override
     public void onCancelButtonClicked() {
-
+        //Window.alert();
     }
 
     @Override

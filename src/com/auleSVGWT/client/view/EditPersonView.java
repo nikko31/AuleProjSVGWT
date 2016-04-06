@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.common.MyListBox;
+import com.auleSVGWT.client.common.RoleDTOListBox;
 import com.auleSVGWT.client.dto.RoleDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,7 +25,7 @@ public interface EditPersonView<T> {
 
     HasValue<String> getEmailAddress();
 
-    MyListBox<RoleDTO> getRole();
+    RoleDTOListBox getRole();
 
     void setPersonData(T personData);
 

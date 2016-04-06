@@ -11,8 +11,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
@@ -418,6 +421,47 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }
 
         return role.getId();
+
+    }
+
+    //---------------------OTHER METHOD
+
+    public HashMap<String,ArrayList<String>> getBuildingsFileName(){
+        ArrayList<String> string = new ArrayList<>();
+        HashMap<String, ArrayList<String>> buildings = new HashMap<String, ArrayList<String>>();
+
+
+        try {
+
+            File folder = new File("C:\\Users\\Federico\\Desktop\\aulesvgwt\\AuleProjSVGWT\\war\\res");
+            File[] listOfFiles = folder.listFiles();
+            for (File file : listOfFiles) {
+                string.add(file.getName());
+            }
+
+
+        }catch(Exception e){
+            System.out.println("Error reading name of maps");
+        }
+
+        for(String s: string){
+            //System.out.println(s.substring(0,s.lastIndexOf('-')));
+            //System.out.println(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
+            if(buildings.containsKey(s.substring(0,s.lastIndexOf('-')))){
+                ArrayList<String> floors = new ArrayList<>();
+                floors = buildings.get(s.substring(0,s.lastIndexOf('-')));
+                floors.add(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
+                Collections.sort(floors);
+                buildings.replace(s.substring(0,s.lastIndexOf('-')),floors);
+            }
+            else{
+                ArrayList<String> floors =new ArrayList<>();
+                floors.add(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
+                buildings.put(s.substring(0,s.lastIndexOf('-')),floors);
+            }
+        }
+
+        return buildings;
 
     }
 

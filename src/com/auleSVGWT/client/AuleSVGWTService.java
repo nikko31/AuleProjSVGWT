@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RemoteServiceRelativePath("AuleSVGWTService")
 public interface AuleSVGWTService
@@ -37,4 +38,6 @@ public interface AuleSVGWTService
     ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt);
 
     ArrayList<String> listaAulePiano(String edificiopiano);
+
+    HashMap<String,ArrayList<String>> getBuildingsFileName();
 }
