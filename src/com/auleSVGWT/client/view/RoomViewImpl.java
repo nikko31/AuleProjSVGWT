@@ -2,16 +2,12 @@ package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomDTO;
-import com.auleSVGWT.client.dto.RoomPeopleDTO;
-import com.auleSVGWT.client.shared.PersonDetails;
-import com.auleSVGWT.client.presenter.Presenter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;

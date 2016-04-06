@@ -1,7 +1,5 @@
 package com.auleSVGWT.client.view;
 
-import com.auleSVGWT.client.shared.Person;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
 /**

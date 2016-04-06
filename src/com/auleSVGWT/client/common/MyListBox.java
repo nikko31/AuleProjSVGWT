@@ -15,6 +15,9 @@ public class MyListBox<S> extends ListBox implements HasValue<String> {
     public void addValue(RoleDTO roleDTO){
         this.addItem(roleDTO.getName());
     }
+    public void addValue(String string){
+        this.addItem(string);
+    }
 
     @Override
     public void setValue(String value) {

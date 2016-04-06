@@ -43,4 +43,5 @@ public class RoleDTO implements Serializable {
     public void setSqm(int sqm) {
         this.sqm = sqm;
     }
+
 }

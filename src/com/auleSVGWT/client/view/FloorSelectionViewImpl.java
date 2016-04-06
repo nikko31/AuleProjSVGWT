@@ -3,11 +3,13 @@ package com.auleSVGWT.client.view;
 import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.shared.FloorDetails;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.OptionElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
@@ -69,11 +71,13 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
         mapLst.setValue("mappa1");
         mapLst.setValue("mappa2");
 
-        for(FloorDetails floorDetail:listsData) {
-            buildingLst.setValue(floorDetail.getBuilding());
-            floorLst.setValue(floorDetail.getFloor());
+        for(FloorDetails floorDetail : listsData) {
+            buildingLst.addValue(floorDetail.getBuilding());
+            floorLst.addValue(floorDetail.getFloor());
         }
+        mapLst.getElement().getStyle().setBackgroundColor("#CEF0F9");
     }
+
 
     @Override
     public void setPresenter(Presenter<FloorDetails> presenter) {

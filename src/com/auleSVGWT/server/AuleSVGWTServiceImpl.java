@@ -190,11 +190,11 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     @Override
     public ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt) {
-        int floor=Integer.parseInt(floorSt);
+        int floor = Integer.parseInt(floorSt);
         ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<>();
         ArrayList<Person> people;
         ArrayList<Long> occ;
-        try{
+        try {
             org.hibernate.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
@@ -220,7 +220,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             }
             session.getTransaction().commit();
 
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("ERROR : getRoomsPeople method fail ");
 
         }
@@ -229,12 +229,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
 
-
-
     @Override
     public RoomPeopleDTO getRoomPeople(String building, String floorSt, String numberSt) {
-        int number=Integer.parseInt(numberSt);
-        int floor=Integer.parseInt(floorSt);
+        int number = Integer.parseInt(numberSt);
+        int floor = Integer.parseInt(floorSt);
         Room room1 = new Room();
         ArrayList<Long> occ = new ArrayList<>();
         ArrayList<Person> people = new ArrayList<>();
@@ -256,7 +254,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                     check = false;
 
                     for (Occupy occupy : occupies) {
-                        System.out.println("sono nel cilo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
+                        System.out.println("sono nel ciclo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
                         if (occupy.getRoom().getId() == room.getId()) {
                             people.add(occupy.getPerson());
                             occ.add(occupy.getId());
@@ -266,19 +264,14 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                     room1 = room;
 
 
-
                 }
             }
 
-
-            if(check){
-
-                roomPeopleDTO = createRoomPeopleDTO(newRoom( building, floorSt,  numberSt, session),people,occ);
-
-            }else{
+            if (check) {
+                roomPeopleDTO = createRoomPeopleDTO(newRoom(building, floorSt, numberSt, session), people, occ);
+            } else {
                 roomPeopleDTO = createRoomPeopleDTO(room1, people, occ);
             }
-
 
 
             session.getTransaction().commit();
@@ -438,10 +431,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         boolean check = true;
         try {
 
-            ArrayList<Building> buildings= new ArrayList<Building>(session.createQuery("from Building ").list());
+            ArrayList<Building> buildings = new ArrayList<Building>(session.createQuery("from Building ").list());
 
-            for(Building build : buildings){
-                if(build.getName().equals(buildingName)){
+            for (Building build : buildings) {
+                if (build.getName().equals(buildingName)) {
                     room.setBuilding(build);
                     room.setFloor(floor);
                     room.setNumber(number);
@@ -452,7 +445,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 }
             }
 
-            if(check){
+            if (check) {
                 building.setName(buildingName);
                 session.save(building);
                 room.setBuilding(building);

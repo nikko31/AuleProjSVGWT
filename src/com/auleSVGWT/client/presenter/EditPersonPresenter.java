@@ -3,14 +3,9 @@ package com.auleSVGWT.client.presenter;
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoleDTO;
-import com.auleSVGWT.client.dto.RoomPeopleDTO;
-import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.view.EditPersonView;
 import com.auleSVGWT.client.view.EditPersonViewImpl;
-import com.auleSVGWT.client.view.EditRoomView;
-import com.auleSVGWT.client.view.EditRoomViewImpl;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 

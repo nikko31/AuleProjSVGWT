@@ -1,8 +1,6 @@
 package com.auleSVGWT.client.view;
 
-import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.dto.PersonDTO;
-import com.auleSVGWT.client.shared.Person;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;

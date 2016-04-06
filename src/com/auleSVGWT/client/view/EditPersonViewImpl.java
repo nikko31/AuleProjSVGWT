@@ -71,7 +71,6 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     @Override
     public void setRolesData(ArrayList<RoleDTO> rolesData) {
         for(RoleDTO roleDTO:rolesData){
-            Window.alert(roleDTO.getName());
             rolesList.addValue(roleDTO);
         }
 

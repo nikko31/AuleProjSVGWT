@@ -1,11 +1,19 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:my="urn:import:com.auleSVGWT.client.common">
-    <g:HorizontalPanel>
-        <my:MyListBox ui:field="buildingLst"></my:MyListBox>
-        <my:MyListBox ui:field="floorLst"></my:MyListBox>
-        <my:MyListBox ui:field="mapLst"></my:MyListBox>
-        <g:Button ui:field="enterBtn">Enter</g:Button>
+    <ui:style>
 
-    </g:HorizontalPanel>
+
+    </ui:style>
+    <ui:style field="otherStyle" src="View.css"></ui:style>
+    <g:HTMLPanel>
+        <g:HorizontalPanel>
+            <my:MyListBox ui:field="buildingLst"></my:MyListBox>
+            <my:MyListBox ui:field="floorLst" ></my:MyListBox>
+            <my:MyListBox ui:field="mapLst"></my:MyListBox>
+            <g:Button ui:field="enterBtn" styleName='{otherStyle.enterButton1}'>Enter</g:Button>
+
+        </g:HorizontalPanel>
+
+    </g:HTMLPanel>
 </ui:UiBinder>
