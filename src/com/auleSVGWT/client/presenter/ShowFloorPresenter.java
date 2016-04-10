@@ -186,6 +186,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
         for (String room : strings) {
             int sum = 0;
+            int dim= 0;
             //Window.alert("ciao");
             for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
                 String s = "";
@@ -196,22 +197,45 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                     for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
                         sum += personDTO.getRole().getSqm();
                     }
+                    dim = roomPeopleDTO.getRoomDTO().getDimension();
                 }
 
             }
-            if(sum != 0){
+            if(dim == 0){
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:red");
+                style = style.replace(DEF_FILL, "fill:grey");
                 roomEl.setAttribute("style", style);
 
             }
-            else if(sum==0){
+            else if(sum == 0 & dim != 0){
+                final OMElement roomEl = roomSVGElt.getElementById(room);
+                String style = roomEl.getAttribute("style");
+                style = style.replace(DEF_FILL, "fill:yellow");
+                roomEl.setAttribute("style", style);
+
+            }
+            else if(sum == dim & dim != 0){
+                final OMElement roomEl = roomSVGElt.getElementById(room);
+                String style = roomEl.getAttribute("style");
+                style = style.replace(DEF_FILL, "fill:green");
+                roomEl.setAttribute("style", style);
+            }
+            else if(sum > dim && dim != 0){
+                final OMElement roomEl = roomSVGElt.getElementById(room);
+                //varia da 0 a 200
+                String str = "FF";
+                String style = roomEl.getAttribute("style");
+                style = style.replace(DEF_FILL, "fill:red");
+                roomEl.setAttribute("style", style);
+            }
+            else if(sum < dim && dim != 0){
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
                 style = style.replace(DEF_FILL, "fill:blue");
                 roomEl.setAttribute("style", style);
             }
+
 
         }
 
