@@ -27,6 +27,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private final AuleSVGWTServiceAsync rpcService;
     ShowFloorView<FloorDetails> view;
     private ArrayList<RoomPeopleDTO>  roomPeopleDTOs;
+    private ArrayList<String> string;
     private String building;
     private String floor;
     private String modality;
@@ -161,7 +162,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     }
 
     private void colorFloor(ArrayList<String> strings){
-        roomPeopleDTOs = new ArrayList<>();
+        string = strings;
 
 
         rpcService.getRoomsPeople(building, floor.replaceAll("\\s+", ""), new AsyncCallback<ArrayList<RoomPeopleDTO>>() {
@@ -172,11 +173,16 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
             @Override
             public void onSuccess(ArrayList<RoomPeopleDTO> result) {
-                roomPeopleDTOs = result;
+                colorRoom(string,result);
 
             }
         });
 
+
+
+
+    }
+    private void colorRoom(ArrayList<String> strings,ArrayList<RoomPeopleDTO> roomPeopleDTOs){
 
         for (String room : strings) {
             int sum = 0;
@@ -200,7 +206,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 roomEl.setAttribute("style", style);
 
             }
-            else{
+            else if(sum==0){
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
                 style = style.replace(DEF_FILL, "fill:blue");
