@@ -29,6 +29,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private String building;
     private String floor;
     private String number;
+    private String modality;
     private PersonDTO personDTO;
     private RoomPeopleDTO roomPeopleDTO;
 
@@ -100,6 +101,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
             public void onShowFloor(ShowFloorEvent event) {
                 building = event.getBuilding();
                 floor = event.getFloor();
+                modality = event.getModality();
                 doOnShowFloor();
             }
         });
@@ -110,7 +112,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnShowFloor() {
-        History.newItem("showFloor " + building + "-" + floor);
+        History.newItem("showFloor " + building + "-" + floor + " " +modality);
     }
 
     private void doOnShowRoom(String number) {
@@ -166,7 +168,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
                     @Override
                     public void onSuccess() {
-                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor)
+                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor,modality)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });

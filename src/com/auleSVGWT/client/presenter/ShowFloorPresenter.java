@@ -2,6 +2,8 @@ package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.Resources;
+import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
 import com.auleSVGWT.client.view.ShowFloorView;
@@ -24,8 +26,10 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private final EventBus eventBus;
     private final AuleSVGWTServiceAsync rpcService;
     ShowFloorView<FloorDetails> view;
+    private ArrayList<RoomPeopleDTO>  roomPeopleDTOs;
     private String building;
     private String floor;
+    private String modality;
     private OMSVGSVGElement roomSVGElt;
     private OMElement selectedRoom;
 
@@ -37,7 +41,8 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                               AuleSVGWTServiceAsync rpcService,
                               ShowFloorView<FloorDetails> view,
                               String building,
-                              String floor) {
+                              String floor,
+                              String modality) {
         this.selectedRoom = null;
         this.building = building;
         this.floor = floor;
@@ -45,6 +50,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
         this.rpcService = rpcService;
         this.view = view;
         this.view.setPresenter(this);
+        this.modality = modality;
     }
 
     @Override
@@ -74,7 +80,13 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                         @Override
                         public void onSuccess(ArrayList<String> result) {
-                            addHandlers(result);
+                            if(modality.equals("mappa1")){
+                                addHandlers(result);
+                            }
+                            else {
+                                colorFloor(result);
+                            }
+
                         }
                     };
                     rpcService.listaAulePiano(building + "-" + floor, callback);
@@ -146,5 +158,56 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
             roomEl.addDomHandler(handler, MouseOutEvent.getType());
 
         }
+    }
+
+    private void colorFloor(ArrayList<String> strings){
+        roomPeopleDTOs = new ArrayList<>();
+
+
+        rpcService.getRoomsPeople(building, floor.replaceAll("\\s+", ""), new AsyncCallback<ArrayList<RoomPeopleDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Error fetching contact details");
+            }
+
+            @Override
+            public void onSuccess(ArrayList<RoomPeopleDTO> result) {
+                roomPeopleDTOs = result;
+
+            }
+        });
+
+
+        for (String room : strings) {
+            int sum = 0;
+            //Window.alert("ciao");
+            for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
+                String s = "";
+                s += roomPeopleDTO.getRoomDTO().getBuilding().getName()+"-"+new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString()+
+                        "-"+new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
+                //Window.alert(s +"......... " + room);
+                if (room.equals(s)){
+                    for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+                        sum += personDTO.getRole().getSqm();
+                    }
+                }
+
+            }
+            if(sum != 0){
+                final OMElement roomEl = roomSVGElt.getElementById(room);
+                String style = roomEl.getAttribute("style");
+                style = style.replace(DEF_FILL, "fill:red");
+                roomEl.setAttribute("style", style);
+
+            }
+            else{
+                final OMElement roomEl = roomSVGElt.getElementById(room);
+                String style = roomEl.getAttribute("style");
+                style = style.replace(DEF_FILL, "fill:blue");
+                roomEl.setAttribute("style", style);
+            }
+
+        }
+
     }
 }

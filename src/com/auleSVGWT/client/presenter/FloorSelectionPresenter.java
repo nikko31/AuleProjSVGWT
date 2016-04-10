@@ -44,6 +44,6 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
 
     @Override
     public void onEnterButtonClicked() {
-        eventBus.fireEvent(new ShowFloorEvent(view.getBuilding().getValue(),view.getFloor().getValue()));
+        eventBus.fireEvent(new ShowFloorEvent(view.getBuilding().getValue(),view.getFloor().getValue(),view.getMapType().getValue()));
     }
 }
