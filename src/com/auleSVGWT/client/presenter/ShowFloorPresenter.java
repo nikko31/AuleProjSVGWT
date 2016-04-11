@@ -184,9 +184,28 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     }
     private void colorRoom(ArrayList<String> strings,ArrayList<RoomPeopleDTO> roomPeopleDTOs){
 
+        //int Max = 0;
+        //int Min = 0;
+        int sum;
+        int dim;
+        /*
+        for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
+            for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+                sum += personDTO.getRole().getSqm();
+            }
+
+            if(sum > roomPeopleDTO.getRoomDTO().getDimension() && sum > Max){
+                Max = sum;
+
+            }
+
+        }*/
+
+
+
         for (String room : strings) {
-            int sum = 0;
-            int dim= 0;
+            sum = 0;
+            dim= 0;
             //Window.alert("ciao");
             for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
                 String s = "";
@@ -208,31 +227,55 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 roomEl.setAttribute("style", style);
 
             }
-            else if(sum == 0 & dim != 0){
+            else if(sum == 0 /*&& dim != 0*/){
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
                 style = style.replace(DEF_FILL, "fill:yellow");
                 roomEl.setAttribute("style", style);
 
             }
-            else if(sum == dim & dim != 0){
+            else if(sum == dim /*&& dim != 0*/){
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
                 style = style.replace(DEF_FILL, "fill:green");
                 roomEl.setAttribute("style", style);
             }
-            else if(sum > dim && dim != 0){
-                final OMElement roomEl = roomSVGElt.getElementById(room);
+            else if(sum > dim /*&& dim != 0*/){
+                //Integer value = new Integer ((1-(sum/Max))*200);
+                Integer value = new Integer ((dim/sum)*200);
+
                 //varia da 0 a 200
-                String str = "FF";
+                String str = "#FF";
+                if(Integer.toHexString(value).length()<=1){
+                    str +="0"+Integer.toHexString(value)+"0"+Integer.toHexString(value);
+                }
+                else{
+                    str+=Integer.toHexString(value)+Integer.toHexString(value);
+                }
+                //Window.alert(str);
+                final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:red");
+                style = style.replace(DEF_FILL, "fill:"+str);
                 roomEl.setAttribute("style", style);
             }
-            else if(sum < dim && dim != 0){
+            else if(sum < dim /*&& dim != 0*/){
+                String str="#";
+                //Integer value = new Integer (((sum/Max))*200);
+                Integer value = new Integer ((sum/dim)*200);
+
+                //varia da 0 a 200
+
+                if(Integer.toHexString(value).length()<=1){
+                    str +="0"+Integer.toHexString(value)+"0"+Integer.toHexString(value);
+                }
+                else{
+                    str+=Integer.toHexString(value)+Integer.toHexString(value);
+                }
+                str+="FF";
+                //Window.alert(str);
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:blue");
+                style = style.replace(DEF_FILL, "fill:"+str);
                 roomEl.setAttribute("style", style);
             }
 
