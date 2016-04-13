@@ -87,12 +87,13 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                             else {
                                 colorFloor(result);
                             }
+                            view.setFloorName(new FloorDetails(building, floor, roomSVGElt));
 
                         }
                     };
                     rpcService.listaAulePiano(building + "-" + floor, callback);
 
-                    view.setFloorName(new FloorDetails(building, floor, roomSVGElt));
+
                 }
             };
             requestBuilder.sendRequest(null, pendingRequest);
@@ -120,7 +121,9 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                         style = style.replace(DEF_FILL, "fill:green");
                         style = style.replace(SEL_FILL, "fill:green");
                         selectedRoom =  roomEl;
-                        eventBus.fireEvent(new ShowRoomEvent(building, floor, String.valueOf(Resources.SVG_ID_MAP.get(roomEl.getAttribute("id")) + 1)));
+                        //eventBus.fireEvent(new ShowRoomEvent(building, floor, String.valueOf(Resources.SVG_ID_MAP.get(roomEl.getAttribute("id")) + 1)));
+                        eventBus.fireEvent(new ShowRoomEvent(building, floor,
+                                String.valueOf(roomEl.getAttribute("id").substring(roomEl.getAttribute("id").lastIndexOf('-')+1))));
                     }
                     roomEl.setAttribute("style", style);
                 }
@@ -242,7 +245,9 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
             }
             else if(sum > dim /*&& dim != 0*/){
                 //Integer value = new Integer ((1-(sum/Max))*200);
-                Integer value = new Integer ((dim/sum)*200);
+                //Integer value = new Integer (((double)dim/sum)*200);
+                Double value1 = new Double(((double)dim/sum)*200);
+                Integer value = new Integer(value1.intValue());
 
                 //varia da 0 a 200
                 String str = "#FF";
@@ -260,8 +265,10 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
             }
             else if(sum < dim /*&& dim != 0*/){
                 String str="#";
-                //Integer value = new Integer (((sum/Max))*200);
-                Integer value = new Integer ((sum/dim)*200);
+                //Integer value = new Integer (((sum*200)/dim));
+
+                Double value1 = new Double(((double)sum/dim)*200);
+                Integer value = new Integer(value1.intValue());
 
                 //varia da 0 a 200
 
