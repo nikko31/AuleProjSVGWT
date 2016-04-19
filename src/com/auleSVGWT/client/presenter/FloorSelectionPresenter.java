@@ -39,6 +39,18 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
         ArrayList<FloorDetails>floorDetails=new ArrayList<>();
         floorDetails.add(new FloorDetails("fac-0","1"));
         floorDetails.add(new FloorDetails("fac-0","2"));
+        floorDetails.add(new FloorDetails("fac","0"));
+        floorDetails.add(new FloorDetails("fac","1"));
+        floorDetails.add(new FloorDetails("fac","2"));
+        floorDetails.add(new FloorDetails("fac","3"));
+        floorDetails.add(new FloorDetails("lab_pes","0"));
+        floorDetails.add(new FloorDetails("mat","0"));
+        floorDetails.add(new FloorDetails("mat","1"));
+        floorDetails.add(new FloorDetails("mec_info","0"));
+        floorDetails.add(new FloorDetails("mec_info","1"));
+        floorDetails.add(new FloorDetails("mec_info","2"));
+        floorDetails.add(new FloorDetails("mec_info","3"));
+        floorDetails.add(new FloorDetails("cent_tec","0"));
         view.setListData(floorDetails);
     }
 
