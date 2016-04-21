@@ -29,6 +29,9 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
     TextBox mtQTxt;
 
     @UiField
+    ScrollPanel personScroll;
+
+    @UiField
     FlexTable editPersonTable;
 
     @UiField

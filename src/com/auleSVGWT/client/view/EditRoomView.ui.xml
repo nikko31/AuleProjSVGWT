@@ -22,7 +22,10 @@
         </g:Grid>
 
         <g:Label>Persone: </g:Label>
-        <g:FlexTable cellSpacing="0" width="100%" borderWidth="1" ui:field="editPersonTable"/>
+        <g:ScrollPanel ui:field="personScroll" pixelSize="200,350">
+            <g:FlexTable cellSpacing="0" width="100%" borderWidth="1" ui:field="editPersonTable"/>
+        </g:ScrollPanel>
+
         <g:Button ui:field="addPersonButton">Crea Nuova Persona</g:Button>
 
         <g:HorizontalPanel>
