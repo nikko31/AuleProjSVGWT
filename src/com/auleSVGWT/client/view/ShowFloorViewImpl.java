@@ -17,9 +17,6 @@ public class ShowFloorViewImpl extends Composite implements ShowFloorView<FloorD
     @UiTemplate("ShowFloorView.ui.xml")
     interface ShowFloorViewUiBinder extends UiBinder<Widget, ShowFloorViewImpl> {
     }
-
-    @UiField
-    Label floorLbl;
     @UiField
     HTML roomContainer;
 
@@ -34,9 +31,7 @@ public class ShowFloorViewImpl extends Composite implements ShowFloorView<FloorD
 
     @Override
     public void setFloorName(FloorDetails floorDetails) {
-        floorLbl.setText(floorDetails.getBuilding() + " " + floorDetails.getFloor());
         roomContainer.getElement().removeAllChildren();
-        roomContainer.setSize("1200","900");
         roomContainer.getElement().appendChild(floorDetails.getRoomSvg().getElement());
 
 

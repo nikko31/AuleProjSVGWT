@@ -3,24 +3,24 @@ package com.auleSVGWT.client.view;
 import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.shared.FloorDetails;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.OptionElement;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by darklinux on 17/03/16.
  */
 public class FloorSelectionViewImpl extends Composite implements FloorSelectionView<FloorDetails> {
+
 
     @UiTemplate("FloorSelectionView.ui.xml")
     interface FloorSelectionViewUiBinder extends UiBinder<Widget, FloorSelectionViewImpl> {
@@ -32,6 +32,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     MyListBox<String> floorLst;
     @UiField
     MyListBox<String> mapLst;
+
 
     @UiField
     Button enterBtn;
@@ -67,15 +68,27 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     }
 
     @Override
-    public void setListData(List<FloorDetails> listsData) {
+    public void setListData(Set<String> buildings) {
         mapLst.setValue("mappa1");
         mapLst.setValue("mappa2");
+        buildingLst.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                presenter.onBuildingLstSelect();
+            }
+        });
 
-        for(FloorDetails floorDetail : listsData) {
-            buildingLst.addValue(floorDetail.getBuilding());
-            floorLst.addValue(floorDetail.getFloor());
+        for(String building : buildings) {
+            buildingLst.addValue(building);
         }
-        mapLst.getElement().getStyle().setBackgroundColor("#CEF0F9");
+        buildingLst.setSelectedIndex(0);
+    }
+
+    @Override
+    public void setFloorData(ArrayList<String> listsData) {
+        this.floorLst.clear();
+        for(String floor:listsData)
+            floorLst.addValue(floor);
     }
 
 

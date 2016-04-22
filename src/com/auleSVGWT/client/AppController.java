@@ -112,7 +112,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnShowFloor() {
-        History.newItem("showFloor " + building + "-" + floor + " " +modality);
+        History.newItem("showFloor " + building + "-" + floor + "-" +modality);
     }
 
     private void doOnShowRoom(String number) {

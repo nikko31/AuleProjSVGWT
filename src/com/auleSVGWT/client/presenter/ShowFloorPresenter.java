@@ -1,11 +1,11 @@
 package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
-import com.auleSVGWT.client.Resources;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
+import com.auleSVGWT.client.shared.Global;
 import com.auleSVGWT.client.view.ShowFloorView;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.EventBus;
@@ -13,11 +13,15 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.ListBox;
 import org.vectomatic.dom.svg.OMElement;
-import org.vectomatic.dom.svg.OMSVGElement;
 import org.vectomatic.dom.svg.OMSVGSVGElement;
 
+import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by darklinux on 18/03/16.
@@ -26,16 +30,13 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private final EventBus eventBus;
     private final AuleSVGWTServiceAsync rpcService;
     ShowFloorView<FloorDetails> view;
-    private ArrayList<RoomPeopleDTO>  roomPeopleDTOs;
+    private ArrayList<RoomPeopleDTO> roomPeopleDTOs;
     private ArrayList<String> string;
     private String building;
     private String floor;
     private String modality;
     private OMSVGSVGElement roomSVGElt;
     private OMElement selectedRoom;
-
-    private static final String DEF_FILL = "fill:transparent";
-    private static final String SEL_FILL = "fill:red";
 
 
     public ShowFloorPresenter(EventBus eventBus,
@@ -64,7 +65,8 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
     private void getMap(final String building, final String floor) {
 
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, "res/" + building + "-" + floor + ".svg");
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET,
+                "res/" + building + "-" + floor + ".svg");
         try {
 
             RequestCallback pendingRequest = new RequestCallback() {
@@ -81,16 +83,16 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                         @Override
                         public void onSuccess(ArrayList<String> result) {
-                            if(modality.equals("mappa1")){
+                            if (modality.equals("mappa1")) {
                                 addHandlers(result);
-                            }
-                            else {
+                            } else {
                                 colorFloor(result);
                             }
                             view.setFloorName(new FloorDetails(building, floor, roomSVGElt));
 
                         }
                     };
+
                     rpcService.listaAulePiano(building + "-" + floor, callback);
 
 
@@ -110,21 +112,21 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
                     String style = roomEl.getAttribute("style");
-                    if (style.contains("fill:green")) {
-                        style = style.replace("fill:green", DEF_FILL);
+                    if (style.contains(Global.GREEN_FILL)) {
+                        style = style.replace(Global.GREEN_FILL, Global.DEF_FILL);
                         selectedRoom = null;
                     } else {
                         if (selectedRoom != null) {
                             String selStyle = selectedRoom.getAttribute("style");
-                            selStyle = selStyle.replace("fill:green", DEF_FILL);
-                            selectedRoom.setAttribute("style",selStyle);
+                            selStyle = selStyle.replace(Global.GREEN_FILL, Global.DEF_FILL);
+                            selectedRoom.setAttribute("style", selStyle);
                         }
-                        style = style.replace(DEF_FILL, "fill:green");
-                        style = style.replace(SEL_FILL, "fill:green");
-                        selectedRoom =  roomEl;
+                        style = style.replace(Global.DEF_FILL, Global.GREEN_FILL);
+                        style = style.replace(Global.SEL_FILL, Global.GREEN_FILL);
+                        selectedRoom = roomEl;
                         //eventBus.fireEvent(new ShowRoomEvent(building, floor, String.valueOf(Resources.SVG_ID_MAP.get(roomEl.getAttribute("id")) + 1)));
                         eventBus.fireEvent(new ShowRoomEvent(building, floor,
-                                String.valueOf(roomEl.getAttribute("id").substring(roomEl.getAttribute("id").lastIndexOf('-')+1))));
+                                String.valueOf(roomEl.getAttribute("id").substring(roomEl.getAttribute("id").lastIndexOf('-') + 1))));
                     }
                     roomEl.setAttribute("style", style);
                 }
@@ -137,14 +139,14 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
                     String style = roomEl.getAttribute("style");
-                    style = style.replace(SEL_FILL, DEF_FILL);
+                    style = style.replace(Global.SEL_FILL, Global.DEF_FILL);
                     roomEl.setAttribute("style", style);
                 }
 
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
                     String style = roomEl.getAttribute("style");
-                    style = style.replace(DEF_FILL, SEL_FILL);
+                    style = style.replace(Global.DEF_FILL, Global.SEL_FILL);
                     roomEl.setAttribute("style", style);
                 }
 
@@ -165,7 +167,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
         }
     }
 
-    private void colorFloor(ArrayList<String> strings){
+    private void colorFloor(ArrayList<String> strings) {
         string = strings;
 
 
@@ -177,16 +179,15 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
             @Override
             public void onSuccess(ArrayList<RoomPeopleDTO> result) {
-                colorRoom(string,result);
+                colorRoom(string, result);
 
             }
         });
 
 
-
-
     }
-    private void colorRoom(ArrayList<String> strings,ArrayList<RoomPeopleDTO> roomPeopleDTOs){
+
+    private void colorRoom(ArrayList<String> strings, ArrayList<RoomPeopleDTO> roomPeopleDTOs) {
 
         //int Max = 0;
         //int Min = 0;
@@ -205,85 +206,74 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
         }*/
 
-
-
         for (String room : strings) {
             sum = 0;
-            dim= 0;
-            //Window.alert("ciao");
-            for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
+            dim = 0;
+            for (RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs) {
                 String s = "";
-                s += roomPeopleDTO.getRoomDTO().getBuilding().getName()+"-"+new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString()+
-                        "-"+new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
-                //Window.alert(s +"......... " + room);
-                if (room.equals(s)){
-                    for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+                s += roomPeopleDTO.getRoomDTO().getBuilding().getName() + "-" + new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString() +
+                        "-" + new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
+                if (room.equals(s)) {
+                    for (PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()) {
                         sum += personDTO.getRole().getSqm();
                     }
                     dim = roomPeopleDTO.getRoomDTO().getDimension();
                 }
 
             }
-            if(dim == 0){
+            if (dim == 0) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:grey");
+                style = style.replace(Global.DEF_FILL, Global.GREY_FILL);
                 roomEl.setAttribute("style", style);
 
-            }
-            else if(sum == 0 /*&& dim != 0*/){
+            } else if (sum == 0 /*&& dim != 0*/) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:yellow");
+                style = style.replace(Global.DEF_FILL, "fill:yellow");
                 roomEl.setAttribute("style", style);
 
-            }
-            else if(sum == dim /*&& dim != 0*/){
+            } else if (sum == dim /*&& dim != 0*/) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:green");
+                style = style.replace(Global.DEF_FILL, Global.GREEN_FILL);
                 roomEl.setAttribute("style", style);
-            }
-            else if(sum > dim /*&& dim != 0*/){
+            } else if (sum > dim /*&& dim != 0*/) {
                 //Integer value = new Integer ((1-(sum/Max))*200);
                 //Integer value = new Integer (((double)dim/sum)*200);
-                Double value1 = new Double(((double)dim/sum)*200);
+                Double value1 = new Double(((double) dim / sum) * 200);
                 Integer value = new Integer(value1.intValue());
 
                 //varia da 0 a 200
                 String str = "#FF";
-                if(Integer.toHexString(value).length()<=1){
-                    str +="0"+Integer.toHexString(value)+"0"+Integer.toHexString(value);
-                }
-                else{
-                    str+=Integer.toHexString(value)+Integer.toHexString(value);
+                if (Integer.toHexString(value).length() <= 1) {
+                    str += "0" + Integer.toHexString(value) + "0" + Integer.toHexString(value);
+                } else {
+                    str += Integer.toHexString(value) + Integer.toHexString(value);
                 }
                 //Window.alert(str);
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:"+str);
+                style = style.replace(Global.DEF_FILL, "fill:" + str);
                 roomEl.setAttribute("style", style);
-            }
-            else if(sum < dim /*&& dim != 0*/){
-                String str="#";
+            } else if (sum < dim /*&& dim != 0*/) {
+                String str = "#";
                 //Integer value = new Integer (((sum*200)/dim));
 
-                Double value1 = new Double(((double)sum/dim)*200);
+                Double value1 = new Double(((double) sum / dim) * 200);
                 Integer value = new Integer(value1.intValue());
 
                 //varia da 0 a 200
 
-                if(Integer.toHexString(value).length()<=1){
-                    str +="0"+Integer.toHexString(value)+"0"+Integer.toHexString(value);
+                if (Integer.toHexString(value).length() <= 1) {
+                    str += "0" + Integer.toHexString(value) + "0" + Integer.toHexString(value);
+                } else {
+                    str += Integer.toHexString(value) + Integer.toHexString(value);
                 }
-                else{
-                    str+=Integer.toHexString(value)+Integer.toHexString(value);
-                }
-                str+="FF";
-                //Window.alert(str);
+                str += "FF";
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(DEF_FILL, "fill:"+str);
+                style = style.replace(Global.DEF_FILL, "fill:" + str);
                 roomEl.setAttribute("style", style);
             }
 

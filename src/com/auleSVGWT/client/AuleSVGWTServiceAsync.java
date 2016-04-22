@@ -30,7 +30,7 @@ public interface AuleSVGWTServiceAsync {
     void getRoomPeople(String building, String floor, String number, AsyncCallback<RoomPeopleDTO> async);
 
 
-    void listaAulePiano(String edificiopiano, AsyncCallback<ArrayList<String>> async);
+    void listaAulePiano(String text, AsyncCallback<ArrayList<String>> async);
 
     void getPerson(AsyncCallback<ArrayList<PersonDTO>> async);
 

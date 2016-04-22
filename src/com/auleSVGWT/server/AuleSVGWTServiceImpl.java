@@ -4,7 +4,6 @@ import com.auleSVGWT.client.AuleSVGWTService;
 import com.auleSVGWT.client.dto.*;
 import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
@@ -13,11 +12,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.stream.Collectors;
 
 
@@ -366,7 +365,30 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
     @Override
-    public ArrayList<String> listaAulePiano(String edificiopiano) {
+    public ArrayList<String> listaAulePiano( String edificiopiano) {
+        ArrayList<String> aule = new ArrayList<>();
+        JSONParser parser = new JSONParser();
+        try {
+
+            Object obj = parser.parse(new FileReader("doc.JSON"));
+            JSONObject jsonObject = (JSONObject) obj;
+
+
+            JSONArray list = (JSONArray) jsonObject.get(edificiopiano);
+
+            for (String aList : (Iterable<String>) list) {
+                aule.add(edificiopiano + "-" + aList);
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return aule;
+    }
+
+
+    public ArrayList<String> listaAule(String edificiopiano) throws FileNotFoundException {
         ArrayList<String> aule = new ArrayList<>();
         JSONParser parser = new JSONParser();
         try {
@@ -433,7 +455,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         try {
 
-            File folder = new File("C:\\Users\\Federico\\Desktop\\aulesvgwt\\AuleProjSVGWT\\war\\res");
+            File folder = new File("res");
             File[] listOfFiles = folder.listFiles();
             for (File file : listOfFiles) {
                 string.add(file.getName());

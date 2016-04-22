@@ -1,6 +1,8 @@
 package com.auleSVGWT.client.common;
 
 import com.auleSVGWT.client.dto.RoleDTO;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
@@ -12,6 +14,11 @@ public class MyListBox<S> extends ListBox implements HasValue<String> {
         return this.getSelectedValue();
     }
 
+    @Override
+    public void setSelectedIndex(int index) {
+        super.setSelectedIndex(index);
+        DomEvent.fireNativeEvent(Document.get().createChangeEvent(), this);
+    }
     public void addValue(RoleDTO roleDTO){
         this.addItem(roleDTO.getName());
     }
@@ -34,6 +41,7 @@ public class MyListBox<S> extends ListBox implements HasValue<String> {
     public void setValue(String value, boolean fireEvents) {
 
     }
+
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {

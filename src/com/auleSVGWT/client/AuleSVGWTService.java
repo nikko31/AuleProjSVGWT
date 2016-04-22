@@ -37,7 +37,7 @@ public interface AuleSVGWTService
 
     ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt);
 
-    ArrayList<String> listaAulePiano(String edificiopiano);
+    ArrayList<String> listaAulePiano(String text);
 
     HashMap<String,ArrayList<String>> getBuildingsFileName();
 }

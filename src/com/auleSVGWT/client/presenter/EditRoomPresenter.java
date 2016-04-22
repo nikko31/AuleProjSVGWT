@@ -39,7 +39,7 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onSaveButtonClicked() {
-        Window.alert(selectedPersons.get(0).getName()+" 2 "+selectedPersons.get(1).getName());
+
     }
 
     @Override
