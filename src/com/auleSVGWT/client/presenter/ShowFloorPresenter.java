@@ -13,15 +13,10 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.ListBox;
 import org.vectomatic.dom.svg.OMElement;
 import org.vectomatic.dom.svg.OMSVGSVGElement;
 
-import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Created by darklinux on 18/03/16.
@@ -230,7 +225,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
             } else if (sum == 0 /*&& dim != 0*/) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(Global.DEF_FILL, "fill:yellow");
+                style = style.replace(Global.DEF_FILL, "fill:grey");
                 roomEl.setAttribute("style", style);
 
             } else if (sum == dim /*&& dim != 0*/) {
