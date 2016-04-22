@@ -19,6 +19,8 @@ public interface AuleSVGWTService
 
     Long deleteOccupy(Long id);
 
+    Long saveRoomOccupy(ArrayList<Long> ids, ArrayList<OccupyDTO> occupyDTOs);
+
     Integer deletePerson(int id);
 
     ArrayList<OccupyDTO> getOccupy();

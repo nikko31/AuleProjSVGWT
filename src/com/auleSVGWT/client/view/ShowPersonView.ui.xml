@@ -32,6 +32,6 @@
         </table>
         </div>
 
-        <g:Button ui:field="backButton">Cancel</g:Button>
+        <g:Button ui:field="backButton">Indietro</g:Button>
     </g:HTMLPanel>
 </ui:UiBinder>

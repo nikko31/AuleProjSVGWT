@@ -107,10 +107,19 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
     }
 
     @Override
-    public void setRowData(ArrayList<PersonDTO> rowData) {
+    public void setRowData(ArrayList<PersonDTO> rowData, RoomPeopleDTO roompeopleDTO) {
         editPersonTable.removeAllRows();
         for (int i = 0; i < rowData.size(); i++) {
-            editPersonTable.setWidget(i, 0, new CheckBox());
+            CheckBox checkBox = new CheckBox();
+
+            for(PersonDTO personDTO : roompeopleDTO.getPeopleDTO()){
+                if(personDTO.getId() == rowData.get(i).getId()){
+                    checkBox.setValue(true);
+
+                }
+
+            }
+            editPersonTable.setWidget(i, 0, checkBox);
             editPersonTable.setText(i, 1, rowData.get(i).getSurname() +" "+rowData.get(i).getName());
         }
         this.rowData = rowData;

@@ -2,6 +2,7 @@ package com.auleSVGWT.client.view;
 
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomDTO;
+import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,7 +29,7 @@ public interface EditRoomView<T> {
 
     HasValue<String> getMtQ();
 
-    void setRowData(ArrayList<PersonDTO> rowData);
+    void setRowData(ArrayList<PersonDTO> rowData, RoomPeopleDTO roompeopleDTO);
 
     void setRoomData(RoomDTO roomData);
 

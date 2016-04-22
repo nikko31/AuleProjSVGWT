@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
+import com.auleSVGWT.client.dto.OccupyDTO;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.EditPersonEvent;
@@ -28,6 +29,7 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     public EditRoomPresenter(EventBus eventBus, AuleSVGWTServiceAsync rpcService, EditRoomViewImpl editRoomView, RoomPeopleDTO roomPeopleDTO) {
         selectedPersons=new ArrayList<>();
+        selectedPersons.addAll(roomPeopleDTO.getPeopleDTO());
         this.rpcService=rpcService;
         this.eventBus=eventBus;
         this.roomPeopleDTO=roomPeopleDTO;
@@ -39,6 +41,23 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onSaveButtonClicked() {
+        ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
+        for(PersonDTO personDTO : selectedPersons){
+            occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
+        }
+        rpcService.saveRoomOccupy(roomPeopleDTO.getOccId(), occupyDTOs, new AsyncCallback<Long>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("errore nel salvataggio");
+            }
+
+            @Override
+            public void onSuccess(Long result) {
+                eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),
+                        new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString()));
+
+            }
+        });
 
     }
 
@@ -63,10 +82,29 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onItemSelected(PersonDTO selectedItem) {
-        if(selectedPersons.contains(selectedItem))
-            selectedPersons.remove(selectedItem);
-        else
+        boolean flag = true;
+        for(PersonDTO personDTO : selectedPersons){
+            if(selectedItem.getId() == personDTO.getId()){
+                //Window.alert("cancello");
+                selectedPersons.remove(personDTO);
+                flag = false;
+            }
+
+        }
+        if(flag){
             selectedPersons.add(selectedItem);
+        }
+
+        /*
+        if (selectedPersons.contains(selectedItem)){
+            Window.alert("contiene un nome");
+            selectedPersons.remove(selectedItem);}
+        else{
+            Window.alert("contiene un nome");
+            selectedPersons.add(selectedItem);
+        }*/
+
+
     }
 
     @Override
@@ -87,7 +125,7 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
             @Override
             public void onSuccess(ArrayList<PersonDTO> result) {
                 personsDetails=result;
-                view.setRowData(personsDetails);
+                view.setRowData(personsDetails,roomPeopleDTO);
             }
         });
     }

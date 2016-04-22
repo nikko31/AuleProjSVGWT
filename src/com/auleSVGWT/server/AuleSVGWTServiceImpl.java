@@ -127,6 +127,58 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     /* */
 
     @Override
+    public Long saveRoomOccupy(ArrayList<Long> ids,ArrayList<OccupyDTO> occupyDTOs){
+        /*System.out.println("sono nel saveroom");
+        for(OccupyDTO occupyDTO: occupyDTOs){
+            System.out.println(occupyDTO.getPerson().getName() + occupyDTO.getPerson().getSurname());
+
+        }*/
+
+
+
+        for(Long id : ids) {
+            System.out.println("sto cancellando id ................"+ id);
+            try {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                session.beginTransaction();
+                Query q = session.createQuery("delete Occupy o where o.id = " + id);
+                q.executeUpdate();
+                session.getTransaction().commit();
+
+
+            } catch (Exception e) {
+                System.out.println("ERROR : saveRoomOccupy method fail ");
+
+            }
+        }
+        for(OccupyDTO occupyDTO: occupyDTOs){
+
+            Occupy occupy = new Occupy(occupyDTO);
+
+
+            try {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                session.beginTransaction();
+                session.save(occupy);
+                session.getTransaction().commit();
+
+
+            } catch (Exception e) {
+                System.out.println("ERROR : saveRoomOccupy method fail ");
+
+            }
+        }
+
+
+
+        return new Long(5);
+    }
+
+
+
+
+
+    @Override
     public Long saveOccupy(OccupyDTO occupyDTO) {
         Occupy occupy = new Occupy(occupyDTO);
 

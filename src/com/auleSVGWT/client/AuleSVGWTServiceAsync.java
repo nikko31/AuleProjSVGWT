@@ -15,6 +15,8 @@ public interface AuleSVGWTServiceAsync {
 
     void deleteOccupy(Long id, AsyncCallback<Long> async);
 
+    void saveRoomOccupy(ArrayList<Long> ids,ArrayList<OccupyDTO> occupyDTOs, AsyncCallback<Long> async);
+
     void deletePerson(int id, AsyncCallback<Integer> async);
 
     void getOccupy(AsyncCallback<ArrayList<OccupyDTO>> async);
