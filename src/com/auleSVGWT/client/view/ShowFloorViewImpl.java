@@ -33,10 +33,6 @@ public class ShowFloorViewImpl extends Composite implements ShowFloorView<FloorD
     public void setFloorName(FloorDetails floorDetails) {
         roomContainer.getElement().removeAllChildren();
         roomContainer.getElement().appendChild(floorDetails.getRoomSvg().getElement());
-
-
-
-
     }
 
     @Override

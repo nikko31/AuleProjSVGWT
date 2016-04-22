@@ -202,7 +202,21 @@ body, td, a, div, .p {
 }
 
 
+.header img {
+    float: left;
+    height: 150px;
+    background: #555;
+}
 
+.header h1 {
+    color: white;
+}
+
+
+
+.headertr {
+    background-color: orange;
+}
 
 
 

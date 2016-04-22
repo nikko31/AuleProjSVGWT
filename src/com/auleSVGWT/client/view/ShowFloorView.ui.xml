@@ -6,7 +6,7 @@
 
     <ui:with field='resources' type='com.auleSVGWT.client.AuleSVGWT' />
     <g:FlowPanel ui:field="display">
-            <g:Label ui:field="floorLbl" />
+
             <g:HTML ui:field="roomContainer"/>
     </g:FlowPanel>
 

@@ -5,6 +5,7 @@
     <!-- Inherit the core Web Toolkit stuff.                  -->
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="org.vectomatic.libgwtsvg"/>
+    <inherits name="com.google.gwt.user.theme.standard.Standard"/>
     <!-- Specify the app entry point class.                   -->
     <entry-point class='com.auleSVGWT.client.AuleSVGWT'/>
 

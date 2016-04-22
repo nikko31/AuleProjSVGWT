@@ -3,12 +3,21 @@
              xmlns:my="urn:import:com.auleSVGWT.client.common">
     <ui:style field="otherStyle" src="View.css"></ui:style>
     <g:HTMLPanel>
-            <g:HorizontalPanel styleName="{otherStyle.header}">
+        <g:HorizontalPanel styleName="{otherStyle.header}">
+            <g:VerticalPanel  styleName="{otherStyle.header1}">
+                <g:Label styleName="{otherStyle.header2}">Edificio</g:Label>
                 <my:MyListBox ui:field="buildingLst"></my:MyListBox>
-                <my:MyListBox ui:field="floorLst" ></my:MyListBox>
-                <my:MyListBox ui:field="mapLst"></my:MyListBox>
-                <g:Button ui:field="enterBtn" styleName='{otherStyle.enterButton1}'>Enter</g:Button>
+            </g:VerticalPanel>
+            <g:VerticalPanel styleName="{otherStyle.header1}">
+                <g:Label styleName="{otherStyle.header2}">Piano</g:Label>
+                <my:MyListBox ui:field="floorLst"></my:MyListBox>
+            </g:VerticalPanel>
+            <g:VerticalPanel styleName="{otherStyle.header1}">
+                <g:Label styleName="{otherStyle.header2}">Tipo Visualizzazione</g:Label>
+            <my:MyListBox ui:field="mapLst"></my:MyListBox>
+            </g:VerticalPanel>
+            <g:Button ui:field="enterBtn" styleName='{otherStyle.enterButton1}'>Enter</g:Button>
 
-            </g:HorizontalPanel>
+        </g:HorizontalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>
