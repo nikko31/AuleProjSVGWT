@@ -29,7 +29,7 @@
             </g:row>
         </g:Grid>
 
-        <g:FlexTable cellSpacing="0" width="100%" borderWidth="1" ui:field="personTable"/>
+        <g:FlexTable cellSpacing="0" width="275" borderWidth="1"  ui:field="personTable"/>
         <g:Button ui:field="editButton">Modifica</g:Button>
 
     </g:VerticalPanel>

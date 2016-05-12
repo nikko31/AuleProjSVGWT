@@ -4,6 +4,7 @@ package com.auleSVGWT.server.domain;
 import com.auleSVGWT.client.dto.PersonDTO;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * Created by FEDE on 21/03/2016.
@@ -13,6 +14,8 @@ public class Person implements Serializable {
     private String name;
     private String surname;
     private Role role;
+    private Date startWork;
+    private Date endWork;
 
     public Person() {
     }
@@ -23,7 +26,10 @@ public class Person implements Serializable {
         this.name = personDTO.getName();
         this.surname = personDTO.getSurname();
         this.role = new Role(personDTO.getRole());
+        this.startWork = personDTO.getStartWork();
+        this.endWork = personDTO.getEndWork();
     }
+
 
     public int getId() {
         return id;
@@ -57,5 +63,20 @@ public class Person implements Serializable {
         this.role = role;
     }
 
+    public Date getStartWork() {
+        return startWork;
+    }
 
+    public void setStartWork(Date startWork) {
+        this.startWork = startWork;
+    }
+
+    public Date getEndWork() {
+        return endWork;
+    }
+
+    public void setEndWork(Date endWork) {
+        this.endWork = endWork;
+    }
 }
+

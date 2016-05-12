@@ -15,6 +15,9 @@ public class Room implements Serializable {
     private Building building;
     private int maxPeople;
     private int dimension;
+    private String maintenance;
+    private int socket;
+    private String roomCode;
 
 
     public Room() {
@@ -28,6 +31,9 @@ public class Room implements Serializable {
         this.dimension = roomDTO.getDimension();
         this.maxPeople = roomDTO.getMaxPerson();
         this.dimension = roomDTO.getDimension();
+        this.socket = roomDTO.getSocket();
+        this.maintenance = roomDTO.getMaintenance();
+        this.roomCode = roomDTO.getRoomCode();
     }
 
     public int getId() {
@@ -78,4 +84,27 @@ public class Room implements Serializable {
         this.dimension = dimension;
     }
 
+    public String getMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(String maintenance) {
+        this.maintenance = maintenance;
+    }
+
+    public String getRoomCode() {
+        return roomCode;
+    }
+
+    public void setRoomCode(String roomCode) {
+        this.roomCode = roomCode;
+    }
+
+    public int getSocket() {
+        return socket;
+    }
+
+    public void setSocket(int socket) {
+        this.socket = socket;
+    }
 }

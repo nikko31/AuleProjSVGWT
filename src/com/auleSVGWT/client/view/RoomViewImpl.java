@@ -68,7 +68,8 @@ public class RoomViewImpl extends Composite implements RoomView<PersonDTO> {
     public void setRowData(ArrayList<PersonDTO> rowData) {
         personTable.removeAllRows();
         for (int c = 0; c < rowData.size(); c++) {
-            personTable.setText(c, 0, rowData.get(c).getRole().getName() + " " + rowData.get(c).getDetails());
+            personTable.setText(c, 0,rowData.get(c).getDetails());
+            personTable.setText(c,1,rowData.get(c).getRole().getName());
         }
         this.rowData = rowData;
 

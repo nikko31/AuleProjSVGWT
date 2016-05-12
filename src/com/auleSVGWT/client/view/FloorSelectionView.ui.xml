@@ -16,7 +16,7 @@
                 <g:Label styleName="{otherStyle.header2}">Tipo Visualizzazione</g:Label>
             <my:MyListBox ui:field="mapLst"></my:MyListBox>
             </g:VerticalPanel>
-            <g:Button ui:field="enterBtn" styleName='{otherStyle.enterButton1}'>Enter</g:Button>
+            <g:Button ui:field="enterBtn" >Enter</g:Button>
 
         </g:HorizontalPanel>
     </g:HTMLPanel>

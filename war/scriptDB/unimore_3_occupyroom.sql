@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: unimore
+-- Host: 127.0.0.1    Database: unimore_3
 -- ------------------------------------------------------
 -- Server version	5.7.11-log
 
@@ -16,29 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `role`
+-- Table structure for table `occupyroom`
 --
 
-DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `occupyroom`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `role` (
-  `role_id` int(11) NOT NULL,
-  `role_name` varchar(30) NOT NULL,
-  `role_sqm` int(11) NOT NULL,
-  PRIMARY KEY (`role_id`),
-  UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `occupyroom` (
+  `occupyroom_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  PRIMARY KEY (`occupyroom_id`),
+  UNIQUE KEY `person_id` (`person_id`,`room_id`),
+  KEY `ibfk_7` (`room_id`),
+  CONSTRAINT `ibfk_6` FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`),
+  CONSTRAINT `ibfk_7` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `role`
+-- Dumping data for table `occupyroom`
 --
 
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'assistente',15),(2,'prof. ordinario',25),(3,'ricercatore',10),(4,'dottornado',10),(5,'tecnico',10);
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+LOCK TABLES `occupyroom` WRITE;
+/*!40000 ALTER TABLE `occupyroom` DISABLE KEYS */;
+INSERT INTO `occupyroom` VALUES (1,2,1),(2,5,1);
+/*!40000 ALTER TABLE `occupyroom` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-21 22:43:30
+-- Dump completed on 2016-05-12 21:48:37

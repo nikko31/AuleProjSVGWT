@@ -122,6 +122,7 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
             }
             editPersonTable.setWidget(i, 0, checkBox);
             editPersonTable.setText(i, 1, rowData.get(i).getSurname() +" "+rowData.get(i).getName());
+            editPersonTable.setText(i, 2, rowData.get(i).getRole().getName());
 
         }
         this.rowData = rowData;

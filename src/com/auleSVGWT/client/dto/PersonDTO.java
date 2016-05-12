@@ -2,6 +2,7 @@ package com.auleSVGWT.client.dto;
 
 
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * Created by FEDE on 21/03/2016.
@@ -11,6 +12,8 @@ public class PersonDTO implements Serializable {
     private String name;
     private String surname;
     private RoleDTO role;
+    private Date startWork;
+    private Date endWork;
 
 
     public PersonDTO() {
@@ -30,6 +33,18 @@ public class PersonDTO implements Serializable {
         this.name = name;
         this.surname = surname;
         this.role = role;
+        startWork = null;
+        endWork = null;
+
+    }
+
+    public PersonDTO(int id, String name, String surname, RoleDTO role,Date startWork,Date endWork) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.role = role;
+        this.startWork = startWork;
+        this.endWork = endWork;
 
     }
 
@@ -68,4 +83,21 @@ public class PersonDTO implements Serializable {
     public void setRole(RoleDTO role) {
         this.role = role;
     }
+
+    public Date getStartWork() {
+        return startWork;
+    }
+
+    public void setStartWork(Date startWork) {
+        this.startWork = startWork;
+    }
+
+    public Date getEndWork() {
+        return endWork;
+    }
+
+    public void setEndWork(Date endWork) {
+        this.endWork = endWork;
+    }
 }
+

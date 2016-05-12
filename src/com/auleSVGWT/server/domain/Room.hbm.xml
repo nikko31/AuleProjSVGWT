@@ -12,6 +12,9 @@
         <property name="number" column="room_number"/>
         <property name="maxPeople" column="room_maxPeople"/>
         <property name="dimension" column="room_dimension"/>
+        <property name="socket" column="socket_network"/>
+        <property name="roomCode" column="room_code"/>
+        <property name="maintenance" column="maintenance"/>
 
         <many-to-one name="building" class="com.auleSVGWT.server.domain.Building" fetch="select">
             <column name="building_number" not-null="true" />

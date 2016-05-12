@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
     // Implementation of sample interface method
 
+
     //--------------------------ROOM
 
     @Override
@@ -238,6 +239,22 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }
 
         return occupyDTO;
+    }
+
+    //questo metodo serve perchè se elimino una persona prima devo eliminare tutte le sue relazioni con room
+    private int deleteOccupyPerson(int id) {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query q = session.createQuery("delete Occupy O where O.person.id = " + id);
+            q.executeUpdate();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : deleteOccupyPerson method fail ");
+        }
+
+        return id;
     }
 
     //-----------------STANZE OCCUPATE------------
@@ -558,6 +575,9 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                     room.setNumber(number);
                     room.setMaxPeople(0);
                     room.setDimension(0);
+                    room.setRoomCode(buildingName + "-" + floor + "-" + number);
+                    room.setSocket(0);
+                    room.setMaintenance("nessun particolare");
                     session.save(room);
                     check = false;
                 }
@@ -571,6 +591,9 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 room.setNumber(number);
                 room.setMaxPeople(0);
                 room.setDimension(0);
+                room.setRoomCode(buildingName + "-" + floor + "-" + number);
+                room.setSocket(0);
+                room.setMaintenance("nessun particolare");
                 session.save(room);
             }
 
@@ -584,26 +607,12 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     }
 
-    //questo metodo serve perchè se elimino una persona prima devo eliminare tutte le sue relazioni con room
-    private int deleteOccupyPerson(int id) {
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            Query q = session.createQuery("delete Occupy O where O.person.id = " + id);
-            q.executeUpdate();
-            session.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.out.println("ERROR : deleteOccupyPerson method fail ");
-        }
 
-        return id;
-    }
-
-    private RoomPeopleDTO createRoomPeopleDTO(Room room, ArrayList<com.auleSVGWT.server.domain.Person> people, ArrayList<Long> occId) {
+    private RoomPeopleDTO createRoomPeopleDTO(Room room, ArrayList<Person> people, ArrayList<Long> occId) {
         ArrayList<PersonDTO> peopleDTO = new ArrayList<>();
 
-        for (com.auleSVGWT.server.domain.Person person : people) {
+        for (Person person : people) {
             peopleDTO.add(createPersonDTO(person));
         }
 
@@ -621,10 +630,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         return new RoleDTO(role.getId(), role.getName(), role.getSqm());
     }
 
-    private PersonDTO createPersonDTO(com.auleSVGWT.server.domain.Person person) {
+    private PersonDTO createPersonDTO(Person person) {
 
         return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
-                createRoleDTO(person.getRole()));
+                createRoleDTO(person.getRole()),person.getStartWork(),person.getEndWork());
     }
 
     private BuildingDTO createBuildingDTO(Building building) {
@@ -635,6 +644,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     private RoomDTO createRoomDTO(Room room) {
 
         return new RoomDTO(room.getId(), room.getNumber(), room.getFloor(),
-                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension());
+                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension(),room.getRoomCode(),room.getMaintenance(),room.getSocket());
     }
+
 }

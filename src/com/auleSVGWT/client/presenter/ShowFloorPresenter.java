@@ -78,6 +78,9 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                         @Override
                         public void onSuccess(ArrayList<String> result) {
+                            if(result==null){
+                                Window.alert("devono essere aggiunti gli handler");
+                            }
                             if (modality.equals("mappa1")) {
                                 addHandlers(result);
                             } else {
