@@ -10,10 +10,15 @@ import org.hibernate.classic.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -645,6 +650,56 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         return new RoomDTO(room.getId(), room.getNumber(), room.getFloor(),
                 createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension(),room.getRoomCode(),room.getMaintenance(),room.getSocket());
+    }
+
+    //--------------------------------------------DA APPROVARE-----------------------------
+    public ArrayList<String> listaAulePianoNewVersion(String text){
+        URI uri = new File( "res/" + text + ".svg").toURI();
+        SVGMetaPost converter;
+        ArrayList<String> room = new ArrayList<>();
+        try{
+            converter = new SVGMetaPost( uri.toString() );
+            Document doc = converter.getSVGDocument();
+
+
+
+
+            int counter =0;
+            String u ="";
+            NodeList n = doc.getElementsByTagName("rect");
+            NodeList p = doc.getElementsByTagName("path");
+            for(int i =0 ;i<n.getLength();i++){
+                //System.out.println(n.item(i).getTextContent());
+                if(((Element) n.item(i)).getAttribute("id").contains(text)){
+                    u+=((Element) n.item(i)).getAttribute("id")+" ";
+                    System.out.println(((Element) n.item(i)).getAttribute("id"));
+                    room.add(((Element) n.item(i)).getAttribute("id"));
+
+                    counter ++;
+                }
+            }
+            for(int i =0 ;i<p.getLength();i++) {
+                //System.out.println(p.item(i).getTextContent());
+                if(((Element) p.item(i)).getAttribute("id").contains(text)){
+                    u+=((Element) p.item(i)).getAttribute("id")+" ";
+                    System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    room.add(((Element) p.item(i)).getAttribute("id"));
+
+                    counter ++;
+                }
+            }
+
+            System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
+        }catch (IOException e){
+            System.out.println("ERROr in liste aule piano new");
+        }
+
+
+
+
+
+        return room;
+
     }
 
 }

@@ -91,7 +91,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                         }
                     };
 
-                    rpcService.listaAulePiano(building + "-" + floor, callback);
+                    rpcService.listaAulePianoNewVersion(building + "-" + floor, callback);
 
 
 
