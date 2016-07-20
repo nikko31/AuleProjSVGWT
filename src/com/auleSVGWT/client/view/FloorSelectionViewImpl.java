@@ -27,15 +27,24 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     }
 
     @UiField
+    TextBox txtName;
+    @UiField
+    TextBox txtSurname;
+    @UiField
+    Button searchPersonButton;
+
+    @UiField
     MyListBox<String> buildingLst;
     @UiField
     MyListBox<String> floorLst;
     @UiField
     MyListBox<String> mapLst;
-
-
     @UiField
     Button enterBtn;
+
+    private String name;
+    private String surname;
+
 
 
     private static FloorSelectionViewUiBinder ourUiBinder = GWT.create(FloorSelectionViewUiBinder.class);
@@ -52,6 +61,24 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
         }
     }
 
+    @UiHandler("searchPersonButton")
+    void onSearchButtonClicked(ClickEvent event) {
+        /*
+        if (presenter != null) {
+            //Window.alert(txtName.getText() + " " + txtSurname.getText());
+            //ricorda di implementare il controllo sulla string di nome e cognome
+            name = txtName.getText();
+            surname = txtSurname.getText();
+            //presenter.onSearchButtonClicked(txtName.getText(),txtSurname.getText());
+            presenter.onSearchButtonClicked();
+            txtName.setText("");
+            txtSurname.setText("");
+
+
+
+        }*/
+    }
+
     @Override
     public HasValue<String> getBuilding() {
         return buildingLst;
@@ -65,6 +92,17 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     @Override
     public HasValue<String> getMapType() {
         return mapLst;
+    }
+
+
+    @Override
+    public String getSurname() {
+        return surname;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

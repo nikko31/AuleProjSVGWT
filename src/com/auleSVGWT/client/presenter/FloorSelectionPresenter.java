@@ -66,4 +66,9 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
     public void onBuildingLstSelect() {
         view.setFloorData(buildingFloor.get(this.view.getBuilding().getValue()));
     }
+
+    @Override
+    public void onSearchButtonClicked() {
+        //da fare
+    }
 }

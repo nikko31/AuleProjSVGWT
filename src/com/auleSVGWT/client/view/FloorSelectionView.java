@@ -15,6 +15,8 @@ public interface FloorSelectionView<T> {
         void onEnterButtonClicked();
 
         void onBuildingLstSelect();
+
+        void onSearchButtonClicked();
     }
 
     HasValue<String> getBuilding();
@@ -22,6 +24,10 @@ public interface FloorSelectionView<T> {
     HasValue<String> getFloor();
 
     HasValue<String> getMapType();
+
+    String  getName();
+
+    String getSurname();
 
     void setListData(Set<String> listsData);
 

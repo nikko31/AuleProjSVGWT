@@ -25,6 +25,8 @@ public interface AuleSVGWTService
 
     ArrayList<OccupyDTO> getOccupy();
 
+    ArrayList<OccupyDTO> getOccupySearch(String param1,String param2);
+
     Integer updatePerson(PersonDTO personDTO);
 
     Integer updateRole(RoleDTO roleDTO);

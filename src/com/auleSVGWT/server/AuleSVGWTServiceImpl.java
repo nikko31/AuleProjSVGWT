@@ -653,6 +653,35 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
     //--------------------------------------------DA APPROVARE-----------------------------
+
+    public ArrayList<OccupyDTO> getOccupySearch(String part1,String part2) {
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Occupy> occup =  new ArrayList<>(( session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
+
+            if(occup.size()>0){
+                for (Occupy occupy : occup) {
+                    occupyDTO.add(createOccupyDTO(occupy));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getOccupySearch method fail ");
+            e.printStackTrace();
+        }
+
+        return occupyDTO;
+    }
+
+
     public ArrayList<String> listaAulePianoNewVersion(String text){
         URI uri = new File( "res/" + text + ".svg").toURI();
         SVGMetaPost converter;
