@@ -76,7 +76,6 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
 
     @Override
     public void setRoomData(RoomDTO roomData) {
-
     }
 
 
