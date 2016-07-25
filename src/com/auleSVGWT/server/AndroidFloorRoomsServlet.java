@@ -81,11 +81,6 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
         return controlFlag;
     }
 
-
-
-
-
-
     public ArrayList<String> roomFloorList(String text){
         ServletContext context = getServletContext();
         String fullPath = context.getRealPath("/Images");
@@ -95,9 +90,6 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
         try{
             converter = new SVGMetaPost( uri.toString() );
             Document doc = converter.getSVGDocument();
-
-
-
 
             int counter =0;
             String u ="";

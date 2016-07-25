@@ -46,7 +46,6 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     private String surname;
 
 
-
     private static FloorSelectionViewUiBinder ourUiBinder = GWT.create(FloorSelectionViewUiBinder.class);
     private FloorSelectionView.Presenter<FloorDetails> presenter;
 
@@ -63,20 +62,18 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
 
     @UiHandler("searchPersonButton")
     void onSearchButtonClicked(ClickEvent event) {
-        /*
+
         if (presenter != null) {
             //Window.alert(txtName.getText() + " " + txtSurname.getText());
             //ricorda di implementare il controllo sulla string di nome e cognome
             name = txtName.getText();
             surname = txtSurname.getText();
-            //presenter.onSearchButtonClicked(txtName.getText(),txtSurname.getText());
             presenter.onSearchButtonClicked();
             txtName.setText("");
             txtSurname.setText("");
 
 
-
-        }*/
+        }
     }
 
     @Override
@@ -117,7 +114,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
             }
         });
 
-        for(String building : buildings) {
+        for (String building : buildings) {
             buildingLst.addValue(building);
         }
         buildingLst.setSelectedIndex(0);
@@ -126,7 +123,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     @Override
     public void setFloorData(ArrayList<String> listsData) {
         this.floorLst.clear();
-        for(String floor:listsData)
+        for (String floor : listsData)
             floorLst.addValue(floor);
     }
 

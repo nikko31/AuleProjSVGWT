@@ -12,15 +12,12 @@ public interface SearchPersonView <T>  {
     public interface Presenter<T> {
 
         void onItemClicked(T clickedItem);
+
     }
 
     void setPresenter(Presenter<T> presenter);
 
     void setRowData(ArrayList<T> rowData);
-
-    void show();
-
-    void hide();
 
     void setRoomData(RoomDTO roomData);
 

@@ -133,7 +133,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     /* */
 
     @Override
-    public Long saveRoomOccupy(ArrayList<Long> ids,ArrayList<OccupyDTO> occupyDTOs){
+    public Long saveRoomOccupy(ArrayList<Long> ids, ArrayList<OccupyDTO> occupyDTOs) {
         /*System.out.println("sono nel saveroom");
         for(OccupyDTO occupyDTO: occupyDTOs){
             System.out.println(occupyDTO.getPerson().getName() + occupyDTO.getPerson().getSurname());
@@ -141,9 +141,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }*/
 
 
-
-        for(Long id : ids) {
-            System.out.println("sto cancellando id ................"+ id);
+        for (Long id : ids) {
+            System.out.println("sto cancellando id ................" + id);
             try {
                 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
                 session.beginTransaction();
@@ -157,7 +156,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
             }
         }
-        for(OccupyDTO occupyDTO: occupyDTOs){
+        for (OccupyDTO occupyDTO : occupyDTOs) {
 
             Occupy occupy = new Occupy(occupyDTO);
 
@@ -176,12 +175,8 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }
 
 
-
-        return new Long(5);
+        return (long) 5;
     }
-
-
-
 
 
     @Override
@@ -439,7 +434,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
     @Override
-    public ArrayList<String> listaAulePiano( String edificiopiano) {
+    public ArrayList<String> listaAulePiano(String edificiopiano) {
         ArrayList<String> aule = new ArrayList<>();
         JSONParser parser = new JSONParser();
         try {
@@ -522,7 +517,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     //---------------------OTHER METHOD
 
-    public HashMap<String,ArrayList<String>> getBuildingsFileName(){
+    public HashMap<String, ArrayList<String>> getBuildingsFileName() {
         ArrayList<String> string = new ArrayList<>();
         HashMap<String, ArrayList<String>> buildings = new HashMap<String, ArrayList<String>>();
 
@@ -536,24 +531,23 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             }
 
 
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Error reading name of maps");
         }
 
-        for(String s: string){
+        for (String s : string) {
             //System.out.println(s.substring(0,s.lastIndexOf('-')));
             //System.out.println(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
-            if(buildings.containsKey(s.substring(0,s.lastIndexOf('-')))){
+            if (buildings.containsKey(s.substring(0, s.lastIndexOf('-')))) {
                 ArrayList<String> floors = new ArrayList<>();
-                floors = buildings.get(s.substring(0,s.lastIndexOf('-')));
-                floors.add(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
+                floors = buildings.get(s.substring(0, s.lastIndexOf('-')));
+                floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
                 Collections.sort(floors);
-                buildings.replace(s.substring(0,s.lastIndexOf('-')),floors);
-            }
-            else{
-                ArrayList<String> floors =new ArrayList<>();
-                floors.add(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
-                buildings.put(s.substring(0,s.lastIndexOf('-')),floors);
+                buildings.replace(s.substring(0, s.lastIndexOf('-')), floors);
+            } else {
+                ArrayList<String> floors = new ArrayList<>();
+                floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
+                buildings.put(s.substring(0, s.lastIndexOf('-')), floors);
             }
         }
 
@@ -613,7 +607,6 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
 
-
     private RoomPeopleDTO createRoomPeopleDTO(Room room, ArrayList<Person> people, ArrayList<Long> occId) {
         ArrayList<PersonDTO> peopleDTO = new ArrayList<>();
 
@@ -638,7 +631,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     private PersonDTO createPersonDTO(Person person) {
 
         return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
-                createRoleDTO(person.getRole()),person.getStartWork(),person.getEndWork());
+                createRoleDTO(person.getRole()), person.getStartWork(), person.getEndWork());
     }
 
     private BuildingDTO createBuildingDTO(Building building) {
@@ -649,20 +642,20 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     private RoomDTO createRoomDTO(Room room) {
 
         return new RoomDTO(room.getId(), room.getNumber(), room.getFloor(),
-                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension(),room.getRoomCode(),room.getMaintenance(),room.getSocket());
+                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension(), room.getRoomCode(), room.getMaintenance(), room.getSocket());
     }
 
     //--------------------------------------------DA APPROVARE-----------------------------
 
-    public ArrayList<OccupyDTO> getOccupySearch(String part1,String part2) {
+    public ArrayList<OccupyDTO> getOccupySearch(String part1, String part2) {
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
         try {
 
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            ArrayList<Occupy> occup =  new ArrayList<>(( session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
+            ArrayList<Occupy> occup = new ArrayList<>((session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
 
-            if(occup.size()>0){
+            if (occup.size() > 0) {
                 for (Occupy occupy : occup) {
                     occupyDTO.add(createOccupyDTO(occupy));
                 }
@@ -682,49 +675,44 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     }
 
 
-    public ArrayList<String> listaAulePianoNewVersion(String text){
-        URI uri = new File( "res/" + text + ".svg").toURI();
+    public ArrayList<String> listaAulePianoNewVersion(String text) {
+        URI uri = new File("res/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();
-        try{
-            converter = new SVGMetaPost( uri.toString() );
+        try {
+            converter = new SVGMetaPost(uri.toString());
             Document doc = converter.getSVGDocument();
 
 
-
-
-            int counter =0;
-            String u ="";
+            int counter = 0;
+            String u = "";
             NodeList n = doc.getElementsByTagName("rect");
             NodeList p = doc.getElementsByTagName("path");
-            for(int i =0 ;i<n.getLength();i++){
+            for (int i = 0; i < n.getLength(); i++) {
                 //System.out.println(n.item(i).getTextContent());
-                if(((Element) n.item(i)).getAttribute("id").contains(text)){
-                    u+=((Element) n.item(i)).getAttribute("id")+" ";
+                if (((Element) n.item(i)).getAttribute("id").contains(text)) {
+                    u += ((Element) n.item(i)).getAttribute("id") + " ";
                     System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
-                    counter ++;
+                    counter++;
                 }
             }
-            for(int i =0 ;i<p.getLength();i++) {
+            for (int i = 0; i < p.getLength(); i++) {
                 //System.out.println(p.item(i).getTextContent());
-                if(((Element) p.item(i)).getAttribute("id").contains(text)){
-                    u+=((Element) p.item(i)).getAttribute("id")+" ";
+                if (((Element) p.item(i)).getAttribute("id").contains(text)) {
+                    u += ((Element) p.item(i)).getAttribute("id") + " ";
                     System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
-                    counter ++;
+                    counter++;
                 }
             }
 
-            System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
-        }catch (IOException e){
+            System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
+        } catch (IOException e) {
             System.out.println("ERROr in liste aule piano new");
         }
-
-
-
 
 
         return room;

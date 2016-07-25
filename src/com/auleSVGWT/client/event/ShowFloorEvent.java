@@ -9,24 +9,33 @@ public class ShowFloorEvent extends GwtEvent<ShowFloorEventHandler> {
     public static Type<ShowFloorEventHandler> TYPE = new Type<ShowFloorEventHandler>();
     private final String building;
     private final String floor;
+    private final String roomID;
     //aggiunta
     private final String modality;
 
-    public ShowFloorEvent(String building,String floor,String modality) {
+    public ShowFloorEvent(String building, String floor, String modality, String roomID) {
         this.building = building;
         this.floor = floor;
         this.modality = modality;
+        this.roomID = roomID;
 
     }
 
     public String getBuilding() {
         return building;
     }
+
     public String getFloor() {
         return floor;
     }
-    public String getModality(){ return modality;}
 
+    public String getModality() {
+        return modality;
+    }
+
+    public String getRoomID() {
+        return roomID;
+    }
 
 
     public Type<ShowFloorEventHandler> getAssociatedType() {

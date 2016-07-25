@@ -2,6 +2,7 @@ package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.OccupyDTO;
+import com.auleSVGWT.client.event.ShowFloorEvent;
 import com.auleSVGWT.client.view.SearchPersonView;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
@@ -29,7 +30,6 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
                                  SearchPersonView<OccupyDTO> view,
                                  String name,
                                  String surname) {
-        //Window.alert("pattivo");
         this.name = name;
         this.surname = surname;
         this.eventBus = eventBus;
@@ -81,6 +81,9 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
 
     @Override
     public void onItemClicked(OccupyDTO clickedItem) {
-        //;
+        eventBus.fireEvent(new ShowFloorEvent(clickedItem.getRoom().getBuilding().getName(),
+                String.valueOf(clickedItem.getRoom().getFloor()),
+                "mappa1",
+                String.valueOf(clickedItem.getRoom().getId())));
     }
 }

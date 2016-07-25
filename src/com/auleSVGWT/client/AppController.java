@@ -28,6 +28,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private ShowPersonViewImpl showPersonView = null;
     private String building;
     private String floor;
+    private String roomID;
     private String number;
     private String modality;
     private PersonDTO personDTO;
@@ -62,7 +63,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         eventBus.addHandler(EditRoomEvent.TYPE, new EditRoomEventHandler() {
             @Override
             public void onEditRoom(EditRoomEvent event) {
-                roomPeopleDTO=event.getRoomPeopleDTO();
+                roomPeopleDTO = event.getRoomPeopleDTO();
                 doOnEditRoom();
             }
         });
@@ -70,7 +71,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         eventBus.addHandler(EditPersonEvent.TYPE, new EditPersonHandler() {
             @Override
             public void onEditPerson(EditPersonEvent event) {
-                personDTO=event.getPersonDTO();
+                personDTO = event.getPersonDTO();
                 doOnEditPerson();
             }
         });
@@ -104,6 +105,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                 building = event.getBuilding();
                 floor = event.getFloor();
                 modality = event.getModality();
+                roomID = event.getRoomID();
                 doOnShowFloor();
             }
         });
@@ -124,7 +126,10 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnShowFloor() {
-        History.newItem("showFloor " + building + "-" + floor + "-" +modality);
+        if (roomID != null)
+            History.newItem("showFloor " + building + "-" + floor + "-" + modality + "-" + roomID);
+        else
+            History.newItem("showFloor " + building + "-" + floor + "-" + modality);
     }
 
     private void doOnShowRoom(String number) {
@@ -151,7 +156,9 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         History.newItem("editPerson");
     }
 
-    private void doOnSearchPerson() { History.newItem("searchPerson "+name+"-"+surname);}
+    private void doOnSearchPerson() {
+        History.newItem("searchPerson " + name + "-" + surname);
+    }
 
 
     @Override
@@ -182,7 +189,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
                     @Override
                     public void onSuccess() {
-                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor,modality)
+                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor, modality, roomID)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });
@@ -231,7 +238,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
-            if(token.startsWith("editPerson")){
+            if (token.startsWith("editPerson")) {
                 GWT.runAsync(new RunAsyncCallback() {
                     @Override
                     public void onFailure(Throwable reason) {
@@ -240,8 +247,8 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
                     @Override
                     public void onSuccess() {
-                        new EditPersonPresenter(eventBus,rpcService,getEditPersonView(),personDTO)
-                                .go(mapContainer,infoContainer,headerContainer);
+                        new EditPersonPresenter(eventBus, rpcService, getEditPersonView(), personDTO)
+                                .go(mapContainer, infoContainer, headerContainer);
                     }
                 });
             }
@@ -257,7 +264,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                         /*new ShowPersonPresenter(eventBus, getShowPersonView(), building, floor, number, personDTO)
                                 .go(mapContainer, infoContainer, headerContainer);*/
 
-                        new SearchPersonPresenter(eventBus,rpcService,getSearchPersonView(),name,surname)
+                        new SearchPersonPresenter(eventBus, rpcService, getSearchPersonView(), name, surname)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });
@@ -299,13 +306,14 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     public EditRoomViewImpl getEditRoomView() {
-     return new EditRoomViewImpl();
+        return new EditRoomViewImpl();
     }
 
     public EditPersonViewImpl getEditPersonView() {
         return new EditPersonViewImpl();
     }
 
-    public SearchPersonViewImpl getSearchPersonView(){ return new SearchPersonViewImpl();
+    public SearchPersonViewImpl getSearchPersonView() {
+        return new SearchPersonViewImpl();
     }
 }

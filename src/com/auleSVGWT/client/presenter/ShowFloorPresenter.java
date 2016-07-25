@@ -2,6 +2,7 @@ package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
@@ -33,6 +34,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private String building;
     private String floor;
     private String modality;
+    private String roomID;
     private OMSVGSVGElement roomSVGElt;
     private OMElement selectedRoom;
 
@@ -42,7 +44,8 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                               ShowFloorView<FloorDetails> view,
                               String building,
                               String floor,
-                              String modality) {
+                              String modality,
+                              String roomID) {
         this.selectedRoom = null;
         this.building = building;
         this.floor = floor;
@@ -51,6 +54,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
         this.view = view;
         this.view.setPresenter(this);
         this.modality = modality;
+        this.roomID = roomID;
     }
 
     @Override
@@ -81,11 +85,13 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                         @Override
                         public void onSuccess(ArrayList<String> result) {
-                            if(result==null){
+                            if (result == null) {
                                 Window.alert("devono essere aggiunti gli handler");
                             }
                             if (modality.equals("mappa1")) {
                                 addHandlers(result);
+                                if(roomID!=null)
+                                    colorRoom();
                             } else {
                                 colorFloor(result);
                             }
@@ -95,7 +101,6 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                     };
 
                     rpcService.listaAulePianoNewVersion(building + "-" + floor, callback);
-
 
 
                 }
@@ -180,9 +185,9 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
             @Override
             public void onSuccess(ArrayList<RoomPeopleDTO> result) {
-                if(modality.equals("mappa2")){
+                if (modality.equals("mappa2")) {
                     colorRoom(string, result);
-                }else{
+                } else {
                     colorRoomEndWork(string, result);
                 }
 
@@ -193,25 +198,20 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
     }
 
+    private void colorRoom(){
+        final OMElement roomEl = roomSVGElt.getElementById(building+"-"+floor+"-"+roomID);
+        selectedRoom=roomEl;
+        String style = roomEl.getAttribute("style");
+        style = style.replace(Global.DEF_FILL, Global.GREEN_FILL);
+        roomEl.setAttribute("style", style);
+        eventBus.fireEvent(new ShowRoomEvent(building, floor,
+                String.valueOf(roomEl.getAttribute("id").substring(roomEl.getAttribute("id").lastIndexOf('-') + 1))));
+
+    }
     private void colorRoom(ArrayList<String> strings, ArrayList<RoomPeopleDTO> roomPeopleDTOs) {
 
-        //int Max = 0;
-        //int Min = 0;
         int sum;
         int dim;
-        /*
-        for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
-            for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
-                sum += personDTO.getRole().getSqm();
-            }
-
-            if(sum > roomPeopleDTO.getRoomDTO().getDimension() && sum > Max){
-                Max = sum;
-
-            }
-
-        }*/
-
         for (String room : strings) {
             sum = 0;
             dim = 0;
@@ -289,28 +289,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     }
 
 
-
-
-
-
-
     private void colorRoomEndWork(ArrayList<String> strings, ArrayList<RoomPeopleDTO> roomPeopleDTOs) {
-
-        //int Max = 0;
-        //int Min = 0;
-        /*
-        for(RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs){
-            for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
-                sum += personDTO.getRole().getSqm();
-            }
-
-            if(sum > roomPeopleDTO.getRoomDTO().getDimension() && sum > Max){
-                Max = sum;
-
-            }
-
-        }*/
-
         for (String room : strings) {
             for (RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs) {
                 String s = "";
@@ -318,8 +297,8 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                         "-" + new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
                 if (room.equals(s)) {
                     for (PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()) {
-                        Window.alert(personDTO.getEndWork().toString() +" "+new Date(new java.util.Date().getTime()));
-                        if(personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))){
+                        Window.alert(personDTO.getEndWork().toString() + " " + new Date(new java.util.Date().getTime()));
+                        if (personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))) {
                             final OMElement roomEl = roomSVGElt.getElementById(room);
                             String style = roomEl.getAttribute("style");
                             style = style.replace(Global.DEF_FILL, Global.GREY_FILL);

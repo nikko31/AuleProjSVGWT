@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
+import com.auleSVGWT.client.event.SearchPersonEvent;
 import com.auleSVGWT.client.event.ShowFloorEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
 import com.auleSVGWT.client.view.FloorSelectionView;
@@ -50,8 +51,7 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
 
             @Override
             public void onSuccess(HashMap<String, ArrayList<String>> result) {
-                buildingFloor= new HashMap<>(result);
-
+                buildingFloor = new HashMap<>(result);
                 view.setListData(result.keySet());
             }
         });
@@ -59,7 +59,7 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
 
     @Override
     public void onEnterButtonClicked() {
-        eventBus.fireEvent(new ShowFloorEvent(view.getBuilding().getValue(), view.getFloor().getValue(), view.getMapType().getValue()));
+        eventBus.fireEvent(new ShowFloorEvent(view.getBuilding().getValue(), view.getFloor().getValue(), view.getMapType().getValue(),null));
     }
 
     @Override
@@ -69,6 +69,6 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
 
     @Override
     public void onSearchButtonClicked() {
-        //da fare
+        eventBus.fireEvent(new SearchPersonEvent(view.getName(), view.getSurname()));
     }
 }

@@ -47,7 +47,7 @@ public class ShowPersonPresenter implements Presenter, ShowPersonView.Presenter<
 
     @Override
     public void onBackButtonClicked() {
-        //eventBus.fireEvent(new ShowRoomEvent(building, floor, number));
+        eventBus.fireEvent(new ShowRoomEvent(building, floor, number));
         History.back();
     }
 
