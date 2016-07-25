@@ -87,6 +87,21 @@ public class AndroidSearchPersonServlet extends HttpServlet {
 
 
             person.put("name",occupyDTOs.get(0).getPerson().getName());
+            person.put("surname",occupyDTOs.get(0).getPerson().getSurname());
+            person.put("role",occupyDTOs.get(0).getPerson().getRole().getName());
+
+            if(occupyDTOs.get(0).getPerson().getStartWork() == null){
+                person.put("startWork","null");
+
+            }else{
+                person.put("startWork",occupyDTOs.get(0).getPerson().getStartWork().toString());
+            }
+            if(occupyDTOs.get(0).getPerson().getEndWork() == null){
+                person.put("endWork","null");
+
+            }else{
+                person.put("endWork",occupyDTOs.get(0).getPerson().getEndWork().toString());
+            }
 
             obj= new JSONObject();
             obj.put("stanze",ar);

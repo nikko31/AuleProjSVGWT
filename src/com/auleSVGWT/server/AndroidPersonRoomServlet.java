@@ -26,6 +26,7 @@ public class AndroidPersonRoomServlet extends HttpServlet {
         String floor;
         String numRoom;
         RoomPeopleDTO roomPeopleDTO = new RoomPeopleDTO();
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
 
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
@@ -35,11 +36,11 @@ public class AndroidPersonRoomServlet extends HttpServlet {
         numRoom = req.getParameter("numRoom");
 
         if(controlParameter(building,floor,numRoom)){
-            roomPeopleDTO = getRoomPeople(building,floor,numRoom);
+            occupyDTO = getOccupy(building, floor, numRoom);
         }
 
 
-        parseOut(roomPeopleDTO, out);
+        parseOut(occupyDTO, out);
     }
 
 
@@ -65,16 +66,19 @@ public class AndroidPersonRoomServlet extends HttpServlet {
 
     }
 
-    private void parseOut(RoomPeopleDTO roomPeopleDTO,PrintWriter out){
+    private void parseOut(ArrayList<OccupyDTO> occupyDTO,PrintWriter out){
         JSONObject obj = new JSONObject();
         JSONArray arr = new JSONArray();
         JSONObject per;
         JSONObject roomJSon = new JSONObject();
+        PersonDTO  personDTO;
 
-        if(roomPeopleDTO != null ){
+        if(occupyDTO != null ){
             int j=0;
 
-            for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+            for(OccupyDTO occ : occupyDTO){
+
+                personDTO = occ.getPerson();
 
                 per = new JSONObject();
 
@@ -107,19 +111,21 @@ public class AndroidPersonRoomServlet extends HttpServlet {
 
             }
 
-            System.out.println("a volte mi da errore ::::::::::::::"+roomPeopleDTO.getRoomDTO().getDimension());
-            roomJSon.put("dimensione", "" + roomPeopleDTO.getRoomDTO().getDimension());
-            System.out.println("a volte mi da errore ::::::::::::::" + roomPeopleDTO.getRoomDTO().getDimension());
+            RoomDTO roomDTO = occupyDTO.get(0).getRoom();
 
-            roomJSon.put("edificio",""+roomPeopleDTO.getRoomDTO().getBuilding().getName());
-            roomJSon.put("piano",""+roomPeopleDTO.getRoomDTO().getFloor());
-            roomJSon.put("numero",""+roomPeopleDTO.getRoomDTO().getNumber());
-            roomJSon.put("socket",""+roomPeopleDTO.getRoomDTO().getSocket());
-            roomJSon.put("persone",""+roomPeopleDTO.getRoomDTO().getMaxPeople());
-            if(roomPeopleDTO.getRoomDTO().getMaintenance() == null){
+            System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
+            roomJSon.put("dimensione", "" + roomDTO.getDimension());
+            System.out.println("a volte mi da errore ::::::::::::::" + roomDTO.getDimension());
+
+            roomJSon.put("edificio", "" + roomDTO.getBuilding().getName());
+            roomJSon.put("piano",""+roomDTO.getFloor());
+            roomJSon.put("numero",""+roomDTO.getNumber());
+            roomJSon.put("socket", "" + roomDTO.getSocket());
+            roomJSon.put("persone",""+roomDTO.getMaxPeople());
+            if(roomDTO.getMaintenance() == null){
                 roomJSon.put("info","nessuna info");
             }else{
-                roomJSon.put("info",""+roomPeopleDTO.getRoomDTO().getMaintenance());
+                roomJSon.put("info",""+roomDTO.getMaintenance());
             }
 
             obj.put("stanza",roomJSon);
@@ -138,6 +144,39 @@ public class AndroidPersonRoomServlet extends HttpServlet {
         out.println(obj);
         out.close();
 
+
+    }
+
+    public ArrayList<OccupyDTO> getOccupy(String building, String floorSt, String numberSt){
+        int number = Integer.parseInt(numberSt);
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor + " and room.number="+number).list());
+
+            if(occupies.size()>0){
+                for (Occupy occupy : occupies) {
+                    occupyDTO.add(createOccupyDTO(occupy));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return occupyDTO;
 
     }
 

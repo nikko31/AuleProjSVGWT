@@ -375,6 +375,40 @@ public class AndroidImageServlet extends HttpServlet {
     }
 
 
+    public ArrayList<OccupyDTO> getOccupy(String building, String floorSt, String numberSt){
+
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor).list());
+
+            if(occupies.size()>0){
+                for (Occupy occupy : occupies) {
+                    occupyDTO.add(createOccupyDTO(occupy));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return occupyDTO;
+
+    }
+
+
     public ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt) {
         int floor = Integer.parseInt(floorSt);
         ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<>();
