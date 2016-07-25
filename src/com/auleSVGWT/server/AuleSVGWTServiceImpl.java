@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -523,11 +524,16 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
 
         try {
+            ServletContext context = getServletContext();
+            String fullPath = context.getRealPath("/imageGWT");
+            System.out.println("55555555555555555....."+fullPath+".....555555555555");
 
             File folder = new File("res");
             File[] listOfFiles = folder.listFiles();
             for (File file : listOfFiles) {
-                string.add(file.getName());
+                if(file.getName().contains(".svg")){
+                    string.add(file.getName());
+                }
             }
 
 
@@ -676,7 +682,9 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
 
     public ArrayList<String> listaAulePianoNewVersion(String text) {
-        URI uri = new File("res/" + text + ".svg").toURI();
+        ServletContext context = getServletContext();
+        String fullPath = context.getRealPath("/imageGWT");
+        URI uri = new File(fullPath+"/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();
         try {

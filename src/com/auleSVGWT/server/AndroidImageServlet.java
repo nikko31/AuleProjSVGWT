@@ -416,7 +416,9 @@ public class AndroidImageServlet extends HttpServlet {
 
 
     public ArrayList<String> listaAulePianoNewVersion(String text){
-        URI uri = new File( "Images/" + text + ".svg").toURI();
+        ServletContext context = getServletContext();
+        String fullPath = context.getRealPath("/imageGWT");
+        URI uri = new File(fullPath+"/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();
         try{
