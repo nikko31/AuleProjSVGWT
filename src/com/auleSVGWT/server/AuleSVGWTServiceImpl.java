@@ -528,7 +528,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             String fullPath = context.getRealPath("/imageGWT");
             System.out.println("55555555555555555....."+fullPath+".....555555555555");
 
-            File folder = new File("res");
+            File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();
             for (File file : listOfFiles) {
                 if(file.getName().contains(".svg")){
