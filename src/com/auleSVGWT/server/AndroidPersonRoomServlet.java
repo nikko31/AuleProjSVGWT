@@ -108,7 +108,8 @@ public class AndroidPersonRoomServlet extends HttpServlet {
             }
 
             System.out.println("a volte mi da errore ::::::::::::::"+roomPeopleDTO.getRoomDTO().getDimension());
-            roomJSon.put("dimensione",""+roomPeopleDTO.getRoomDTO().getDimension());
+            roomJSon.put("dimensione", "" + roomPeopleDTO.getRoomDTO().getDimension());
+            System.out.println("a volte mi da errore ::::::::::::::" + roomPeopleDTO.getRoomDTO().getDimension());
 
             roomJSon.put("edificio",""+roomPeopleDTO.getRoomDTO().getBuilding().getName());
             roomJSon.put("piano",""+roomPeopleDTO.getRoomDTO().getFloor());
