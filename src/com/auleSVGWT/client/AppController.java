@@ -32,6 +32,8 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private String modality;
     private PersonDTO personDTO;
     private RoomPeopleDTO roomPeopleDTO;
+    private String name;
+    private String surname;
 
     public AppController(AuleSVGWTServiceAsync auleSVGWTServiceAsync, SimpleEventBus simpleEventBus) {
         this.eventBus = simpleEventBus;
@@ -105,6 +107,16 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                 doOnShowFloor();
             }
         });
+        eventBus.addHandler(SearchPersonEvent.TYPE, new SearchPersonEventHandler() {
+            @Override
+            public void onSearchPerson(SearchPersonEvent event) {
+                name = event.getName();
+                surname = event.getSurname();
+
+
+                doOnSearchPerson();
+            }
+        });
     }
 
     private void doOnShowHeader() {
@@ -138,6 +150,8 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private void doOnEditPerson() {
         History.newItem("editPerson");
     }
+
+    private void doOnSearchPerson() { History.newItem("searchPerson "+name+"-"+surname);}
 
 
     @Override
@@ -231,6 +245,23 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                     }
                 });
             }
+            if (token.startsWith("searchPerson")) {
+                GWT.runAsync(new RunAsyncCallback() {
+                    @Override
+                    public void onFailure(Throwable reason) {
+                        Window.alert(reason.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        /*new ShowPersonPresenter(eventBus, getShowPersonView(), building, floor, number, personDTO)
+                                .go(mapContainer, infoContainer, headerContainer);*/
+
+                        new SearchPersonPresenter(eventBus,rpcService,getSearchPersonView(),name,surname)
+                                .go(mapContainer, infoContainer, headerContainer);
+                    }
+                });
+            }
         }
     }
 
@@ -273,5 +304,8 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
     public EditPersonViewImpl getEditPersonView() {
         return new EditPersonViewImpl();
+    }
+
+    public SearchPersonViewImpl getSearchPersonView(){ return new SearchPersonViewImpl();
     }
 }
