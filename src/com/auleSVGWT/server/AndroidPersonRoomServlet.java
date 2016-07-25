@@ -69,6 +69,7 @@ public class AndroidPersonRoomServlet extends HttpServlet {
         JSONObject obj = new JSONObject();
         JSONArray arr = new JSONArray();
         JSONObject per;
+        JSONObject roomJSon = new JSONObject();
 
         if(roomPeopleDTO != null ){
             int j=0;
@@ -106,15 +107,31 @@ public class AndroidPersonRoomServlet extends HttpServlet {
 
             }
 
+            System.out.println("a volte mi da errore ::::::::::::::"+roomPeopleDTO.getRoomDTO().getDimension());
+            roomJSon.put("dimensione",""+roomPeopleDTO.getRoomDTO().getDimension());
 
-            obj.put("dimension",roomPeopleDTO.getRoomDTO().getDimension());
-            obj.put("info",roomPeopleDTO.getRoomDTO().getMaintenance());
-            obj.put("persons",arr);
+            roomJSon.put("edificio",""+roomPeopleDTO.getRoomDTO().getBuilding().getName());
+            roomJSon.put("piano",""+roomPeopleDTO.getRoomDTO().getFloor());
+            roomJSon.put("numero",""+roomPeopleDTO.getRoomDTO().getNumber());
+            roomJSon.put("socket",""+roomPeopleDTO.getRoomDTO().getSocket());
+            roomJSon.put("persone",""+roomPeopleDTO.getRoomDTO().getMaxPeople());
+            if(roomPeopleDTO.getRoomDTO().getMaintenance() == null){
+                roomJSon.put("info","nessuna info");
+            }else{
+                roomJSon.put("info",""+roomPeopleDTO.getRoomDTO().getMaintenance());
+            }
+
+            obj.put("stanza",roomJSon);
+
+
+            obj.put("persone",arr);
 
         }else{
-            obj.put("persons","arr");
+            obj.put("persone",arr);
+            obj.put("stanza",roomJSon);
 
 
+            //////
         }
 
         out.println(obj);
