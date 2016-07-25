@@ -86,10 +86,8 @@ public class RoomViewImpl extends Composite implements RoomView<PersonDTO> {
             }else{
                 personTable.setText(c,3,rowData.get(c).getEndWork().toString());
             }
-
-
-
-
+            if(c%2==0)
+                personTable.getRowFormatter().setStyleName(c,"rowColor");
         }
         this.rowData = rowData;
 

@@ -64,12 +64,15 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
         searchPersonTable.setText(0, 1, "DIMENSIONI");
         searchPersonTable.setText(0, 2, "NUMERO MASSIMO DI PERSONE");
         searchPersonTable.setText(0, 3, "PRESE DI RETE");
+        searchPersonTable.getRowFormatter().addStyleName(0,"cellHeader");
 
         for (int i = 1; i < rowData.size() + 1; i++) {
             searchPersonTable.setText(i, 0, rowData.get(i - 1).getRoom().getBuilding().getName() + "-" + String.valueOf(rowData.get(i - 1).getRoom().getFloor()) + "-" + String.valueOf(rowData.get(i - 1).getRoom().getNumber()));
             searchPersonTable.setText(i, 1, String.valueOf(rowData.get(i - 1).getRoom().getDimension()));
             searchPersonTable.setText(i, 2, String.valueOf(rowData.get(i - 1).getRoom().getMaxPeople()));
             searchPersonTable.setText(i, 3, String.valueOf(rowData.get(i - 1).getRoom().getSocket()));
+            if(i%2==0)
+                searchPersonTable.getRowFormatter().setStyleName(i,"rowColor");
         }
         this.rowData=rowData;
     }
@@ -82,6 +85,4 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
     public Widget asWidget() {
         return this;
     }
-
-
 }

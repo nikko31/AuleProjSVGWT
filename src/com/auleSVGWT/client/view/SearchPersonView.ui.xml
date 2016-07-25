@@ -4,6 +4,7 @@
         .headerFontWidget2 {
             margin-top: 10px;
             font-size: medium;
+
         }
 
         .containterDistance {
