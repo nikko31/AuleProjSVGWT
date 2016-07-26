@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-/**
- * Created by Utente on 20/07/2016.
- */
 public class AndroidStartServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

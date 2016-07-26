@@ -17,9 +17,7 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.util.ArrayList;
 
-/**
- * Created by Utente on 20/07/2016.
- */
+
 public class AndroidFloorRoomsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected void doGet(HttpServletRequest request,
@@ -99,7 +97,7 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
                 //System.out.println(n.item(i).getTextContent());
                 if(((Element) n.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) n.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) n.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
                     counter ++;
@@ -109,16 +107,17 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
                 //System.out.println(p.item(i).getTextContent());
                 if(((Element) p.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) p.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
                     counter ++;
                 }
             }
 
-            System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
+           // System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
         }catch (IOException e){
-            System.out.println("ERROr in liste aule piano new");
+            System.out.println("ERROR in listRoomsOfFloor");
+            e.printStackTrace();
         }
 
 
