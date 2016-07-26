@@ -400,7 +400,7 @@ public class AndroidImageServlet extends HttpServlet {
                 //System.out.println(p.item(i).getTextContent());
                 if(((Element) p.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) p.item(i)).getAttribute("id")+" ";
-                    //System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
                     counter ++;

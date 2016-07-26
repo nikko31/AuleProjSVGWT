@@ -47,6 +47,8 @@ public class AndroidStartServlet extends HttpServlet {
 
 
 
+
+
         } catch (Exception e) {
             System.out.println("Error reading name of maps");
             e.printStackTrace();
