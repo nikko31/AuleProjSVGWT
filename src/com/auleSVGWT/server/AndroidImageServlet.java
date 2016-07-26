@@ -237,14 +237,14 @@ public class AndroidImageServlet extends HttpServlet {
                 s += occupyDTO.getRoom().getBuilding().getName() + "-" + Integer.toString(occupyDTO.getRoom().getFloor()) +
                         "-" + Integer.toString(occupyDTO.getRoom().getNumber());
 
-                System.out.println(""+room +"  ===  "+ s);
+                //System.out.println(""+room +"  ===  "+ s);
 
                 if (room.equals(s)) {
-                    System.out.println("\n sono uguali");
+                    //System.out.println("\n sono uguali");
                     sum += occupyDTO.getPerson().getRole().getSqm();
 
                     if(occupyDTO.getRoom().getDimension()!=0 && first) {
-                        System.out.println("\n dim=" + occupyDTO.getRoom().getDimension());
+                        //System.out.println("\n dim=" + occupyDTO.getRoom().getDimension());
                         dim = occupyDTO.getRoom().getDimension();
                         first = false;
                     }
@@ -356,7 +356,7 @@ public class AndroidImageServlet extends HttpServlet {
             TranscoderInput input = new TranscoderInput(doc);
             //FileOutputStream ostream = new FileOutputStream("C:\\Users\\Utente\\IdeaProject\\esperimenti_vari\\src\\");
             TranscoderOutput output = new TranscoderOutput(out);
-            System.out.println("vediamo cosa passa    " + input.getURI());
+            //System.out.println("vediamo cosa passa    " + input.getURI());
             transcoder.transcode(input, output);
             out.flush();
             out.close();
@@ -390,7 +390,7 @@ public class AndroidImageServlet extends HttpServlet {
                 //System.out.println(n.item(i).getTextContent());
                 if(((Element) n.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) n.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) n.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
                     counter ++;
@@ -400,16 +400,16 @@ public class AndroidImageServlet extends HttpServlet {
                 //System.out.println(p.item(i).getTextContent());
                 if(((Element) p.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) p.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
                     counter ++;
                 }
             }
 
-            System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
+            //System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
         }catch (IOException e){
-            System.out.println("ERROr in liste aule piano new");
+            System.out.println("ERROr in listRoomsOfFLoor");
         }
 
 

@@ -143,7 +143,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
 
         for (Long id : ids) {
-            System.out.println("sto cancellando id ................" + id);
+            //System.out.println("sto cancellando id ................" + id);
             try {
                 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
                 session.beginTransaction();
@@ -284,7 +284,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                         if (occupy.getRoom().getId() == room.getId()) {
                             people.add(occupy.getPerson());
                             occ.add(occupy.getId());
-                            System.out.println(people.get(0).getName() + "\n");
+                            //System.out.println(people.get(0).getName() + "\n");
                         }
                     }
                     roomPeopleDTO.add(createRoomPeopleDTO(room, people, occ));
@@ -321,16 +321,16 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
             for (Room room : rooms) {
 
-                System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
+               // System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
                 if ((room.getFloor() == floor) && (room.getBuilding().getName().equals(building) && (room.getNumber() == number))) {
                     check = false;
 
                     for (Occupy occupy : occupies) {
-                        System.out.println("sono nel ciclo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
+                        //System.out.println("sono nel ciclo occupy" + occupy.getId() + " = " + room.getId() + "....................................................");
                         if (occupy.getRoom().getId() == room.getId()) {
                             people.add(occupy.getPerson());
                             occ.add(occupy.getId());
-                            System.out.println(people.get(0).getName() + "\n");
+                            //System.out.println(people.get(0).getName() + "\n");
                         }
                     }
                     room1 = room;
@@ -526,7 +526,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         try {
             ServletContext context = getServletContext();
             String fullPath = context.getRealPath("/imageGWT");
-            System.out.println("55555555555555555....."+fullPath+".....555555555555");
+            //System.out.println("55555555555555555....."+fullPath+".....555555555555");
 
             File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();
@@ -700,7 +700,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 //System.out.println(n.item(i).getTextContent());
                 if (((Element) n.item(i)).getAttribute("id").contains(text)) {
                     u += ((Element) n.item(i)).getAttribute("id") + " ";
-                    System.out.println(((Element) n.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
                     counter++;
@@ -710,14 +710,14 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 //System.out.println(p.item(i).getTextContent());
                 if (((Element) p.item(i)).getAttribute("id").contains(text)) {
                     u += ((Element) p.item(i)).getAttribute("id") + " ";
-                    System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
                     counter++;
                 }
             }
 
-            System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
+           // System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
         } catch (IOException e) {
             System.out.println("ERROr in liste aule piano new");
         }

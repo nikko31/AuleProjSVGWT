@@ -97,7 +97,7 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
                 //System.out.println(n.item(i).getTextContent());
                 if(((Element) n.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) n.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) n.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
                     counter ++;
@@ -107,14 +107,14 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
                 //System.out.println(p.item(i).getTextContent());
                 if(((Element) p.item(i)).getAttribute("id").contains(text)){
                     u+=((Element) p.item(i)).getAttribute("id")+" ";
-                    System.out.println(((Element) p.item(i)).getAttribute("id"));
+                    //System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
                     counter ++;
                 }
             }
 
-            System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
+           // System.out.println("RISULTATO RICERCA NEL FILE "+ u+" "+ counter);
         }catch (IOException e){
             System.out.println("ERROR in listRoomsOfFloor");
             e.printStackTrace();

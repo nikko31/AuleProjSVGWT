@@ -108,9 +108,9 @@ public class AndroidPersonRoomServlet extends HttpServlet {
 
             RoomDTO roomDTO = occupyDTO.get(0).getRoom();
             if(roomDTO!= null){
-                System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
+                //System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
                 roomJSon.put("dimension", "" + roomDTO.getDimension());
-                System.out.println("a volte mi da errore ::::::::::::::" + roomDTO.getDimension());
+                //System.out.println("a volte mi da errore ::::::::::::::" + roomDTO.getDimension());
 
                 roomJSon.put("building", "" + roomDTO.getBuilding().getName());
                 roomJSon.put("floor",""+roomDTO.getFloor());
