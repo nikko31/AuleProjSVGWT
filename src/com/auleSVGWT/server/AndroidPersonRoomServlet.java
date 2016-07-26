@@ -107,30 +107,32 @@ public class AndroidPersonRoomServlet extends HttpServlet {
             }
 
             RoomDTO roomDTO = occupyDTO.get(0).getRoom();
+            if(roomDTO!= null){
+                System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
+                roomJSon.put("dimension", "" + roomDTO.getDimension());
+                System.out.println("a volte mi da errore ::::::::::::::" + roomDTO.getDimension());
 
-            System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
-            roomJSon.put("dimension", "" + roomDTO.getDimension());
-            System.out.println("a volte mi da errore ::::::::::::::" + roomDTO.getDimension());
+                roomJSon.put("building", "" + roomDTO.getBuilding().getName());
+                roomJSon.put("floor",""+roomDTO.getFloor());
+                roomJSon.put("number",""+roomDTO.getNumber());
+                roomJSon.put("socket", "" + roomDTO.getSocket());
+                roomJSon.put("personMax",""+roomDTO.getMaxPeople());
+                if(roomDTO.getMaintenance() == null){
+                    roomJSon.put("info","nessuna info");
+                }else{
+                    roomJSon.put("info",""+roomDTO.getMaintenance());
+                }
 
-            roomJSon.put("building", "" + roomDTO.getBuilding().getName());
-            roomJSon.put("floor",""+roomDTO.getFloor());
-            roomJSon.put("number",""+roomDTO.getNumber());
-            roomJSon.put("socket", "" + roomDTO.getSocket());
-            roomJSon.put("personMax",""+roomDTO.getMaxPeople());
-            if(roomDTO.getMaintenance() == null){
-                roomJSon.put("info","nessuna info");
-            }else{
-                roomJSon.put("info",""+roomDTO.getMaintenance());
             }
 
+
+
             obj.put("room",roomJSon);
-
-
             obj.put("persons",arr);
 
         }else{
-            obj.put("persons",arr);
-            obj.put("room",roomJSon);
+            obj.put("persons", arr);
+            obj.put("room", roomJSon);
 
 
             //////
