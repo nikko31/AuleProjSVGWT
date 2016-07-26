@@ -292,8 +292,11 @@ body, td, a, div, .p {
     background-color: orange;
 }
 
-.rowColor {
+.rowDColor {
     background: #99ff99;
+}
+.rowColor {
+    cursor: pointer;
 }
 
 .cellHeader {
@@ -382,13 +385,14 @@ body, td, a, div, .p {
     cursor: pointer;
     float: right;
     height: 32px;
-    margin: 8px 0 0;
     padding: 4px;
     position: relative;
     transition: background-color 200ms ease-in-out 0s;
     color:  forestgreen;
     font-weight: bold;
     margin-right: 10%;
+    margin-left: 40%;
+    margin-top: 8px;
 }
 .default-button:hover{
     border: 2px solid rgba(0, 0, 0, 0.2);

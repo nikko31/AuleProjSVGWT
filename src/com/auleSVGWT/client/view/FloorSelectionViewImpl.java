@@ -120,6 +120,8 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
         buildingLst.setSelectedIndex(0);
         txtName.setStyleName("top-search-bl");
         txtSurname.setStyleName("top-search-bl");
+        enterBtn.setStyleName("default-button");
+        searchPersonButton.setStyleName("default-button");
     }
 
     @Override

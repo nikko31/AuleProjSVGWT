@@ -125,8 +125,10 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
             editPersonTable.setText(i, 2, rowData.get(i).getRole().getName());
 
             if(i%2==0){
-                editPersonTable.getRowFormatter().setStyleName(i,"rowColor");
+                editPersonTable.getRowFormatter().addStyleName(i,"rowDColor");
             }
+            editPersonTable.getRowFormatter().addStyleName(i,"rowColor");
+
 
         }
         this.rowData = rowData;

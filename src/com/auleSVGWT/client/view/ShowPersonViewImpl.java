@@ -55,6 +55,7 @@ public class ShowPersonViewImpl extends Composite implements ShowPersonView<Pers
     @Override
     public void setPresenter(Presenter<PersonDTO> presenter) {
         this.presenter = presenter;
+        backButton.setStyleName("default-button-cancel");
     }
 
     @Override

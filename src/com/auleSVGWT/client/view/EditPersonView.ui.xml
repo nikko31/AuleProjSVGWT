@@ -31,7 +31,12 @@
             </tr>
         </table>
         <br/>
-        <g:Button ui:field="saveButton">Salva</g:Button>
-        <g:Button ui:field="cancelButton">Indietro</g:Button>
+
+        <table>
+            <tr>
+                <td><g:Button ui:field="saveButton">Salva</g:Button></td>
+                <td><g:Button ui:field="cancelButton">Indietro</g:Button></td>
+            </tr>
+        </table>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -87,7 +87,8 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     public void setRolesData(ArrayList<RoleDTO> rolesData, RoleDTO role) {
             rolesList.setRoleDTOs(rolesData);
             rolesList.setValue(role);
-
+            saveButton.setStyleName("default-button");
+            cancelButton.setStyleName("default-button-cancel");
     }
 
     @Override

@@ -3,14 +3,14 @@
 
     <ui:style field="otherStyle" src="View.css"></ui:style>
     <g:VerticalPanel height="100%" width="100%" styleName="{otherStyle.distanceFromTopLeftPanel}">
-        <g:Label styleName="{otherStyle.headerFontWidget2}">Stanza</g:Label>
+        <g:Label styleName="{otherStyle.headerFontWidget3}">STANZA</g:Label>
         <g:Grid>
             <g:row>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}">Numero Aula :</g:Label>
+                    <g:Label styleName="{otherStyle.headerFontWidget2}" >Numero Aula :</g:Label>
                 </g:customCell>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}" ui:field="roomNumber"/>
+                    <g:Label styleName="{otherStyle.headerFontWidget}" ui:field="roomNumber" horizontalAlignment="ALIGN_CENTER"/>
                 </g:customCell>
             </g:row>
             <g:row>
@@ -18,7 +18,7 @@
                     <g:Label styleName="{otherStyle.headerFontWidget2}">Numero Posti :</g:Label>
                 </g:customCell>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}" ui:field="numSeats"/>
+                    <g:Label styleName="{otherStyle.headerFontWidget}" ui:field="numSeats" horizontalAlignment="ALIGN_CENTER"/>
                 </g:customCell>
             </g:row>
             <g:row>
@@ -26,7 +26,7 @@
                     <g:Label styleName="{otherStyle.headerFontWidget2}">Metri Quadri :</g:Label>
                 </g:customCell>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}" ui:field="mtQ"/>
+                    <g:Label styleName="{otherStyle.headerFontWidget}" ui:field="mtQ"  horizontalAlignment="ALIGN_CENTER"/>
                 </g:customCell>
             </g:row>
             <g:row>
@@ -34,7 +34,7 @@
                     <g:Label styleName="{otherStyle.headerFontWidget2}">Prese di rete  :</g:Label>
                 </g:customCell>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}"  ui:field="numSocket"/>
+                    <g:Label styleName="{otherStyle.headerFontWidget}"  ui:field="numSocket" horizontalAlignment="ALIGN_CENTER"/>
                 </g:customCell>
             </g:row>
             <g:row>
@@ -42,7 +42,7 @@
                     <g:Label styleName="{otherStyle.headerFontWidget2}">Info  :</g:Label>
                 </g:customCell>
                 <g:customCell>
-                    <g:Label styleName="{otherStyle.headerFontWidget2}" ui:field="infoTxt"/>
+                    <g:Label styleName="{otherStyle.headerFontWidget}" ui:field="infoTxt"  horizontalAlignment="ALIGN_CENTER"/>
                 </g:customCell>
             </g:row>
         </g:Grid>

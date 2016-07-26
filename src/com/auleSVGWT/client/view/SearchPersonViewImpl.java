@@ -72,7 +72,10 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
             searchPersonTable.setText(i, 2, String.valueOf(rowData.get(i - 1).getRoom().getMaxPeople()));
             searchPersonTable.setText(i, 3, String.valueOf(rowData.get(i - 1).getRoom().getSocket()));
             if(i%2==0)
-                searchPersonTable.getRowFormatter().setStyleName(i,"rowColor");
+                searchPersonTable.getRowFormatter().addStyleName(i,"rowDColor");
+            searchPersonTable.getRowFormatter().addStyleName(i,"rowColor");
+
+
         }
         this.rowData=rowData;
     }
