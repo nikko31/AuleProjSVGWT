@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 public class AndroidStartServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final String addImageAndroid="/res/imageAndroid";
 
     public AndroidStartServlet() {
         super();
@@ -34,7 +35,7 @@ public class AndroidStartServlet extends HttpServlet {
 
         try {
             ServletContext context = getServletContext();
-            String fullPath = context.getRealPath("/Images");
+            String fullPath = context.getRealPath(addImageAndroid);
 
             File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();

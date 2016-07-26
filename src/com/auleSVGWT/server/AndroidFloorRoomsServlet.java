@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class AndroidFloorRoomsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final String addImageAndroid="/res/imageAndroid";
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
 
@@ -81,7 +82,7 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
 
     public ArrayList<String> roomFloorList(String text){
         ServletContext context = getServletContext();
-        String fullPath = context.getRealPath("/Images");
+        String fullPath = context.getRealPath(addImageAndroid);
         URI uri = new File( fullPath+"/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();

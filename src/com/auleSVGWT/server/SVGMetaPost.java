@@ -102,9 +102,14 @@ public class SVGMetaPost {
         DocumentLoader loader = new DocumentLoader( userAgent );
         BridgeContext bridgeContext = new BridgeContext( userAgent, loader );
         bridgeContext.setDynamicState( BridgeContext.DYNAMIC );
-
+        try{
+            (new GVTBuilder()).build( bridgeContext, document );
+        }catch (Exception m){
+            System.out.println("errore nel dom");
+            m.printStackTrace();
+        }
         // Enable CSS- and SVG-specific enhancements.
-        (new GVTBuilder()).build( bridgeContext, document );
+
     }
 
     /**

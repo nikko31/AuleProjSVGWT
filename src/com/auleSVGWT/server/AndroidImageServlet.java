@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class AndroidImageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final String addImageAndroid="/res/imageAndroid";
+    private static final String addImageTMPPNG="/res/tmpPNG";
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -115,7 +117,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         try{
             ServletContext context = getServletContext();
-            String fullPath = context.getRealPath("/Images");
+            String fullPath = context.getRealPath(addImageAndroid);
             f = (new File(fullPath+"/"+name+".svg"));
             if(!f.exists()){
                 fileExistance = false;
@@ -352,7 +354,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         try{
 
-            //System.out.println("" + (new File("C:\\Users\\Utente\\IdeaProject\\esperimenti_vari\\src\\fac-0.svg.svg")).toURI().toString());
+            //System.out.println("" + (new File("C:\\Users\\Utente\\IdeaProject\\esperimenti_vari\\sr);
             TranscoderInput input = new TranscoderInput(doc);
             //FileOutputStream ostream = new FileOutputStream("C:\\Users\\Utente\\IdeaProject\\esperimenti_vari\\src\\");
             TranscoderOutput output = new TranscoderOutput(out);

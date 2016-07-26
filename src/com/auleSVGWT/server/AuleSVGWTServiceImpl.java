@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
+    private static final String addImageGWT="/res/imageGWT";
     // Implementation of sample interface method
 
 
@@ -525,7 +526,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         try {
             ServletContext context = getServletContext();
-            String fullPath = context.getRealPath("/imageGWT");
+            String fullPath = context.getRealPath(addImageGWT);
             //System.out.println("55555555555555555....."+fullPath+".....555555555555");
 
             File folder = new File(fullPath);
@@ -683,7 +684,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     public ArrayList<String> listaAulePianoNewVersion(String text) {
         ServletContext context = getServletContext();
-        String fullPath = context.getRealPath("/imageGWT");
+        String fullPath = context.getRealPath(addImageGWT);
         URI uri = new File(fullPath+"/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();
