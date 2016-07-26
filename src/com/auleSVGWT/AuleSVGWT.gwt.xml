@@ -12,5 +12,4 @@
 
     <!-- Specify the app servlets.                   -->
     <servlet path='/AuleSVGWTService' class='com.auleSVGWT.server.AuleSVGWTServiceImpl'/>
-
 </module>

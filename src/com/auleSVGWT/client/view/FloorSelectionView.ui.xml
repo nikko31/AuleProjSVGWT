@@ -19,18 +19,18 @@
                     <g:Button ui:field="enterBtn" styleName="{otherStyle.headerFontWidgetMarginLeft}">Enter</g:Button>
                 </g:HorizontalPanel>
             </g:VerticalPanel>
-            <g:VerticalPanel styleName="{otherStyle.header}">
+
+            <g:VerticalPanel styleName="{otherStyle.header}" horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE">
                 <g:Label styleName="{otherStyle.header2}">Inserisci Nome</g:Label>
                 <g:TextBox ui:field="txtName" styleName="{otherStyle.headerFontWidget}"></g:TextBox>
-            </g:VerticalPanel>
-            <g:VerticalPanel styleName="{otherStyle.header1}">
                 <g:Label styleName="{otherStyle.header2}">Cognome:</g:Label>
-                <g:HorizontalPanel>
-                    <g:TextBox ui:field="txtSurname" styleName="{otherStyle.headerFontWidget}"></g:TextBox>
-                    <g:Button ui:field="searchPersonButton" styleName="{otherStyle.headerFontWidgetMarginLeft}">Cerca
-                    </g:Button>
-                </g:HorizontalPanel>
+                <g:TextBox ui:field="txtSurname" styleName="{otherStyle.headerFontWidget}"></g:TextBox>
+
+                <g:Button ui:field="searchPersonButton" styleName="{otherStyle.headerFontWidgetMarginLeft}">
+                    Cerca
+                </g:Button>
             </g:VerticalPanel>
+
         </g:HorizontalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>
