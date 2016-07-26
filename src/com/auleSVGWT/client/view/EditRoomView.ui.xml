@@ -28,7 +28,7 @@
 
         <g:Button ui:field="addPersonButton">Crea Nuova Persona</g:Button>
 
-        <g:HorizontalPanel>
+        <g:HorizontalPanel horizontalAlignment="ALIGN_CENTER">
             <g:Button ui:field="saveButton">Salva</g:Button>
             <g:Button ui:field="cancelButton">Indietro</g:Button>
         </g:HorizontalPanel>

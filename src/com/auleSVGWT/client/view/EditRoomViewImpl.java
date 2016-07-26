@@ -136,5 +136,9 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
     public void setRoomData(RoomDTO roomData) {
         numSeatsTxt.setText(String.valueOf(roomData.getMaxPerson()));
         mtQTxt.setText(String.valueOf(roomData.getDimension()));
+        addPersonButton.setStyleName("fm-add-user");
+        cancelButton.setStyleName("default-button-cancel");
+        saveButton.setStyleName("default-button");
+
     }
 }

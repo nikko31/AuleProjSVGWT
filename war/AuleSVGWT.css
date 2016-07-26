@@ -1,12 +1,80 @@
 /** Add css rules here for your application. */
 
+@font-face {
+    font-family: "brandon_textbold_italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont_v2.svg#brandon_textbold_italic") format("svg");
+}
+@font-face {
+    font-family: "brandon_textmedium";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont_v2.svg#brandon_textmedium") format("svg");
+}
+@font-face {
+    font-family: "source_sans_probold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.svg#source_sans_probold") format("svg");
+}
+@font-face {
+    font-family: "source_sans_proextralight";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.svg#source_sans_proextralight") format("svg");
+}
+@font-face {
+    font-family: "source_sans_prolight";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.svg#source_sans_prolight") format("svg");
+}
+@font-face {
+    font-family: "source_sans_proregular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.svg#source_sans_proregular") format("svg");
+}
+@font-face {
+    font-family: "source_sans_prosemibold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.svg#source_sans_prosemibold") format("svg");
+}
+@font-face {
+    font-family: "Open Sans Semibold Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.svg#open_sanssemibold_italic") format("svg");
+}
+@font-face {
+    font-family: "Open Sans Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.svg#open_sansitalic") format("svg");
+}
+@font-face {
+    font-family: "source_code_proregular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.svg#source_code_proregular") format("svg");
+}
+@font-face {
+    font-family: "VentiCF-Bold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.otf") format("opentype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.svg#VentiCF-Bold") format("svg");
+}
 h1 {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
 }
+
 .info {
 }
+
 .redText {
     font-family: Arial, Sans-serif;
     color: #FF0000;
@@ -73,21 +141,17 @@ body, td, a, div, .p {
     border-bottom: none;
 }
 
-
-
-
-
-
 .holder {
     width: 300px;
     margin: 20px;
     float: left;
     overflow: hidden;
 }
+
 .topbar {
-    border: 1px solid rgba(0,0,0,0.2);
-    box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5),
-    inset 0px -3px 15px -1px rgba(0,0,0,0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 0px 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0px -3px 15px -1px rgba(0, 0, 0, 0.2);
     -webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -96,38 +160,43 @@ body, td, a, div, .p {
     border-top-right-radius: 5px;
     -webkit-background-clip: padding-box;
 }
+
 .topbar h1 {
     background: url(http://noisepng.com/100-90-4-monochrome.png);
     text-align: center;
     margin: 0px 0px 0px 0px;
     color: #fff;
     font-size: 26px;
-    text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
     letter-spacing: -1px;
 }
+
 .inbar {
-    border: 1px solid rgba(0,0,0,0.2);
-    box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 0px 10px -2px rgba(0, 0, 0, 0.2);
 }
+
 .inbar ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
+
 .inbar ul li {
     margin: 0;
     padding: 0;
     clear: both;
-    background: rgb(255,255,255);
+    background: rgb(255, 255, 255);
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmN2Y3ZjciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(247,247,247,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(247,247,247,1)));
-    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(247,247,247,1) 100%);
-    background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(247,247,247,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(247,247,247,1) 100%);
-    background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(247,247,247,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(100%, rgba(247, 247, 247, 1)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    background: linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
 }
+
 .inbar ul li span {
     float: left;
     padding: 5px 20px 5px 20px;
@@ -138,6 +207,7 @@ body, td, a, div, .p {
     color: #888;
     background: #fff;
 }
+
 .inbar ul li p {
     padding: 17px 0px 16px 70px;
     border-right: 1px solid #eee;
@@ -148,60 +218,65 @@ body, td, a, div, .p {
     text-shadow: 1px 1px 0 #fff;
     box-shadow: inset 0 0 1px 1px #fff;
 }
+
 .inbar ul li:hover p {
-    background: rgba(0,0,0,0.02);
+    background: rgba(0, 0, 0, 0.02);
 }
+
 .inbar ul li:hover span {
-    color: rgba(0,0,0,0.3);
+    color: rgba(0, 0, 0, 0.3);
 }
+
 /* Colors */
 
 .orange {
-    background: rgb(255,175,75);
+    background: rgb(255, 175, 75);
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYWY0YiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZjkyMGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(255,175,75,1) 0%, rgba(255,146,10,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,175,75,1)), color-stop(100%,rgba(255,146,10,1)));
-    background: -webkit-linear-gradient(top,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%);
-    background: -o-linear-gradient(top,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%);
-    background: linear-gradient(top,  rgba(255,175,75,1) 0%,rgba(255,146,10,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 );
+    background: -moz-linear-gradient(top, rgba(255, 175, 75, 1) 0%, rgba(255, 146, 10, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 175, 75, 1)), color-stop(100%, rgba(255, 146, 10, 1)));
+    background: -webkit-linear-gradient(top, rgba(255, 175, 75, 1) 0%, rgba(255, 146, 10, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 175, 75, 1) 0%, rgba(255, 146, 10, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 175, 75, 1) 0%, rgba(255, 146, 10, 1) 100%);
+    background: linear-gradient(top, rgba(255, 175, 75, 1) 0%, rgba(255, 146, 10, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=0);
 }
+
 .red {
-    background: rgb(234,0,0);
+    background: rgb(234, 0, 0);
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VhMDAwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiNTAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(234,0,0,1) 0%, rgba(181,0,0,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(234,0,0,1)), color-stop(100%,rgba(181,0,0,1)));
-    background: -webkit-linear-gradient(top,  rgba(234,0,0,1) 0%,rgba(181,0,0,1) 100%);
-    background: -o-linear-gradient(top,  rgba(234,0,0,1) 0%,rgba(181,0,0,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(234,0,0,1) 0%,rgba(181,0,0,1) 100%);
-    background: linear-gradient(top,  rgba(234,0,0,1) 0%,rgba(181,0,0,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ea0000', endColorstr='#b50000',GradientType=0 );
+    background: -moz-linear-gradient(top, rgba(234, 0, 0, 1) 0%, rgba(181, 0, 0, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(234, 0, 0, 1)), color-stop(100%, rgba(181, 0, 0, 1)));
+    background: -webkit-linear-gradient(top, rgba(234, 0, 0, 1) 0%, rgba(181, 0, 0, 1) 100%);
+    background: -o-linear-gradient(top, rgba(234, 0, 0, 1) 0%, rgba(181, 0, 0, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(234, 0, 0, 1) 0%, rgba(181, 0, 0, 1) 100%);
+    background: linear-gradient(top, rgba(234, 0, 0, 1) 0%, rgba(181, 0, 0, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ea0000', endColorstr='#b50000', GradientType=0);
 }
+
 .green {
-    background: rgb(138,182,107);
+    background: rgb(138, 182, 107);
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIxJSIgc3RvcC1jb2xvcj0iIzhhYjY2YiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzOTgyMzUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(138,182,107,1) 1%, rgba(57,130,53,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(138,182,107,1)), color-stop(100%,rgba(57,130,53,1)));
-    background: -webkit-linear-gradient(top,  rgba(138,182,107,1) 1%,rgba(57,130,53,1) 100%);
-    background: -o-linear-gradient(top,  rgba(138,182,107,1) 1%,rgba(57,130,53,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(138,182,107,1) 1%,rgba(57,130,53,1) 100%);
-    background: linear-gradient(top,  rgba(138,182,107,1) 1%,rgba(57,130,53,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8ab66b', endColorstr='#398235',GradientType=0 );
+    background: -moz-linear-gradient(top, rgba(138, 182, 107, 1) 1%, rgba(57, 130, 53, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, rgba(138, 182, 107, 1)), color-stop(100%, rgba(57, 130, 53, 1)));
+    background: -webkit-linear-gradient(top, rgba(138, 182, 107, 1) 1%, rgba(57, 130, 53, 1) 100%);
+    background: -o-linear-gradient(top, rgba(138, 182, 107, 1) 1%, rgba(57, 130, 53, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(138, 182, 107, 1) 1%, rgba(57, 130, 53, 1) 100%);
+    background: linear-gradient(top, rgba(138, 182, 107, 1) 1%, rgba(57, 130, 53, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8ab66b', endColorstr='#398235', GradientType=0);
 
 }
+
 .blue {
-    background: rgb(64,150,238);
+    background: rgb(64, 150, 238);
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQwOTZlZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzcwYmMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(64,150,238,1) 0%, rgba(35,112,188,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(64,150,238,1)), color-stop(100%,rgba(35,112,188,1)));
-    background: -webkit-linear-gradient(top,  rgba(64,150,238,1) 0%,rgba(35,112,188,1) 100%);
-    background: -o-linear-gradient(top,  rgba(64,150,238,1) 0%,rgba(35,112,188,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(64,150,238,1) 0%,rgba(35,112,188,1) 100%);
-    background: linear-gradient(top,  rgba(64,150,238,1) 0%,rgba(35,112,188,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4096ee', endColorstr='#2370bc',GradientType=0 );
+    background: -moz-linear-gradient(top, rgba(64, 150, 238, 1) 0%, rgba(35, 112, 188, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(64, 150, 238, 1)), color-stop(100%, rgba(35, 112, 188, 1)));
+    background: -webkit-linear-gradient(top, rgba(64, 150, 238, 1) 0%, rgba(35, 112, 188, 1) 100%);
+    background: -o-linear-gradient(top, rgba(64, 150, 238, 1) 0%, rgba(35, 112, 188, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(64, 150, 238, 1) 0%, rgba(35, 112, 188, 1) 100%);
+    background: linear-gradient(top, rgba(64, 150, 238, 1) 0%, rgba(35, 112, 188, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4096ee', endColorstr='#2370bc', GradientType=0);
 }
-
 
 .header img {
     float: left;
@@ -213,19 +288,109 @@ body, td, a, div, .p {
     color: white;
 }
 
-
-
 .headertr {
     background-color: orange;
 }
 
-.rowColor{
+.rowColor {
     background: #99ff99;
 }
 
-.cellHeader{
+.cellHeader {
     background: #00b35c;
     color: white;
     font-family: Verdana, Geneva, sans-serif;
     font-weight: bold;
+}
+
+.top-search-bl {
+    background-color: #66ff66;
+    background-image: url("https://eu.static.mega.co.nz/3/images/mega/top-sprite_v4.svg");
+    background-position: -3px -473px;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+    box-sizing: border-box;
+    float: right;
+    height: 24px;
+    margin: 12px 20px 0 0;
+    position: relative;
+    transition: background-color 200ms ease-in-out 0s;
+    width: 160px;
+    color: #000;
+    padding-left: 20%;
+}
+
+.top-search-bl:hover {
+    background-color: #99ff99;
+    width: 170px;
+
+}
+
+.top-search-bl:focus {
+    background-color: #99ff99;
+    background-image: none;
+    width: 170px;
+}
+
+.fm-add-user {
+    background-color:greenyellow;
+    background-image: url("https://eu.static.mega.co.nz/3/images/mega/nw-fm-sprite_v18.svg");
+    background-position: -1px -8510px;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    color: forestgreen;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    height: auto;
+    line-height: 23px;
+    min-width: 50px;
+    padding-left: 10%;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+}
+
+.fm-add-user:hover {
+    background-color: rgba(25, 181, 24, 0.2);
+}
+.default-button-cancel{
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+    float: right;
+    height: 32px;
+    margin: 8px 0 0;
+    padding: 4px;
+    position: relative;
+    transition: background-color 200ms ease-in-out 0s;
+    color: #d90007;
+    font-weight: bold;
+    margin-right: 10%;
+
+}
+.default-button-cancel:hover{
+    background-color: rgba(217, 0, 7, 0.2);
+}
+.default-button{
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+    float: right;
+    height: 32px;
+    margin: 8px 0 0;
+    padding: 4px;
+    position: relative;
+    transition: background-color 200ms ease-in-out 0s;
+    color:  forestgreen;
+    font-weight: bold;
+    margin-right: 10%;
+}
+.default-button:hover{
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    background-color: rgba(60, 217, 23, 0.2);
 }

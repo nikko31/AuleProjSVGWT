@@ -118,6 +118,8 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
             buildingLst.addValue(building);
         }
         buildingLst.setSelectedIndex(0);
+        txtName.setStyleName("top-search-bl");
+        txtSurname.setStyleName("top-search-bl");
     }
 
     @Override
