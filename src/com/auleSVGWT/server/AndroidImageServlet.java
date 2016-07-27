@@ -1,6 +1,7 @@
 package com.auleSVGWT.server;
 
 import com.auleSVGWT.client.dto.*;
+
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -14,12 +15,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.sql.Date;
 import java.util.ArrayList;
+
 
 
 public class AndroidImageServlet extends HttpServlet {
@@ -35,6 +35,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         resp.setContentType("image/png");
         OutputStream out = resp.getOutputStream();
+
 
 
 
@@ -111,8 +112,8 @@ public class AndroidImageServlet extends HttpServlet {
         File f;
 
         PNGTranscoder transcoder = new PNGTranscoder();
-        transcoder.addTranscodingHint(JPEGTranscoder.KEY_WIDTH, (float) 1920);
-        transcoder.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, (float) 1080);
+        transcoder.addTranscodingHint(JPEGTranscoder.KEY_WIDTH, (float) 1280);
+        transcoder.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, (float) 720);
 
 
         try{
@@ -183,25 +184,121 @@ public class AndroidImageServlet extends HttpServlet {
     }
 
     public void modalityZero(OutputStream out,Document doc,PNGTranscoder transcoder){
+        File file;
+        InputStream imageIn;
+        ServletContext context = getServletContext();
+        String Path = context.getRealPath(addImageTMPPNG);
+        String name= String.valueOf((int)(Math.random()*(1000)));
+        name += "tmp.png";
+
+        while(new File(Path+"/"+name).exists()){
+
+            name= String.valueOf((int)(Math.random()*(1000)));
+            name += "tmp.png";
+
+        }
 
 
         try{
 
+            OutputStream ostream = new FileOutputStream(Path+"/"+name);
+
             TranscoderInput input = new TranscoderInput(doc);
-            TranscoderOutput output = new TranscoderOutput(out);
+            TranscoderOutput output = new TranscoderOutput(ostream);
             //System.out.println("vediamo cosa passa    " + input.getURI());
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
             transcoder.transcode(input, output);
-            out.flush();
-            out.close();
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            ostream.flush();
+            ostream.close();
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
+        }
+
+        try {
+            file = new File(Path+"/"+name);
+            imageIn = new FileInputStream(file);
+            byte[] buffer = new byte[20];
+            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
+                out.write(buffer, 0, length);
+            }
+
+            imageIn.close();
+            if(file.delete()){
+                System.out.println("file"+name+ " eliminato ");
+            }
+
+            out.flush();
+            out.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+
         }
 
 
     }
 
     public void modalityOne(OutputStream out,Document doc,String id,PNGTranscoder transcoder){
+
+        File file;
+        InputStream imageIn;
+        ServletContext context = getServletContext();
+        String Path = context.getRealPath(addImageTMPPNG);
+        String name= String.valueOf((int)(Math.random()*(1000)));
+        name += "tmp.png";
+
+        while(new File(Path+"/"+name).exists()){
+
+            name= String.valueOf((int)(Math.random()*(1000)));
+            name += "tmp.png";
+
+        }
+
+
+        try{
+            String style = doc.getElementById(id).getAttribute("style");
+            style = style.replaceFirst("fill:none","fill:green");
+            doc.getElementById(id).setAttribute("style", style);
+
+            OutputStream ostream = new FileOutputStream(Path+"/"+name);
+
+            TranscoderInput input = new TranscoderInput(doc);
+            TranscoderOutput output = new TranscoderOutput(ostream);
+            //System.out.println("vediamo cosa passa    " + input.getURI());
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            transcoder.transcode(input, output);
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            ostream.flush();
+            ostream.close();
+
+        }catch(TranscoderException | IOException c){
+            c.printStackTrace();
+        }
+
+        try {
+            file = new File(Path+"/"+name);
+            imageIn = new FileInputStream(file);
+            byte[] buffer = new byte[20];
+            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
+                out.write(buffer, 0, length);
+            }
+
+            imageIn.close();
+            if(file.delete()){
+                System.out.println("file"+name+ " eliminato ");
+            }
+
+            out.flush();
+            out.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        /*
 
 
         try{
@@ -219,7 +316,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -308,6 +405,65 @@ public class AndroidImageServlet extends HttpServlet {
 
         }
 
+
+        File file;
+        InputStream imageIn;
+        ServletContext context = getServletContext();
+        String Path = context.getRealPath(addImageTMPPNG);
+        String name= String.valueOf((int)(Math.random()*(1000)));
+        name += "tmp.png";
+
+        while(new File(Path+"/"+name).exists()){
+
+            name= String.valueOf((int)(Math.random()*(1000)));
+            name += "tmp.png";
+
+        }
+
+
+        try{
+
+            OutputStream ostream = new FileOutputStream(Path+"/"+name);
+
+            TranscoderInput input = new TranscoderInput(doc);
+            TranscoderOutput output = new TranscoderOutput(ostream);
+            //System.out.println("vediamo cosa passa    " + input.getURI());
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            transcoder.transcode(input, output);
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            ostream.flush();
+            ostream.close();
+
+        }catch(TranscoderException | IOException c){
+            c.printStackTrace();
+        }
+
+        try {
+            file = new File(Path+"/"+name);
+            imageIn = new FileInputStream(file);
+            byte[] buffer = new byte[20];
+            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
+                out.write(buffer, 0, length);
+            }
+
+            imageIn.close();
+            if(file.delete()){
+                System.out.println("file"+name+ " eliminato ");
+            }
+
+            out.flush();
+            out.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+
+
+
+
+        /*
         try{
             TranscoderInput input = new TranscoderInput(doc);
             TranscoderOutput output = new TranscoderOutput(out);
@@ -318,7 +474,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }
+        }*/
 
 
     }
@@ -352,6 +508,66 @@ public class AndroidImageServlet extends HttpServlet {
 
         }
 
+
+        File file;
+        InputStream imageIn;
+        ServletContext context = getServletContext();
+        String Path = context.getRealPath(addImageTMPPNG);
+        String name= String.valueOf((int)(Math.random()*(1000)));
+        name += "tmp.png";
+
+        while(new File(Path+"/"+name).exists()){
+
+            name= String.valueOf((int)(Math.random()*(1000)));
+            name += "tmp.png";
+
+        }
+
+
+        try{
+
+            OutputStream ostream = new FileOutputStream(Path+"/"+name);
+
+            TranscoderInput input = new TranscoderInput(doc);
+            TranscoderOutput output = new TranscoderOutput(ostream);
+            //System.out.println("vediamo cosa passa    " + input.getURI());
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            transcoder.transcode(input, output);
+            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+            ostream.flush();
+            ostream.close();
+
+        }catch(TranscoderException | IOException c){
+            c.printStackTrace();
+        }
+
+        try {
+            file = new File(Path+"/"+name);
+            imageIn = new FileInputStream(file);
+            byte[] buffer = new byte[20];
+            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
+                out.write(buffer, 0, length);
+            }
+
+            imageIn.close();
+            if(file.delete()){
+                System.out.println("file"+name+ " eliminato ");
+            }
+
+            out.flush();
+            out.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+
+
+
+
+        /*
+
         try{
 
             //System.out.println("" + (new File("C:\\Users\\Utente\\IdeaProject\\esperimenti_vari\\sr);
@@ -365,7 +581,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -373,7 +589,7 @@ public class AndroidImageServlet extends HttpServlet {
 
     public ArrayList<String> listRoomsOfFloor(String text){
         ServletContext context = getServletContext();
-        String fullPath = context.getRealPath("/imageGWT");
+        String fullPath = context.getRealPath(addImageAndroid);
         URI uri = new File(fullPath+"/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();

@@ -68,7 +68,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private void getMap(final String building, final String floor) {
 
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET,
-                "res/" + building + "-" + floor + ".svg");
+                "res/imageGWT/" + building + "-" + floor + ".svg");
         try {
 
             RequestCallback pendingRequest = new RequestCallback() {

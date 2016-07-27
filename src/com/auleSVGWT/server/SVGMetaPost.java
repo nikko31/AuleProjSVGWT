@@ -1,12 +1,12 @@
 package com.auleSVGWT.server;
 
+import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
+import org.apache.batik.anim.dom.SVGOMSVGElement;
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.bridge.DocumentLoader;
 import org.apache.batik.bridge.GVTBuilder;
 import org.apache.batik.bridge.UserAgent;
 import org.apache.batik.bridge.UserAgentAdapter;
-import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
-import org.apache.batik.dom.svg.SVGOMSVGElement;
 import org.apache.batik.util.XMLResourceDescriptor;
 
 import org.w3c.dom.Document;
@@ -77,7 +77,7 @@ public class SVGMetaPost {
      * @param document The document that contains SVG content.
      */
     public void setSVGDocument( Document document ) {
-        initSVGDOM( document );
+        //initSVGDOM( document );
         this.svgDocument = document;
     }
 
