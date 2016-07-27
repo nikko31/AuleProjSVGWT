@@ -5,7 +5,9 @@ import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
 import org.hibernate.classic.Session;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class DatabaseM {
@@ -91,6 +93,76 @@ public class DatabaseM {
 
         }
         return occupyDTO;
+
+    }
+
+    public ArrayList<RoomDTO> getOccupyOfFloorwithDimension(String building, String floorSt){
+
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select room from Occupy occ where  " +
+                    "occ.room.building.name ='"+building+"'" +"and occ.room.floor="+floor +
+                    " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());
+
+            if(rooms.size()>0){
+                for (Room room : rooms) {
+                    roomDTOs.add(createRoomDTO(room));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return roomDTOs;
+
+    }
+
+
+    public ArrayList<PersonDTO> getOccupyOfFloorwithDate(String building, String floorSt){
+
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Person> persons = new ArrayList<>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
+                    "' and occ.room.floor=" + floor +" and occ.person.endWork < CURRENT_DATE() group by occ.person.id").list() );
+
+            if(persons.size()>0){
+                for (Person person : persons) {
+                    personDTOs.add(createPersonDTO(person));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return personDTOs;
 
     }
 

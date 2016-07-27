@@ -69,4 +69,15 @@
         <url-pattern>/Android/cercaPersona</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>queryMap</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidFloorOccuAndContracts</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>queryMap</servlet-name>
+        <url-pattern>/Android/auleLavoroOccupazione</url-pattern>
+    </servlet-mapping>
+
 </web-app>
