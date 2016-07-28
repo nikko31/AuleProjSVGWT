@@ -1,6 +1,7 @@
 package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.event.SearchPersonEvent;
 import com.auleSVGWT.client.event.ShowFloorEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
@@ -55,6 +56,17 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
                 view.setListData(result.keySet());
             }
         });
+        rpcService.getPerson(new AsyncCallback<ArrayList<PersonDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<PersonDTO> result) {
+                view.setSuggestion(result);
+            }
+        });
     }
 
     @Override
@@ -69,6 +81,6 @@ public class FloorSelectionPresenter implements Presenter, FloorSelectionView.Pr
 
     @Override
     public void onSearchButtonClicked() {
-        eventBus.fireEvent(new SearchPersonEvent(view.getName(), view.getSurname()));
+        eventBus.fireEvent(new SearchPersonEvent(view.getSelectedPersons()));
     }
 }

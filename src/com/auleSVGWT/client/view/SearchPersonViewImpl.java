@@ -44,7 +44,7 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
             if (cell != null) {
                 // Suppress clicks if the user is actually selecting the
                 //  check box
-                presenter.onItemClicked(this.rowData.get(cell.getRowIndex()-1));
+                presenter.onItemClicked(this.rowData.get(cell.getRowIndex() - 1));
             }
         }
     }
@@ -60,24 +60,27 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
 
     @Override
     public void setRowData(ArrayList<OccupyDTO> rowData) {
-        searchPersonTable.setText(0, 0, "EDIFICIO STANZA");
-        searchPersonTable.setText(0, 1, "DIMENSIONI");
-        searchPersonTable.setText(0, 2, "NUMERO MASSIMO DI PERSONE");
-        searchPersonTable.setText(0, 3, "PRESE DI RETE");
-        searchPersonTable.getRowFormatter().addStyleName(0,"cellHeader");
+        searchPersonTable.setText(0, 0, "DOCENTE");
+        searchPersonTable.setText(0, 1, "EDIFICIO STANZA");
+        searchPersonTable.setText(0, 2, "DIMENSIONI");
+        searchPersonTable.setText(0, 3, "NUMERO MASSIMO DI PERSONE");
+        searchPersonTable.setText(0, 4, "PRESE DI RETE");
+        searchPersonTable.getRowFormatter().addStyleName(0, "cellHeader");
 
         for (int i = 1; i < rowData.size() + 1; i++) {
-            searchPersonTable.setText(i, 0, rowData.get(i - 1).getRoom().getBuilding().getName() + "-" + String.valueOf(rowData.get(i - 1).getRoom().getFloor()) + "-" + String.valueOf(rowData.get(i - 1).getRoom().getNumber()));
-            searchPersonTable.setText(i, 1, String.valueOf(rowData.get(i - 1).getRoom().getDimension()));
-            searchPersonTable.setText(i, 2, String.valueOf(rowData.get(i - 1).getRoom().getMaxPeople()));
-            searchPersonTable.setText(i, 3, String.valueOf(rowData.get(i - 1).getRoom().getSocket()));
-            if(i%2==0)
-                searchPersonTable.getRowFormatter().addStyleName(i,"rowDColor");
-            searchPersonTable.getRowFormatter().addStyleName(i,"rowColor");
+            searchPersonTable.setText(i, 0, rowData.get(i - 1).getPerson().getName() + " "
+                    + rowData.get(i-1).getPerson().getSurname());
+            searchPersonTable.setText(i, 1, rowData.get(i - 1).getRoom().getBuilding().getName() + "-" + String.valueOf(rowData.get(i - 1).getRoom().getFloor()) + "-" + String.valueOf(rowData.get(i - 1).getRoom().getNumber()));
+            searchPersonTable.setText(i, 2, String.valueOf(rowData.get(i - 1).getRoom().getDimension()));
+            searchPersonTable.setText(i, 3, String.valueOf(rowData.get(i - 1).getRoom().getMaxPeople()));
+            searchPersonTable.setText(i, 4, String.valueOf(rowData.get(i - 1).getRoom().getSocket()));
+            if (i % 2 == 0)
+                searchPersonTable.getRowFormatter().addStyleName(i, "rowDColor");
+            searchPersonTable.getRowFormatter().addStyleName(i, "rowColor");
 
 
         }
-        this.rowData=rowData;
+        this.rowData = rowData;
     }
 
     @Override

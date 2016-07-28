@@ -6,66 +6,77 @@
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-bolditalic-webfont_v2.svg#brandon_textbold_italic") format("svg");
 }
+
 @font-face {
     font-family: "brandon_textmedium";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/brandontext-medium-webfont_v2.svg#brandon_textmedium") format("svg");
 }
+
 @font-face {
     font-family: "source_sans_probold";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Bold.svg#source_sans_probold") format("svg");
 }
+
 @font-face {
     font-family: "source_sans_proextralight";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-ExtraLight.svg#source_sans_proextralight") format("svg");
 }
+
 @font-face {
     font-family: "source_sans_prolight";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Light.svg#source_sans_prolight") format("svg");
 }
+
 @font-face {
     font-family: "source_sans_proregular";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Regular.svg#source_sans_proregular") format("svg");
 }
+
 @font-face {
     font-family: "source_sans_prosemibold";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/SourceSansPro-Semibold.svg#source_sans_prosemibold") format("svg");
 }
+
 @font-face {
     font-family: "Open Sans Semibold Italic";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/OpenSans-SemiboldItalic_v3.svg#open_sanssemibold_italic") format("svg");
 }
+
 @font-face {
     font-family: "Open Sans Italic";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/opensansitalic.svg#open_sansitalic") format("svg");
 }
+
 @font-face {
     font-family: "source_code_proregular";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.woff2") format("woff2"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/sourcecodepro-regular-webfont.svg#source_code_proregular") format("svg");
 }
+
 @font-face {
     font-family: "VentiCF-Bold";
     font-style: normal;
     font-weight: normal;
     src: url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.eot?#iefix") format("embedded-opentype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.otf") format("opentype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.woff") format("woff"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.ttf") format("truetype"), url("https://eu.static.mega.co.nz/3/fonts/VentiCF-Bold.svg#VentiCF-Bold") format("svg");
 }
+
 h1 {
     font-size: 2em;
     font-weight: bold;
@@ -278,11 +289,6 @@ body, td, a, div, .p {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4096ee', endColorstr='#2370bc', GradientType=0);
 }
 
-.header img {
-    float: left;
-    height: 150px;
-    background: #555;
-}
 
 .header h1 {
     color: white;
@@ -295,6 +301,7 @@ body, td, a, div, .p {
 .rowDColor {
     background: #99ff99;
 }
+
 .rowColor {
     cursor: pointer;
 }
@@ -314,7 +321,7 @@ body, td, a, div, .p {
     border-radius: 15px;
     box-sizing: border-box;
     float: right;
-    height: 24px;
+    height: auto;
     margin: 12px 20px 0 0;
     position: relative;
     transition: background-color 200ms ease-in-out 0s;
@@ -336,7 +343,7 @@ body, td, a, div, .p {
 }
 
 .fm-add-user {
-    background-color:greenyellow;
+    background-color: greenyellow;
     background-image: url("https://eu.static.mega.co.nz/3/images/mega/nw-fm-sprite_v18.svg");
     background-position: -1px -8510px;
     background-repeat: no-repeat;
@@ -359,7 +366,8 @@ body, td, a, div, .p {
 .fm-add-user:hover {
     background-color: rgba(25, 181, 24, 0.2);
 }
-.default-button-cancel{
+
+.default-button-cancel {
     background-color: rgba(255, 255, 255, 0);
     border-radius: 8px;
     box-sizing: border-box;
@@ -375,10 +383,12 @@ body, td, a, div, .p {
     margin-right: 10%;
 
 }
-.default-button-cancel:hover{
+
+.default-button-cancel:hover {
     background-color: rgba(217, 0, 7, 0.2);
 }
-.default-button{
+
+.default-button {
     background-color: rgba(255, 255, 255, 0);
     border-radius: 8px;
     box-sizing: border-box;
@@ -388,13 +398,106 @@ body, td, a, div, .p {
     padding: 4px;
     position: relative;
     transition: background-color 200ms ease-in-out 0s;
-    color:  forestgreen;
+    color: forestgreen;
     font-weight: bold;
     margin-right: 10%;
     margin-left: 40%;
     margin-top: 8px;
 }
-.default-button:hover{
+
+.default-button:hover {
     border: 2px solid rgba(0, 0, 0, 0.2);
     background-color: rgba(60, 217, 23, 0.2);
 }
+
+/* Example tokeninput style #2: Facebook style */
+.container{
+    background-color: gainsboro;
+    background-image: url("https://eu.static.mega.co.nz/3/images/mega/top-sprite_v4.svg");
+    background-position: -3px -473px;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+    box-sizing: border-box;
+    float: right;
+    height: auto !important;
+    transition: background-color 200ms ease-in-out 0s;
+    width: 450px;
+    color: darkslategray;
+    padding-left: 8%;
+    border: none;
+    position: relative;
+    margin-top: 15px;
+}
+ul.token-input-list-facebook {
+    overflow: hidden;
+    height: auto !important;
+    height: 1%;
+    width: 400px;
+    cursor: text;
+    font-size: 12px;
+    min-height: 1px;
+    z-index: 999;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+ul.token-input-list-facebook {
+    list-style-type: none;
+}
+
+ul.token-input-list-facebook li input {
+    border: 0;
+    width: 100px;
+    padding: 3px 8px;
+    background-color: transparent;
+    margin: 2px 0;
+}
+
+li.token-input-token-facebook {
+    overflow: hidden;
+    height: auto !important;
+    height: 1%;
+    margin: 3px;
+    padding: 1px 3px;
+    background-color: #eff2f7;
+    color: #000;
+    cursor: default;
+    border: 1px solid #ccd5e4;
+    font-size: 11px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    float: left;
+}
+
+li.token-input-token-facebook p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+li.token-input-token-facebook span {
+    color: #a6b3cf;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li.token-input-selected-token-facebook {
+    background-color: #5670a6;
+    border: 1px solid #3b5998;
+    color: #fff;
+}
+
+li.token-input-input-token-facebook {
+    float: left;
+    border: transparent;
+}
+
+.svg{
+    width: 100%;
+    height: 100%;
+}
+
+

@@ -2,6 +2,7 @@ package com.auleSVGWT.client.presenter;
 
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.OccupyDTO;
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.event.ShowFloorEvent;
 import com.auleSVGWT.client.view.SearchPersonView;
 import com.google.gwt.event.shared.EventBus;
@@ -21,17 +22,15 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
     private ArrayList<OccupyDTO> occupyDTO;
     private final AuleSVGWTServiceAsync rpcService;
     SearchPersonView<OccupyDTO> view;
-    private String name;
-    private String surname;
+    private ArrayList<PersonDTO>selectedPersons;
 
 
     public SearchPersonPresenter(EventBus eventBus,
                                  AuleSVGWTServiceAsync rpcService,
                                  SearchPersonView<OccupyDTO> view,
-                                 String name,
-                                 String surname) {
-        this.name = name;
-        this.surname = surname;
+                                 ArrayList<PersonDTO>selectedPersons) {
+
+        this.selectedPersons=selectedPersons;
         this.eventBus = eventBus;
         this.rpcService = rpcService;
         this.view = view;
@@ -58,7 +57,7 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
 
     private void fetchOccupyDetails() {
 
-        rpcService.getOccupySearch(name, surname, new AsyncCallback<ArrayList<OccupyDTO>>() {
+        rpcService.getOccupySearch(selectedPersons,new AsyncCallback<ArrayList<OccupyDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
                 Window.alert("Error fetching contact details");

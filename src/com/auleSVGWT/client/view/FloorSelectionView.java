@@ -1,5 +1,6 @@
 package com.auleSVGWT.client.view;
 
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -25,15 +26,15 @@ public interface FloorSelectionView<T> {
 
     HasValue<String> getMapType();
 
-    String  getName();
-
-    String getSurname();
+    ArrayList<PersonDTO> getSelectedPersons();
 
     void setListData(Set<String> listsData);
 
     void setFloorData(ArrayList<String> listsData);
 
     void setPresenter(Presenter<T> presenter);
+
+    void setSuggestion(ArrayList<PersonDTO>persons);
 
     Widget asWidget();
 }

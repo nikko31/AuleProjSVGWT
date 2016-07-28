@@ -16,6 +16,8 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+import java.util.ArrayList;
+
 public class AppController implements Presenter, ValueChangeHandler<String> {
     private final EventBus eventBus;
     private final AuleSVGWTServiceAsync rpcService;
@@ -35,6 +37,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private RoomPeopleDTO roomPeopleDTO;
     private String name;
     private String surname;
+    private ArrayList<PersonDTO>selectedPersons;
 
     public AppController(AuleSVGWTServiceAsync auleSVGWTServiceAsync, SimpleEventBus simpleEventBus) {
         this.eventBus = simpleEventBus;
@@ -112,10 +115,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         eventBus.addHandler(SearchPersonEvent.TYPE, new SearchPersonEventHandler() {
             @Override
             public void onSearchPerson(SearchPersonEvent event) {
-                name = event.getName();
-                surname = event.getSurname();
-
-
+                selectedPersons=event.getPersonsSelected();
                 doOnSearchPerson();
             }
         });
@@ -157,7 +157,10 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnSearchPerson() {
-        History.newItem("searchPerson " + name + "-" + surname);
+        String names="";
+        for (PersonDTO personDTO:selectedPersons)
+            names+=personDTO.getName()+"-"+personDTO.getSurname()+" ";
+        History.newItem("searchPerson "+names);
     }
 
 
@@ -264,7 +267,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
                         /*new ShowPersonPresenter(eventBus, getShowPersonView(), building, floor, number, personDTO)
                                 .go(mapContainer, infoContainer, headerContainer);*/
 
-                        new SearchPersonPresenter(eventBus, rpcService, getSearchPersonView(), name, surname)
+                        new SearchPersonPresenter(eventBus, rpcService, getSearchPersonView(), selectedPersons)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });

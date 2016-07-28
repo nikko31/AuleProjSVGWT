@@ -1,30 +1,25 @@
 package com.auleSVGWT.client.event;
 
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.google.gwt.event.shared.GwtEvent;
+
+import java.util.ArrayList;
 
 /**
  * Created by Utente on 19/07/2016.
  */
 public class SearchPersonEvent  extends GwtEvent<SearchPersonEventHandler> {
     public static Type<SearchPersonEventHandler> TYPE = new Type<SearchPersonEventHandler>();
-    private final String name;
-    private final String surname;
+    private final ArrayList<PersonDTO>personsSelected;
 
 
-    public SearchPersonEvent(String name,String surname) {
-        this.name = name;
-        this.surname = surname;
-
+    public SearchPersonEvent(ArrayList<PersonDTO> personsSelected){
+        this.personsSelected = personsSelected;
     }
 
-    public String getName() {
-        return name;
+    public ArrayList<PersonDTO> getPersonsSelected() {
+        return personsSelected;
     }
-    public String getSurname() {
-        return surname;
-    }
-
-
 
     public Type<SearchPersonEventHandler> getAssociatedType() {
         return TYPE;

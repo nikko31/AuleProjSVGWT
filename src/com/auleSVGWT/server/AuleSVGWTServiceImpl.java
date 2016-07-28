@@ -680,6 +680,13 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         return occupyDTO;
     }
+    public ArrayList<OccupyDTO> getOccupySearch(ArrayList<PersonDTO>persons) {
+        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+        for(PersonDTO personDTO:persons){
+            occupyDTO.addAll(getOccupySearch(personDTO.getName(),personDTO.getSurname()));
+        }
+        return occupyDTO;
+    }
 
 
     public ArrayList<String> listaAulePianoNewVersion(String text) {

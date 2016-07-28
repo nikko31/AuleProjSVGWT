@@ -24,10 +24,12 @@ public class AuleSVGWT implements EntryPoint {
                 new SimpleEventBus()
         ).go(mapPnl, infoPnl,headerPnl);
 
-
         RootPanel.get("header").add(headerPnl);
         RootPanel.get("room").add(mapPnl);
+        //RootPanel.get("room").setStyleName("roomPnl");
         RootPanel.get("info").add(infoPnl);
+        //RootPanel.get("room").setStyleName("infoPnl");
+
 
 
     }

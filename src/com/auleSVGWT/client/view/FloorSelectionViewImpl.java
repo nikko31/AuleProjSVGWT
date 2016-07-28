@@ -1,7 +1,10 @@
 package com.auleSVGWT.client.view;
 
+import com.auleSVGWT.client.common.AutoSuggestPage;
 import com.auleSVGWT.client.common.MyListBox;
+import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.shared.FloorDetails;
+import com.auleSVGWT.server.domain.Person;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -27,10 +30,6 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     }
 
     @UiField
-    TextBox txtName;
-    @UiField
-    TextBox txtSurname;
-    @UiField
     Button searchPersonButton;
 
     @UiField
@@ -41,10 +40,11 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     MyListBox<String> mapLst;
     @UiField
     Button enterBtn;
+    @UiField
+    VerticalPanel vertPnl;
+    private ArrayList<PersonDTO>selectedPersons;
 
-    private String name;
-    private String surname;
-
+    private AutoSuggestPage autoSuggestPage;
 
     private static FloorSelectionViewUiBinder ourUiBinder = GWT.create(FloorSelectionViewUiBinder.class);
     private FloorSelectionView.Presenter<FloorDetails> presenter;
@@ -62,17 +62,10 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
 
     @UiHandler("searchPersonButton")
     void onSearchButtonClicked(ClickEvent event) {
-
         if (presenter != null) {
-            //Window.alert(txtName.getText() + " " + txtSurname.getText());
-            //ricorda di implementare il controllo sulla string di nome e cognome
-            name = txtName.getText();
-            surname = txtSurname.getText();
+            selectedPersons=new ArrayList<>();
+            this.selectedPersons.addAll(autoSuggestPage.getSelected());
             presenter.onSearchButtonClicked();
-            txtName.setText("");
-            txtSurname.setText("");
-
-
         }
     }
 
@@ -91,16 +84,11 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
         return mapLst;
     }
 
-
     @Override
-    public String getSurname() {
-        return surname;
+    public ArrayList<PersonDTO> getSelectedPersons() {
+        return this.selectedPersons;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
     @Override
     public void setListData(Set<String> buildings) {
@@ -118,8 +106,8 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
             buildingLst.addValue(building);
         }
         buildingLst.setSelectedIndex(0);
-        txtName.setStyleName("top-search-bl");
-        txtSurname.setStyleName("top-search-bl");
+        //txtName.setStyleName("top-search-bl");
+
         enterBtn.setStyleName("default-button");
         searchPersonButton.setStyleName("default-button");
     }
@@ -135,5 +123,11 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     @Override
     public void setPresenter(Presenter<FloorDetails> presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setSuggestion(ArrayList<PersonDTO> persons) {
+         autoSuggestPage=new AutoSuggestPage(persons);
+        vertPnl.add(autoSuggestPage);
     }
 }

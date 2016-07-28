@@ -49,27 +49,6 @@ public class AndroidImageServlet extends HttpServlet {
         }
         out.close();
 
-
-
-
-
-        //File file = new File("C:\\Users\\Utente\\Desktop\\provaAule\\AuleProjSVGWT\\war\\Images\\");
-        //resp.setContentLength((int)file.length());
-
-        //FileInputStream in = new FileInputStream(file);
-
-
-        // Copy the contents of the file to the output stream
-        /*
-        byte[] buf = new byte[1024];
-        int count = 0;
-        while ((count = in.read(buf)) >= 0) {
-            out.write(buf, 0, count);
-        }*/
-
-        //in.close();
-
-
     }
 
 
