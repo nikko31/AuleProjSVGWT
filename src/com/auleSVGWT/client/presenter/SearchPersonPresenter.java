@@ -44,9 +44,8 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
         //this.mapContainer = mapContainer;
 
         mapContainer.clear();
-
+        infoContainer.clear();
         mapContainer.add(view.asWidget());
-
         //Window.alert("sono nello show");
         //mapContainer.add(view.asWidget());
         fetchOccupyDetails();
@@ -66,7 +65,6 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
             @Override
             public void onSuccess(ArrayList<OccupyDTO> result) {
                 occupyDTO = result;
-
                 view.setRowData(result);
                 //view.show();
                 //mapContainer.add(view.asWidget());

@@ -289,7 +289,6 @@ body, td, a, div, .p {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4096ee', endColorstr='#2370bc', GradientType=0);
 }
 
-
 .header h1 {
     color: white;
 }
@@ -411,7 +410,7 @@ body, td, a, div, .p {
 }
 
 /* Example tokeninput style #2: Facebook style */
-.container{
+.container {
     background-color: gainsboro;
     background-image: url("https://eu.static.mega.co.nz/3/images/mega/top-sprite_v4.svg");
     background-position: -3px -473px;
@@ -428,6 +427,7 @@ body, td, a, div, .p {
     position: relative;
     margin-top: 15px;
 }
+
 ul.token-input-list-facebook {
     overflow: hidden;
     height: auto !important;
@@ -495,9 +495,20 @@ li.token-input-input-token-facebook {
     border: transparent;
 }
 
-.svg{
+.svg {
+width: 100%;
+}
+
+.searchTable {
+
+}
+
+
+#room > div:first-child{
     width: 100%;
-    height: 100%;
+}
+.room table{
+    width: 100%;
 }
 
 

@@ -29,7 +29,6 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private final EventBus eventBus;
     private final AuleSVGWTServiceAsync rpcService;
     ShowFloorView<FloorDetails> view;
-    private ArrayList<RoomPeopleDTO> roomPeopleDTOs;
     private ArrayList<String> string;
     private String building;
     private String floor;
