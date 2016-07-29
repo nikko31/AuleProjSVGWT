@@ -47,7 +47,7 @@
             </g:row>
         </g:Grid>
 
-        <g:FlexTable cellSpacing="0" width="100%" borderWidth="1"  ui:field="personTable" />
+        <g:FlexTable cellSpacing="0" cellPadding="2" width="95%" ui:field="personTable" styleName="{otherStyle.headerFontWidget4}"/>
         <g:Button ui:field="editButton">Modifica</g:Button>
 
     </g:VerticalPanel>

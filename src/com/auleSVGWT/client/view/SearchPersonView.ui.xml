@@ -2,9 +2,13 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style>
         .headerFontWidget2 {
+            font-family: "source_sans_prosemibold",Arial;
             margin-top: 10px;
-            font-size: medium;
-
+            font-size: 15px;
+            font-weight: bold;
+            color: #666666;
+            display: inline;
+            border: none;
         }
 
         .containterDistance {
@@ -13,7 +17,7 @@
     </ui:style>
     <g:HorizontalPanel ui:field="popupSearch" width="500" height="300" styleName="{style.containterDistance}">
         <g:VerticalPanel width="500" height="300" styleName="{style.containterDistance}">
-            <g:FlexTable cellSpacing="0" borderWidth="1" ui:field="searchPersonTable"
+            <g:FlexTable ui:field="searchPersonTable" cellSpacing="0" cellPadding="5"
                          styleName="{style.headerFontWidget2}"/>
         </g:VerticalPanel>
     </g:HorizontalPanel>

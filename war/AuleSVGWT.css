@@ -499,16 +499,56 @@ li.token-input-input-token-facebook {
 width: 100%;
 }
 
-.searchTable {
-
-}
-
-
 #room > div:first-child{
     width: 100%;
 }
 .room table{
     width: 100%;
+}
+li.autoSuggestForm{
+    background-color: #64ff82;
+    border: 1px solid #0ab712;
+    color: #585858;
+}
+
+
+.item{
+    background: white;
+    padding-left: 10px;
+    border: 1px solid #9dff89;
+    width: 200px;
+
+    /* Border radius for Chrome, Webkit and other good browsers */
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -border-radius: 10px;
+    border-radius: 10px;
+
+    font-size: medium;
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+    color: #575757;
+    font-family: "source_sans_prosemibold",Arial;
+}
+.item:hover{
+    background: #afffb6;
+    padding-left: 10px;
+    border: 1px solid #9dff89;
+    width: 200px;
+
+    /* Border radius for Chrome, Webkit and other good browsers */
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -border-radius: 10px;
+    border-radius: 10px;
+
+    font-size: medium;
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+    color: #575757;
+    font-family: "source_sans_prosemibold",Arial;
 }
 
 

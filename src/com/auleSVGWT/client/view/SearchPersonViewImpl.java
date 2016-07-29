@@ -81,8 +81,6 @@ public class SearchPersonViewImpl extends Composite implements SearchPersonView<
 
         }
         this.rowData = rowData;
-        searchPersonTable.setStyleName("searchTable");
-
     }
 
     @Override

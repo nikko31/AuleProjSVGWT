@@ -40,12 +40,14 @@
 .headerFontWidget {
     font-size: medium;
     margin-top: 10px;
+    color: #575757;
+    font-family: "source_sans_prosemibold",Arial;
 }
 
 .headerFontWidget2 {
+    font-family: "source_sans_prosemibold",Arial;
     margin-top: 10px;
     font-size: medium;
-    font-weight: bold;
     color: #666666;
     display: inline;
 }
@@ -56,6 +58,14 @@
     font-family: "source_sans_prolight";
     font-size: 32px;
 
+}
+.headerFontWidget4 {
+    font-family: "source_sans_prosemibold",Arial;
+    margin: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #666666;
+    border: none;
 }
 
 .containterDistance {
