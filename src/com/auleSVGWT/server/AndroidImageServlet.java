@@ -2,6 +2,7 @@ package com.auleSVGWT.server;
 
 import com.auleSVGWT.client.dto.*;
 
+import com.auleSVGWT.client.shared.Global;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -163,7 +164,7 @@ public class AndroidImageServlet extends HttpServlet {
     }
 
     public void modalityZero(OutputStream out,Document doc,PNGTranscoder transcoder){
-        File file;
+        /*File file;
         InputStream imageIn;
         ServletContext context = getServletContext();
         String Path = context.getRealPath(addImageTMPPNG);
@@ -175,25 +176,26 @@ public class AndroidImageServlet extends HttpServlet {
             name= String.valueOf((int)(Math.random()*(1000)));
             name += "tmp.png";
 
-        }
+        }*/
 
 
         try{
 
-            OutputStream ostream = new FileOutputStream(Path+"/"+name);
+            //OutputStream ostream = new FileOutputStream(Path+"/"+name);
 
             TranscoderInput input = new TranscoderInput(doc);
-            TranscoderOutput output = new TranscoderOutput(ostream);
+            TranscoderOutput output = new TranscoderOutput(out);
             //System.out.println("vediamo cosa passa    " + input.getURI());
             System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
             transcoder.transcode(input, output);
             System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            ostream.flush();
-            ostream.close();
+            out.flush();
+            out.close();
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
         }
+        /*
 
         try {
             file = new File(Path+"/"+name);
@@ -214,13 +216,13 @@ public class AndroidImageServlet extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
 
-        }
+        }*/
 
 
     }
 
     public void modalityOne(OutputStream out,Document doc,String id,PNGTranscoder transcoder){
-
+        /*
         File file;
         InputStream imageIn;
         ServletContext context = getServletContext();
@@ -245,7 +247,7 @@ public class AndroidImageServlet extends HttpServlet {
 
             TranscoderInput input = new TranscoderInput(doc);
             TranscoderOutput output = new TranscoderOutput(ostream);
-            //System.out.println("vediamo cosa passa    " + input.getURI());
+            System.out.println("vediamo cosa passa    " + input.getURI());
             System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
             transcoder.transcode(input, output);
             System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
@@ -275,14 +277,14 @@ public class AndroidImageServlet extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
 
-        }
+        }*/
 
-        /*
+
 
 
         try{
             String style = doc.getElementById(id).getAttribute("style");
-            style = style.replaceFirst("fill:none","fill:green");
+            style = style.replaceFirst("fill:none", Global.GREEN_FILL);
             doc.getElementById(id).setAttribute("style", style);
 
 
@@ -295,7 +297,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }*/
+        }
 
     }
 
@@ -333,16 +335,16 @@ public class AndroidImageServlet extends HttpServlet {
                 }
 
             }
-            if (dim == 0 || sum == 0) {
+            if (dim == 0 && sum != 0 ) {
                 String style = doc.getElementById(room).getAttribute("style");
-                style = style.replaceFirst("fill:none", "fill:grey");
+                style = style.replaceFirst("fill:none",Global.RED_FILL);
                 doc.getElementById(room).setAttribute("style", style);
 
-            } else if (sum == dim /*&& dim != 0*/) {
+            } else if (sum == dim && sum!=0) {
                 String style = doc.getElementById(room).getAttribute("style");
-                style = style.replaceFirst("fill:none", "fill:green");
+                style = style.replaceFirst("fill:none",Global.GREEN_FILL);
                 doc.getElementById(room).setAttribute("style", style);
-            } else if (sum > dim /*&& dim != 0*/) {
+            } else if (sum > dim ) {
                 //Integer value = new Integer ((1-(sum/Max))*200);
                 //Integer value = new Integer (((double)dim/sum)*200);
                 Double value1 = ((double) dim / sum) * 200;
@@ -384,7 +386,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }
 
-
+        /*
         File file;
         InputStream imageIn;
         ServletContext context = getServletContext();
@@ -436,13 +438,13 @@ public class AndroidImageServlet extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
 
-        }
+        }*/
 
 
 
 
 
-        /*
+
         try{
             TranscoderInput input = new TranscoderInput(doc);
             TranscoderOutput output = new TranscoderOutput(out);
@@ -453,7 +455,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }*/
+        }
 
 
     }
@@ -471,7 +473,7 @@ public class AndroidImageServlet extends HttpServlet {
                     if(occupyDTO.getPerson().getEndWork() != null){
                             if(occupyDTO.getPerson().getEndWork().before(new Date(new java.util.Date().getTime()))){
                                 String style = doc.getElementById(room).getAttribute("style");
-                                style = style.replaceFirst("fill:none", "fill:red");
+                                style = style.replaceFirst("fill:none", Global.RED_FILL);
                                 doc.getElementById(room).setAttribute("style", style);
 
                             }
@@ -487,7 +489,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }
 
-
+        /*
         File file;
         InputStream imageIn;
         ServletContext context = getServletContext();
@@ -543,9 +545,9 @@ public class AndroidImageServlet extends HttpServlet {
 
 
 
+        */
 
 
-        /*
 
         try{
 
@@ -560,7 +562,7 @@ public class AndroidImageServlet extends HttpServlet {
 
         }catch(TranscoderException | IOException c){
             c.printStackTrace();
-        }*/
+        }
 
     }
 

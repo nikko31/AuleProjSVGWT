@@ -1,5 +1,6 @@
 package com.auleSVGWT.server;
 
+import com.auleSVGWT.client.dto.PersonDTO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -26,12 +27,63 @@ public class AndroidStartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
 
+
+        String reque = request.getParameter("request");
+
         ArrayList<String> string = new ArrayList<>();
 
         response.setContentType("text/html");
-        PrintWriter outPrinter = response.getWriter();
+        PrintWriter out = response.getWriter();
 
 
+        if(reque == null){
+            printBuildings(out);
+        }else if("allPeople".equals(reque)){
+            printPeople(out);
+        }else{
+            out.print("");
+            out.close();
+        }
+
+
+
+
+
+
+    }
+
+
+    private void printPeople(PrintWriter out){
+        JSONObject personJSON = new JSONObject();
+        JSONArray perosnARRJSON = new JSONArray();
+        ArrayList<PersonDTO> personDTOs;
+        DatabaseM db = new DatabaseM();
+        personDTOs = db.getPerson();
+
+
+        if(personDTOs.size()>0){
+            int i = 0;
+            for(PersonDTO personDTO : personDTOs){
+                JSONObject stringNameSurname = new JSONObject();
+                stringNameSurname.put("name",personDTO.getName());
+                stringNameSurname.put("surname",personDTO.getSurname());
+                perosnARRJSON.add(i,stringNameSurname);
+                i++;
+            }
+
+        }
+
+        personJSON.put("personsNameSur",perosnARRJSON);
+        out.print(personJSON.toString());
+        out.close();
+
+
+    }
+
+    private void printBuildings(PrintWriter printOut){
+
+        ArrayList<String> string = new ArrayList<>();
+        HashMap<String, ArrayList<String>> buildings = new HashMap<>();
 
         try {
             ServletContext context = getServletContext();
@@ -42,64 +94,43 @@ public class AndroidStartServlet extends HttpServlet {
 
             if(listOfFiles != null){
                 for (File file : listOfFiles) {
-                    string.add(file.getName());
+                    String s= file.getName();
+                    if (buildings.containsKey(s.substring(0, s.lastIndexOf('-')))) {
+                        ArrayList<String> floors;
+                        floors = buildings.get(s.substring(0, s.lastIndexOf('-')));
+                        floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
+                        Collections.sort(floors);
+                        buildings.replace(s.substring(0, s.lastIndexOf('-')), floors);
+                    } else {
+                        ArrayList<String> floors = new ArrayList<>();
+                        floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
+                        buildings.put(s.substring(0, s.lastIndexOf('-')), floors);
+                    }
+                    //string.add(file.getName());
                 }
             }
-
-
-
-
 
         } catch (Exception e) {
             System.out.println("Error reading name of maps");
             e.printStackTrace();
         }
 
+        if(buildings.size()>0){
+            printOutBuildingJSON(buildings, printOut);
 
-        if(string.size()>0) {
-            printBuildings(outPrinter, string);
-
+        }else{
+            printOut.print("");
+            printOut.close();
         }
 
 
-    }
-
-    private void printBuildings(PrintWriter printOut,ArrayList<String> string){
-
-        HashMap<String, ArrayList<String>> buildings = new HashMap<>();
-
-        for (String s : string) {
-
-            //System.out.println(s.substring(0,s.lastIndexOf('-')));
-            //System.out.println(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
-
-
-            if (buildings.containsKey(s.substring(0, s.lastIndexOf('-')))) {
-                ArrayList<String> floors;
-                floors = buildings.get(s.substring(0, s.lastIndexOf('-')));
-                floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
-                Collections.sort(floors);
-                buildings.replace(s.substring(0, s.lastIndexOf('-')), floors);
-            } else {
-                ArrayList<String> floors = new ArrayList<>();
-                floors.add(s.substring(s.lastIndexOf('-') + 1, s.lastIndexOf('.')));
-                buildings.put(s.substring(0, s.lastIndexOf('-')), floors);
-            }
-        }
-
-
-
-        JSONObject obj = createReturnJSON(buildings);
-
-
-        printOut.println(obj);
 
     }
 
 
 
 
-    private JSONObject createReturnJSON(HashMap<String, ArrayList<String>> buildings){
+    private void  printOutBuildingJSON(HashMap<String, ArrayList<String>> buildings,PrintWriter out){
         int j = 0;
         JSONArray buildingFloors = new JSONArray();
         for (String buildingString : buildings.keySet()) {
@@ -124,7 +155,8 @@ public class AndroidStartServlet extends HttpServlet {
         JSONObject obj = new JSONObject();
         obj.put("buildings", buildingFloors);
 
-        return obj;
+        out.print(obj);
+        out.close();
 
     }
 }

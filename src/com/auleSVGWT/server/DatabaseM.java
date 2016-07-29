@@ -8,6 +8,7 @@ import org.hibernate.classic.Session;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 
 public class DatabaseM {
@@ -198,6 +199,25 @@ public class DatabaseM {
         }
         return occupyDTO;
 
+    }
+
+
+    public ArrayList<PersonDTO> getPerson() {
+        ArrayList<PersonDTO> personDTO = new ArrayList<>();
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
+
+            personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getPerson method fail ");
+            e.printStackTrace();
+        }
+        return personDTO;
     }
 
 

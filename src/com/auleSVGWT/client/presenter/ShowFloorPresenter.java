@@ -226,24 +226,18 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 }
 
             }
-            if (dim == 0) {
+            if (dim == 0 && sum!=0) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
-                style = style.replace(Global.DEF_FILL, Global.GREY_FILL);
+                style = style.replace(Global.DEF_FILL, Global.RED_FILL);
                 roomEl.setAttribute("style", style);
 
-            } else if (sum == 0 /*&& dim != 0*/) {
-                final OMElement roomEl = roomSVGElt.getElementById(room);
-                String style = roomEl.getAttribute("style");
-                style = style.replace(Global.DEF_FILL, "fill:grey");
-                roomEl.setAttribute("style", style);
-
-            } else if (sum == dim /*&& dim != 0*/) {
+            } else if (sum == dim && dim != 0) {
                 final OMElement roomEl = roomSVGElt.getElementById(room);
                 String style = roomEl.getAttribute("style");
                 style = style.replace(Global.DEF_FILL, Global.GREEN_FILL);
                 roomEl.setAttribute("style", style);
-            } else if (sum > dim /*&& dim != 0*/) {
+            } else if (sum > dim && dim != 0) {
                 //Integer value = new Integer ((1-(sum/Max))*200);
                 //Integer value = new Integer (((double)dim/sum)*200);
                 Double value1 = new Double(((double) dim / sum) * 200);
@@ -261,7 +255,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 String style = roomEl.getAttribute("style");
                 style = style.replace(Global.DEF_FILL, "fill:" + str);
                 roomEl.setAttribute("style", style);
-            } else if (sum < dim /*&& dim != 0*/) {
+            } else if (sum < dim && dim != 0) {
                 String str = "#";
                 //Integer value = new Integer (((sum*200)/dim));
 
@@ -296,11 +290,11 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                         "-" + new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
                 if (room.equals(s)) {
                     for (PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()) {
-                        Window.alert(personDTO.getEndWork().toString() + " " + new Date(new java.util.Date().getTime()));
+                        //Window.alert(personDTO.getEndWork().toString() + " " + new Date(new java.util.Date().getTime()));
                         if (personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))) {
                             final OMElement roomEl = roomSVGElt.getElementById(room);
                             String style = roomEl.getAttribute("style");
-                            style = style.replace(Global.DEF_FILL, Global.GREY_FILL);
+                            style = style.replace(Global.DEF_FILL, Global.RED_FILL);
                             roomEl.setAttribute("style", style);
 
                         }

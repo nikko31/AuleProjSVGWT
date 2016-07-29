@@ -42,8 +42,15 @@ public class AndroidSearchPersonServlet extends HttpServlet {
 
         }
 
+        if(occupyDTOs.size()>0){
+            parseOut(occupyDTOs, out);
 
-        parseOut(occupyDTOs, out);
+        }else{
+            out.print("");
+            out.close();
+        }
+
+
 
 
 
@@ -119,6 +126,7 @@ public class AndroidSearchPersonServlet extends HttpServlet {
 
 
         out.print(obj.toString());
+        out.close();
 
     }
 

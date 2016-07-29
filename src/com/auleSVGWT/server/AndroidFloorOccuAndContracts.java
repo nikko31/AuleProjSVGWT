@@ -54,7 +54,8 @@ public class AndroidFloorOccuAndContracts extends HttpServlet{
             }
 
         }else{
-            out.print("noResult");
+            out.print("");
+            out.close();
 
         }
 
@@ -159,6 +160,7 @@ public class AndroidFloorOccuAndContracts extends HttpServlet{
         obj=new JSONObject();
         obj.put("rooms",arrayRoomJ);
         out.print(obj.toString());
+        out.close();
 
     }
 

@@ -36,8 +36,18 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
             rooms = roomFloorList(fileSVG);
         }
 
+        if(rooms.size()>0){
+            parseOut(rooms,out);
 
-        parseOut(rooms,out);
+        }else{
+            out.print("");
+            out.close();
+        }
+
+
+
+
+
 
 
     }
@@ -59,6 +69,7 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
 
         obj.put("rooms",a);
         out.print(obj.toString());
+        out.close();
 
 
     }
