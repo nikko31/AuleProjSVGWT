@@ -39,17 +39,12 @@ public class AndroidSearchPersonServlet extends HttpServlet {
             if((occupyDTOs == null) || (occupyDTOs.size() == 0)){
                 occupyDTOs = db.getOccupyOfPerson(part2,part1);
             }
-
-        }
-
-        if(occupyDTOs.size()>0){
             parseOut(occupyDTOs, out);
 
         }else{
             out.print("");
             out.close();
         }
-
 
 
 

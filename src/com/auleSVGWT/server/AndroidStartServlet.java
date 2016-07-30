@@ -115,13 +115,9 @@ public class AndroidStartServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        if(buildings.size()>0){
-            printOutBuildingJSON(buildings, printOut);
+        printOutBuildingJSON(buildings, printOut);
 
-        }else{
-            printOut.print("");
-            printOut.close();
-        }
+
 
 
 

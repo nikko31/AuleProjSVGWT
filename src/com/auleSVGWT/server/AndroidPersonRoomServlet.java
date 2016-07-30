@@ -77,44 +77,47 @@ public class AndroidPersonRoomServlet extends HttpServlet {
         PersonDTO  personDTO;
 
         if(occupyDTO != null ){
-            int j=0;
-
-            for(OccupyDTO occ : occupyDTO){
-
-                personDTO = occ.getPerson();
-
-                per = new JSONObject();
-
-                per.put("name", personDTO.getName());
-                per.put("surname", personDTO.getSurname());
-                per.put("role",personDTO.getRole().getName());
-                if(personDTO.getStartWork() != null){
-                    String sW = personDTO.getStartWork().toString();
-                    sW = sW.replaceAll("-"," ");
-                    per.put("startWork",sW);
-                }else{
-                    per.put("startWork","null");
-
-                }
-                if(personDTO.getEndWork() != null){
-                    String eW = personDTO.getEndWork().toString();
-                    eW = eW.replaceAll("-", " ");
-                    per.put("endWork",eW);
-
-
-                }else{
-                    per.put("endWork","null");
-
-                }
-
-
-                arr.add(j, per);
-                j++;
-
-
-            }
 
             if(occupyDTO.size()>0){
+
+                int j=0;
+
+                for(OccupyDTO occ : occupyDTO){
+
+                    personDTO = occ.getPerson();
+
+                    per = new JSONObject();
+
+                    per.put("name", personDTO.getName());
+                    per.put("surname", personDTO.getSurname());
+                    per.put("role",personDTO.getRole().getName());
+                    if(personDTO.getStartWork() != null){
+                        String sW = personDTO.getStartWork().toString();
+                        sW = sW.replaceAll("-"," ");
+                        per.put("startWork",sW);
+                    }else{
+                        per.put("startWork","null");
+
+                    }
+                    if(personDTO.getEndWork() != null){
+                        String eW = personDTO.getEndWork().toString();
+                        eW = eW.replaceAll("-", " ");
+                        per.put("endWork",eW);
+
+
+                    }else{
+                        per.put("endWork","null");
+
+                    }
+
+
+                    arr.add(j, per);
+                    j++;
+
+
+                }
+
+
                 RoomDTO roomDTO = occupyDTO.get(0).getRoom();
                 if(roomDTO!= null){
                     //System.out.println("a volte mi da errore ::::::::::::::"+roomDTO.getDimension());
@@ -148,7 +151,7 @@ public class AndroidPersonRoomServlet extends HttpServlet {
 
 
             //////
-        }
+            }
 
         out.println(obj);
         out.close();

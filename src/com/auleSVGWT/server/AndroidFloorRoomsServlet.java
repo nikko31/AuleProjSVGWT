@@ -34,15 +34,13 @@ public class AndroidFloorRoomsServlet extends HttpServlet {
 
         if(controlParameter(fileSVG)){
             rooms = roomFloorList(fileSVG);
-        }
-
-        if(rooms.size()>0){
             parseOut(rooms,out);
-
         }else{
             out.print("");
             out.close();
         }
+
+
 
 
 
