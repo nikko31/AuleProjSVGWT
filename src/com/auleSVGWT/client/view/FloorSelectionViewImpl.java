@@ -92,9 +92,9 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
 
     @Override
     public void setListData(Set<String> buildings) {
-        mapLst.setValue("mappa1");
-        mapLst.setValue("mappa2");
-        mapLst.setValue("mappa3");
+        mapLst.setValue("visualizzazione");
+        mapLst.setValue("distribuzione spazi");
+        mapLst.setValue("termine attività lavorativa");
         buildingLst.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {

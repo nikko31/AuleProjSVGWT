@@ -35,11 +35,95 @@ public class DatabaseM {
         }
     }
 
+    public ArrayList<PersonDTO> getPerson(String part1,String part2) {
+        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+            session.beginTransaction();
+
+            ArrayList<Person> person =  new ArrayList<>(( session.createQuery("select o from Person o where o.name='" + part1 + "' and o.surname='" + part2 + "'").list()));
+
+            if(person.size() != 0){
+                personDTOs.add(createPersonDTO(person.get(0)));
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getOccupy method fail ");
+            e.printStackTrace();
+        }
+
+        return personDTOs;
+    }
+
+
+    public ArrayList<PersonDTO> getPersonFromId(int id) {
+        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+            session.beginTransaction();
+
+            ArrayList<Person> person =  new ArrayList<>(( session.createQuery("select o from Person o where o.id="+ id ).list()));
+
+            if(person.size() != 0){
+                personDTOs.add(createPersonDTO(person.get(0)));
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getOccupy method fail ");
+            e.printStackTrace();
+        }
+
+        return personDTOs;
+    }
+
+    public ArrayList<RoomDTO> getOccupedRoomOfPerson(String part1,String part2) {
+        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+            session.beginTransaction();
+
+            ArrayList<Room> rooms =  new ArrayList<>(( session.createQuery("select o.room from Occupy o where o.person.name='" + part1 + "' and o.person.surname='" + part2 + "'").list()));
+
+            if(rooms.size()>0){
+                for (Room room : rooms) {
+                    roomDTOs.add(createRoomDTO(room));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getOccupy method fail ");
+            e.printStackTrace();
+        }
+
+        return roomDTOs;
+    }
+
+
+
 
     public ArrayList<OccupyDTO> getOccupyOfPerson(String part1,String part2) {
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
             session.beginTransaction();
 
             ArrayList<Occupy> occup =  new ArrayList<>(( session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
@@ -61,6 +145,41 @@ public class DatabaseM {
         }
 
         return occupyDTO;
+    }
+
+
+
+    public ArrayList<RoomDTO> getRoomInfo(String building, String floorSt, String numberSt){
+        int number = Integer.parseInt(numberSt);
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + building + "' and floor=" + floor + " and number="+number).list());
+
+            if(rooms.size()>0){
+                for (Room room : rooms) {
+                    roomDTOs.add(createRoomDTO(room));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return roomDTOs;
+
     }
 
 
@@ -96,6 +215,42 @@ public class DatabaseM {
         return occupyDTO;
 
     }
+
+
+    public ArrayList<PersonDTO> getPeopleInRoom(String building, String floorSt, String numberSt){
+        int number = Integer.parseInt(numberSt);
+        int floor = Integer.parseInt(floorSt);
+
+        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
+
+
+        try {
+            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            ArrayList<Person> people = new ArrayList<>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
+                    "o.room.floor=" + floor + " and o.room.number="+number).list());
+
+            if(people.size()>0){
+                for (Person person : people) {
+                    personDTOs.add(createPersonDTO(person));
+                }
+
+
+            }
+
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getRoomPeople method fail ");
+            e.printStackTrace();
+
+        }
+        return personDTOs;
+
+    }
+
 
     public ArrayList<RoomDTO> getOccupyOfFloorwithDimension(String building, String floorSt){
 
@@ -219,6 +374,26 @@ public class DatabaseM {
         }
         return personDTO;
     }
+
+
+    public ArrayList<PersonDTO> getPeople() {
+        ArrayList<PersonDTO> personDTO = new ArrayList<>();
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
+
+            personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : getPerson method fail ");
+            e.printStackTrace();
+        }
+        return personDTO;
+    }
+
 
 
 

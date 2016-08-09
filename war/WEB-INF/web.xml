@@ -33,7 +33,7 @@
 
     <servlet-mapping>
         <servlet-name>image</servlet-name>
-        <url-pattern>/Android/immagine</url-pattern>
+        <url-pattern>/Android/immagine/*</url-pattern>
     </servlet-mapping>
 
 
@@ -78,6 +78,77 @@
     <servlet-mapping>
         <servlet-name>queryMap</servlet-name>
         <url-pattern>/Android/auleLavoroOccupazione</url-pattern>
+    </servlet-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <servlet>
+        <servlet-name>people</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidPeopleServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>people</servlet-name>
+        <url-pattern>/Android/persone/*</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>rooms</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidRoomServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>rooms</servlet-name>
+        <url-pattern>/Android/stanzee/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>floorRoomlist</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidFloorRoomsListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>floorRoomlist</servlet-name>
+        <url-pattern>/Android/listaStanzePiano/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>buildingList</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidBuildingsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>buildingList</servlet-name>
+        <url-pattern>/Android/listaEdifici</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>beginning</servlet-name>
+        <servlet-class>com.auleSVGWT.server.AndroidStart</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>beginning</servlet-name>
+        <url-pattern>/Android</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -80,7 +80,7 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
     public void onItemClicked(OccupyDTO clickedItem) {
         eventBus.fireEvent(new ShowFloorEvent(clickedItem.getRoom().getBuilding().getName(),
                 String.valueOf(clickedItem.getRoom().getFloor()),
-                "mappa1",
+                "visualizzazione",
                 String.valueOf(clickedItem.getRoom().getId())));
     }
 }

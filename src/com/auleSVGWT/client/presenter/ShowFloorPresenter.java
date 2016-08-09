@@ -87,7 +87,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                             if (result == null) {
                                 Window.alert("devono essere aggiunti gli handler");
                             }
-                            if (modality.equals("mappa1")) {
+                            if (modality.equals("visualizzazione")) {
                                 addHandlers(result);
                                 if(roomID!=null)
                                     colorRoom();
@@ -184,9 +184,10 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
             @Override
             public void onSuccess(ArrayList<RoomPeopleDTO> result) {
-                if (modality.equals("mappa2")) {
+                if (modality.equals("distribuzione spazi")) {
                     colorRoom(string, result);
                 } else {
+                    Window.alert("entro in modalita mappa 3");
                     colorRoomEndWork(string, result);
                 }
 
@@ -284,20 +285,31 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
     private void colorRoomEndWork(ArrayList<String> strings, ArrayList<RoomPeopleDTO> roomPeopleDTOs) {
         for (String room : strings) {
+
             for (RoomPeopleDTO roomPeopleDTO : roomPeopleDTOs) {
                 String s = "";
                 s += roomPeopleDTO.getRoomDTO().getBuilding().getName() + "-" + new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString() +
                         "-" + new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString();
+
                 if (room.equals(s)) {
-                    for (PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()) {
-                        //Window.alert(personDTO.getEndWork().toString() + " " + new Date(new java.util.Date().getTime()));
-                        if (personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))) {
-                            final OMElement roomEl = roomSVGElt.getElementById(room);
-                            String style = roomEl.getAttribute("style");
-                            style = style.replace(Global.DEF_FILL, Global.RED_FILL);
-                            roomEl.setAttribute("style", style);
+
+                    ArrayList<PersonDTO> people = roomPeopleDTO.getPeopleDTO();
+                    for (PersonDTO personDTO : people) {
+                        Window.alert(personDTO.getName());
+
+                        if(personDTO.getEndWork()!=null){
+                            Window.alert("sono nel controllo null");
+                            if (personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))) {
+                                Window.alert("sono nel controllo end work");
+                                final OMElement roomEl = roomSVGElt.getElementById(room);
+                                String style = roomEl.getAttribute("style");
+                                style = style.replace(Global.DEF_FILL, Global.RED_FILL);
+                                roomEl.setAttribute("style", style);
+
+                            }
 
                         }
+
                     }
 
                 }

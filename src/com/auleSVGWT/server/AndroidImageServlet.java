@@ -28,60 +28,94 @@ public class AndroidImageServlet extends HttpServlet {
     private static final String addImageAndroid="/res/imageAndroid";
     private static final String addImageTMPPNG="/res/tmpPNG";
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse resp) throws IOException {
 
-        String buildingName;
-        String modality;
-        String numRoom ;
+        String uri = request.getRequestURI();
+        String servlet = request.getServletPath();
+        uri =  java.net.URLDecoder.decode(uri,"UTF-8");
+
 
         resp.setContentType("image/png");
         OutputStream out = resp.getOutputStream();
 
-
-
-
-        buildingName = req.getParameter("name");
-        modality = req.getParameter("mod");
-        numRoom = req.getParameter("numRoom");
-
-        if(convertionParameter(buildingName,modality,numRoom)){
-            String roomID = buildingName+"-"+numRoom;
-            Convert(out,buildingName,modality,roomID);
+        try{
+            if(ControlPath(servlet,uri,out)) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                out.close();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.close();
         }
-        out.close();
+
+
+
+
+
+
 
     }
 
+    private Boolean ControlPath(String servlet,String uri ,OutputStream out)throws Exception{
+        ServletContext context = getServletContext();
+        String imagePath = context.getRealPath(addImageAndroid);
+        File folder = new File(imagePath);
+        File[] listOfFiles = folder.listFiles();
 
 
-    private Boolean convertionParameter(String name,String mod,String numRoom){
-        Boolean controlFlag = true;
+        if(listOfFiles != null){
+            for (File file : listOfFiles) {
+                String filename = file.getName();
+                filename = filename.substring(0,filename.lastIndexOf("."));
+                String s= file.getName();
+                s=servlet+"/"+s.substring(0,s.lastIndexOf("."));
+                System.out.println(""+filename+"........"+uri);
 
-        if((name == null) || (mod == null)){
-            controlFlag = false;
-        }
 
-        if(!("0".equals(mod)) && !("1".equals(mod)) && !("2".equals(mod)) && !("3".equals(mod)) ){
-            controlFlag = false;
-        }
+                if(uri.equals(servlet+"/lavoro/"+filename+".png")){
 
-        if("1".equals(mod)){
-            if(numRoom == null){
-                controlFlag = false;
+                    Convert(out,filename,"3","");
+                    return false;
 
-            }else{
-                if(numRoom.length()>10){
-                    controlFlag = false;
+                }
+                if(uri.equals(servlet+"/occupazione/"+filename+".png")){
+
+                    Convert(out,filename,"2","");
+                    return false;
+
+                }
+
+                if(uri.contains(servlet + "/" + filename)){
+                    if(uri.equals(servlet+"/"+filename+".png")){
+                        System.out.println("entro in 0");
+                        Convert(out,filename,"0","");
+                        return false;
+
+                    }
+
+
+                    for(String room :listRoomsOfFloor(filename)){
+                        System.out.println(""+s+"/room........"+uri);
+                        if(uri.equals(s+"/"+room.substring(room.lastIndexOf("-")+1)+".png")){
+
+                            Convert(out,filename,"1",room);
+                            return false;
+
+                        }
+                    }
                 }
             }
-
-
         }
 
 
-        return controlFlag;
+
+        return true;
+
 
     }
+
+
 
 
     public void Convert(OutputStream out,String name,String mod,String idRoom) throws IOException {
@@ -103,6 +137,7 @@ public class AndroidImageServlet extends HttpServlet {
             if(!f.exists()){
                 fileExistance = false;
             }else{
+                System.out.println("il file esiste");
                 image= f.toURI().toString();
             }
 
@@ -137,12 +172,14 @@ public class AndroidImageServlet extends HttpServlet {
                     floor = name.substring(name.lastIndexOf("-") + 1);
 
                     room = listRoomsOfFloor(name);
+                    System.out.println("get occupy of floor"+ build +" "+floor);
                     occupyDTOs = db.getOccupyOfFloor(build,floor);
 
 
 
 
                     if("2".equals(mod)){
+                        System.out.println("sono nell mod 2");
                         modalityTwo(room, occupyDTOs, doc, out, transcoder);
                     }
                     else if("3".equals(mod)){
@@ -222,64 +259,6 @@ public class AndroidImageServlet extends HttpServlet {
     }
 
     public void modalityOne(OutputStream out,Document doc,String id,PNGTranscoder transcoder){
-        /*
-        File file;
-        InputStream imageIn;
-        ServletContext context = getServletContext();
-        String Path = context.getRealPath(addImageTMPPNG);
-        String name= String.valueOf((int)(Math.random()*(1000)));
-        name += "tmp.png";
-
-        while(new File(Path+"/"+name).exists()){
-
-            name= String.valueOf((int)(Math.random()*(1000)));
-            name += "tmp.png";
-
-        }
-
-
-        try{
-            String style = doc.getElementById(id).getAttribute("style");
-            style = style.replaceFirst("fill:none","fill:green");
-            doc.getElementById(id).setAttribute("style", style);
-
-            OutputStream ostream = new FileOutputStream(Path+"/"+name);
-
-            TranscoderInput input = new TranscoderInput(doc);
-            TranscoderOutput output = new TranscoderOutput(ostream);
-            System.out.println("vediamo cosa passa    " + input.getURI());
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            transcoder.transcode(input, output);
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            ostream.flush();
-            ostream.close();
-
-        }catch(TranscoderException | IOException c){
-            c.printStackTrace();
-        }
-
-        try {
-            file = new File(Path+"/"+name);
-            imageIn = new FileInputStream(file);
-            byte[] buffer = new byte[20];
-            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
-                out.write(buffer, 0, length);
-            }
-
-            imageIn.close();
-            if(file.delete()){
-                System.out.println("file"+name+ " eliminato ");
-            }
-
-            out.flush();
-            out.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
-
-        }*/
-
-
 
 
         try{
@@ -325,6 +304,7 @@ public class AndroidImageServlet extends HttpServlet {
 
                     if(occupyDTO.getRoom().getDimension()!=0 && first) {
                         //System.out.println("\n dim=" + occupyDTO.getRoom().getDimension());
+                        DatabaseM db = new DatabaseM();
                         dim = occupyDTO.getRoom().getDimension();
                         first = false;
                     }
@@ -333,8 +313,10 @@ public class AndroidImageServlet extends HttpServlet {
 
 
                 }
-
+                System.out.println(sum +"  dim "+ dim  +room+" .....  "+s);
             }
+
+
             if (dim == 0 && sum != 0 ) {
                 String style = doc.getElementById(room).getAttribute("style");
                 style = style.replaceFirst("fill:none",Global.RED_FILL);
@@ -361,8 +343,7 @@ public class AndroidImageServlet extends HttpServlet {
                 String style = doc.getElementById(room).getAttribute("style");
                 style = style.replaceFirst("fill:none", "fill:"+str);
                 doc.getElementById(room).setAttribute("style", style);
-            } else {
-                if (sum < dim /*&& dim != 0*/) {
+            } else if (sum < dim /*&& dim != 0*/) {
                     String str = "#";
                     //Integer value = new Integer (((sum*200)/dim));
 
@@ -380,65 +361,11 @@ public class AndroidImageServlet extends HttpServlet {
                     String style = doc.getElementById(room).getAttribute("style");
                     style = style.replaceFirst("fill:none", "fill:" + str);
                     doc.getElementById(room).setAttribute("style", style);
-                }
+
             }
 
 
         }
-
-        /*
-        File file;
-        InputStream imageIn;
-        ServletContext context = getServletContext();
-        String Path = context.getRealPath(addImageTMPPNG);
-        String name= String.valueOf((int)(Math.random()*(1000)));
-        name += "tmp.png";
-
-        while(new File(Path+"/"+name).exists()){
-
-            name= String.valueOf((int)(Math.random()*(1000)));
-            name += "tmp.png";
-
-        }
-
-
-        try{
-
-            OutputStream ostream = new FileOutputStream(Path+"/"+name);
-
-            TranscoderInput input = new TranscoderInput(doc);
-            TranscoderOutput output = new TranscoderOutput(ostream);
-            //System.out.println("vediamo cosa passa    " + input.getURI());
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            transcoder.transcode(input, output);
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            ostream.flush();
-            ostream.close();
-
-        }catch(TranscoderException | IOException c){
-            c.printStackTrace();
-        }
-
-        try {
-            file = new File(Path+"/"+name);
-            imageIn = new FileInputStream(file);
-            byte[] buffer = new byte[20];
-            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
-                out.write(buffer, 0, length);
-            }
-
-            imageIn.close();
-            if(file.delete()){
-                System.out.println("file"+name+ " eliminato ");
-            }
-
-            out.flush();
-            out.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
-
-        }*/
 
 
 
@@ -488,65 +415,6 @@ public class AndroidImageServlet extends HttpServlet {
 
 
         }
-
-        /*
-        File file;
-        InputStream imageIn;
-        ServletContext context = getServletContext();
-        String Path = context.getRealPath(addImageTMPPNG);
-        String name= String.valueOf((int)(Math.random()*(1000)));
-        name += "tmp.png";
-
-        while(new File(Path+"/"+name).exists()){
-
-            name= String.valueOf((int)(Math.random()*(1000)));
-            name += "tmp.png";
-
-        }
-
-
-        try{
-
-            OutputStream ostream = new FileOutputStream(Path+"/"+name);
-
-            TranscoderInput input = new TranscoderInput(doc);
-            TranscoderOutput output = new TranscoderOutput(ostream);
-            //System.out.println("vediamo cosa passa    " + input.getURI());
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            transcoder.transcode(input, output);
-            System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
-            ostream.flush();
-            ostream.close();
-
-        }catch(TranscoderException | IOException c){
-            c.printStackTrace();
-        }
-
-        try {
-            file = new File(Path+"/"+name);
-            imageIn = new FileInputStream(file);
-            byte[] buffer = new byte[20];
-            for (int length = 0; (length = imageIn.read(buffer)) > 0;) {
-                out.write(buffer, 0, length);
-            }
-
-            imageIn.close();
-            if(file.delete()){
-                System.out.println("file"+name+ " eliminato ");
-            }
-
-            out.flush();
-            out.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
-
-        }
-
-
-
-        */
-
 
 
         try{
