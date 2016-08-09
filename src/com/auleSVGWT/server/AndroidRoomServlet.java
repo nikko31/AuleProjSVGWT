@@ -166,7 +166,7 @@ public class AndroidRoomServlet extends HttpServlet {
                 obj.put("socket",""+roomDTO.getSocket());
                 obj.put("dimension",""+roomDTO.getDimension());
                 obj.put("code",""+roomDTO.getRoomCode());
-                link.put("peopleInRoom","/Android/persona/"+roomDTO.getBuilding().getName()+"-"+roomDTO.getFloor()+"/"+roomDTO.getNumber()+".json");
+                link.put("peopleInRoom","/Android/persone/"+roomDTO.getBuilding().getName()+"-"+roomDTO.getFloor()+"/"+roomDTO.getNumber()+".json");
                 link.put("imageSelecRoom","/Android/immagine/"+roomDTO.getBuilding().getName()+"-"+roomDTO.getFloor()+"/"+roomDTO.getNumber()+".png");
                 obj.put("link",link);
                 if(obj.size()!=0){
