@@ -112,7 +112,7 @@ public class AndroidFloorRoomsListServlet extends HttpServlet {
                 String num = room.substring(room.lastIndexOf("-")+1);
 
                 link.put("imageSelecRoom","/Android/immagine/"+buildingFloor+"/"+num+".png");
-                link.put("roomSelectInfo","/Android/stanzee/"+buildingFloor + "/" + num+".json");
+                link.put("roomSelectInfo","/Android/stanze/"+buildingFloor + "/" + num+".json");
                 link.put("peopleInRoom","/Android/persone/"+buildingFloor + "/" + num+".json");
 
                 ro.put("link", link);

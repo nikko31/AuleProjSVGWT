@@ -33,7 +33,7 @@ public class AndroidStart extends HttpServlet {
         obj.put("image",servlet+"/immagine");
         obj.put("listRoomsFloor",servlet+"/listaStanzePiano");
         obj.put("people",servlet+"/persone");
-        obj.put("rooms",servlet+"/stanzee");
+        obj.put("rooms",servlet+"/stanze");
         obj.put("listBuildings",servlet+"/listaEdifici");
 
         out.print(obj.toString());

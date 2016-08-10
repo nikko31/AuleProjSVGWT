@@ -55,7 +55,7 @@
 
     <servlet-mapping>
         <servlet-name>floorRooms</servlet-name>
-        <url-pattern>/Android/stanze</url-pattern>
+        <url-pattern>/Android/stanzee</url-pattern>
     </servlet-mapping>
 
 
@@ -116,7 +116,7 @@
 
     <servlet-mapping>
         <servlet-name>rooms</servlet-name>
-        <url-pattern>/Android/stanzee/*</url-pattern>
+        <url-pattern>/Android/stanze/*</url-pattern>
     </servlet-mapping>
 
 

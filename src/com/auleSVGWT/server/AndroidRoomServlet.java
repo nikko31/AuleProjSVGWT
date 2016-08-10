@@ -176,13 +176,8 @@ public class AndroidRoomServlet extends HttpServlet {
 
             }
 
-
-
             obj= new JSONObject();
             obj.put("rooms",ar);
-
-
-
 
         }else{
             obj= new JSONObject();

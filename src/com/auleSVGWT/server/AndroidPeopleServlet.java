@@ -165,7 +165,7 @@ public class AndroidPeopleServlet extends HttpServlet {
 
                 }
 
-                link.put("roomsOccPerson","/Android/stanzee/persone/"+personDTO.getName()+"_"+personDTO.getSurname()+".json");
+                link.put("roomsOccPerson","/Android/stanze/persone/"+personDTO.getName()+"_"+personDTO.getSurname()+".json");
 
                 personJSON.put("link",link);
 

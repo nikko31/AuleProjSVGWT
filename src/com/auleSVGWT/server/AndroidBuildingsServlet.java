@@ -119,7 +119,7 @@ public class AndroidBuildingsServlet extends HttpServlet {
                 link.put("imageRoomWork", "/Android/immagine/lavoro/" + buildingString + "-" + floorString +".png");
                 link.put("roomsList","/Android/listaStanzePiano/"+buildingString+"-"+floorString+".json");
                 link.put("peopleWork","/Android/persone/lavoro/"+buildingString+"-"+floorString+".json");
-                link.put("roomsOccu","/Android/stanzee/occupazione/"+buildingString+"-"+floorString+".json");
+                link.put("roomsOccu","/Android/stanze/occupazione/"+buildingString+"-"+floorString+".json");
                 floor.put("floor", floorString);
                 floor.put("link",link);
                 arr.add(i, floor);
