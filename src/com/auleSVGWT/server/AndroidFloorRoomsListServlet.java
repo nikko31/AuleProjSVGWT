@@ -31,9 +31,13 @@ public class AndroidFloorRoomsListServlet extends HttpServlet {
 
         String uri = request.getRequestURI();
         String servlet = request.getServletPath();
-        uri =  java.net.URLDecoder.decode(uri,"UTF-8");
 
-        response.setContentType("text/html");
+        uri =  java.net.URLDecoder.decode(uri,"UTF-8");
+        servlet = uri.substring(0,uri.indexOf(servlet,0)) +servlet;
+        uri = uri.replace('_',' ');
+
+
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
 
@@ -76,6 +80,7 @@ public class AndroidFloorRoomsListServlet extends HttpServlet {
                 String s= file.getName();
                 s=servlet+"/"+s.substring(0,s.lastIndexOf("."))+".json";
                 System.out.println(""+s+"........"+uri);
+
                 if(uri.equals(s) ){
                     rooms = roomFloorList(s.substring(s.lastIndexOf("/")+1,s.lastIndexOf(".")));
 
@@ -110,7 +115,7 @@ public class AndroidFloorRoomsListServlet extends HttpServlet {
 
                 String buildingFloor = room.substring(0,room.lastIndexOf("-"));
                 String num = room.substring(room.lastIndexOf("-")+1);
-
+                buildingFloor = buildingFloor.replace(' ','_');
                 link.put("imageSelecRoom","/Android/immagine/"+buildingFloor+"/"+num+".png");
                 link.put("roomSelectInfo","/Android/stanze/"+buildingFloor + "/" + num+".json");
                 link.put("peopleInRoom","/Android/persone/"+buildingFloor + "/" + num+".json");

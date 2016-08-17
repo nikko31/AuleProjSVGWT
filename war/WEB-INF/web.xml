@@ -14,15 +14,6 @@
         <url-pattern>/AuleSVGWT/AuleSVGWTService</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>initialSer</servlet-name>
-        <servlet-class>com.auleSVGWT.server.AndroidStartServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>initialSer</servlet-name>
-        <url-pattern>/Android/startActivity</url-pattern>
-    </servlet-mapping>
 
 
 
@@ -33,69 +24,8 @@
 
     <servlet-mapping>
         <servlet-name>image</servlet-name>
-        <url-pattern>/Android/immagine/*</url-pattern>
+        <url-pattern>/Andro/immagine/*</url-pattern>
     </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>personInRoom</servlet-name>
-        <servlet-class>com.auleSVGWT.server.AndroidPersonRoomServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>personInRoom</servlet-name>
-        <url-pattern>/Android/personeStanza</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>floorRooms</servlet-name>
-        <servlet-class>com.auleSVGWT.server.AndroidFloorRoomsServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>floorRooms</servlet-name>
-        <url-pattern>/Android/stanzee</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>searchPerson</servlet-name>
-        <servlet-class>com.auleSVGWT.server.AndroidSearchPersonServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>searchPerson</servlet-name>
-        <url-pattern>/Android/cercaPersona</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>queryMap</servlet-name>
-        <servlet-class>com.auleSVGWT.server.AndroidFloorOccuAndContracts</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>queryMap</servlet-name>
-        <url-pattern>/Android/auleLavoroOccupazione</url-pattern>
-    </servlet-mapping>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <servlet>
         <servlet-name>people</servlet-name>
@@ -104,10 +34,8 @@
 
     <servlet-mapping>
         <servlet-name>people</servlet-name>
-        <url-pattern>/Android/persone/*</url-pattern>
+        <url-pattern>/Andro/persone/*</url-pattern>
     </servlet-mapping>
-
-
 
     <servlet>
         <servlet-name>rooms</servlet-name>
@@ -116,7 +44,7 @@
 
     <servlet-mapping>
         <servlet-name>rooms</servlet-name>
-        <url-pattern>/Android/stanze/*</url-pattern>
+        <url-pattern>/Andro/stanze/*</url-pattern>
     </servlet-mapping>
 
 
@@ -127,7 +55,7 @@
 
     <servlet-mapping>
         <servlet-name>floorRoomlist</servlet-name>
-        <url-pattern>/Android/listaStanzePiano/*</url-pattern>
+        <url-pattern>/Andro/listaStanzePiano/*</url-pattern>
     </servlet-mapping>
 
 
@@ -138,7 +66,7 @@
 
     <servlet-mapping>
         <servlet-name>buildingList</servlet-name>
-        <url-pattern>/Android/listaEdifici</url-pattern>
+        <url-pattern>/Andro/listaEdifici.json</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -148,7 +76,21 @@
 
     <servlet-mapping>
         <servlet-name>beginning</servlet-name>
-        <url-pattern>/Android</url-pattern>
+        <url-pattern>/Andro</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.auleSVGWT.server.JaxApplication</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <url-pattern>/Android/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

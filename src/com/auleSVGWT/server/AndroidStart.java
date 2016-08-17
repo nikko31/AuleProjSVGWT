@@ -25,7 +25,7 @@ public class AndroidStart extends HttpServlet {
         System.out.println(servlet+".........");
 
 
-        resp.setContentType("text/html");
+        resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
         JSONObject obj;
 
@@ -34,7 +34,7 @@ public class AndroidStart extends HttpServlet {
         obj.put("listRoomsFloor",servlet+"/listaStanzePiano");
         obj.put("people",servlet+"/persone");
         obj.put("rooms",servlet+"/stanze");
-        obj.put("listBuildings",servlet+"/listaEdifici");
+        obj.put("listBuildings",servlet+"/listaEdifici.json");
 
         out.print(obj.toString());
         out.close();

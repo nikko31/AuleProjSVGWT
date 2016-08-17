@@ -187,7 +187,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                 if (modality.equals("distribuzione spazi")) {
                     colorRoom(string, result);
                 } else {
-                    Window.alert("entro in modalita mappa 3");
+                    //Window.alert("entro in modalita mappa 3");
                     colorRoomEndWork(string, result);
                 }
 
@@ -295,12 +295,12 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                     ArrayList<PersonDTO> people = roomPeopleDTO.getPeopleDTO();
                     for (PersonDTO personDTO : people) {
-                        Window.alert(personDTO.getName());
+                        //Window.alert(personDTO.getName());
 
                         if(personDTO.getEndWork()!=null){
-                            Window.alert("sono nel controllo null");
+                            //Window.alert("sono nel controllo null");
                             if (personDTO.getEndWork().before(new Date(new java.util.Date().getTime()))) {
-                                Window.alert("sono nel controllo end work");
+                                //Window.alert("sono nel controllo end work");
                                 final OMElement roomEl = roomSVGElt.getElementById(room);
                                 String style = roomEl.getAttribute("style");
                                 style = style.replace(Global.DEF_FILL, Global.RED_FILL);

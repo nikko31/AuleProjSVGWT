@@ -32,6 +32,9 @@ public class AndroidPeopleServlet extends HttpServlet {
         String uri = req.getRequestURI();
         String servlet = req.getServletPath();
         uri =  java.net.URLDecoder.decode(uri,"UTF-8");
+        servlet = uri.substring(0,uri.indexOf(servlet,0)) +servlet;
+        uri = uri.replace('_',' ');
+        System.out.println(uri +"........"+servlet);
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
         try{
@@ -61,28 +64,26 @@ public class AndroidPeopleServlet extends HttpServlet {
 
         if(uri.equals(servlet)){
             db= new DatabaseM();
-            personDTOs = db.getPerson();
-            parseOut(out,personDTOs);
+            //personDTOs = db.getPerson();
+
+            //parseOut(out,personDTOs);
+            out.println(db.getPeopleJson().toString());
             return false;
         }
         String path = servlet+"/";
         if(uri.contains(path) && uri.endsWith(".json")){
             System.out.println(uri.substring(servlet.length() + 1,uri.lastIndexOf("."))+".........");
-            if(controlOfNumberOnly(uri.substring(servlet.length() + 1,uri.lastIndexOf(".")))){
-                db= new DatabaseM();
-                personDTOs = db.getPersonFromId(Integer.parseInt(uri.substring(servlet.length() + 1,uri.lastIndexOf("."))));
-                parseOut(out,personDTOs);
-                return false;
 
-            }
             if(controlOfLettersandSpaceOnly(uri.substring(servlet.length() + 1, uri.lastIndexOf(".")))){
 
                 String person = uri.substring(uri.lastIndexOf('/')+1);
-                System.out.println("la string della persona e :" + person + "di cui  " + person.substring(0, person.lastIndexOf('_')) + "   e...." + person.substring(person.lastIndexOf('_') + 1));
+                System.out.println("la string della persona e :" + person + "di cui  " + person.substring(0, person.lastIndexOf(' ')) + "   e...." + person.substring(person.lastIndexOf(' ') + 1));
                 db= new DatabaseM();
-                personDTOs = db.getPerson(person.substring(0,person.lastIndexOf('_')),person.substring(person.lastIndexOf('_')+1,person.lastIndexOf(".")));
-                System.out.println("la dimensione di personDTOS e  " + personDTOs.size());
-                parseOut(out,personDTOs);
+                //personDTOs = db.getPerson(person.substring(0,person.lastIndexOf(' ')),person.substring(person.lastIndexOf(' ')+1,person.lastIndexOf(".")));
+                //System.out.println("la dimensione di personDTOS e  " + personDTOs.size());
+                //parseOut(out, personDTOs);
+                out.println(db.getPersonJson(person.substring(0,person.lastIndexOf(' ')),person.substring(person.lastIndexOf(' ')+1,person.lastIndexOf("."))).toString());
+                out.close();
                 return false;
             }
 
@@ -103,8 +104,10 @@ public class AndroidPeopleServlet extends HttpServlet {
                     if(uri.equals(s+"/lavoro.json")){
                         System.out.println(filename.substring(0,filename.lastIndexOf("-"))+" "+filename.substring(filename.lastIndexOf("-"))+".....  ");
                         db= new DatabaseM();
-                        personDTOs = db.getOccupyOfFloorwithDate(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1));
-                        parseOut(out,personDTOs);
+                        /*personDTOs = db.getOccupyOfFloorwithDate(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1));
+                        parseOut(out,personDTOs);*/
+                        out.println(db.getOccupyOfFloorwithDateJson(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1)).toString());
+                        out.close();
                         return false;
                     }
 
@@ -113,8 +116,12 @@ public class AndroidPeopleServlet extends HttpServlet {
                         if(uri.equals(servlet+"/"+filename+"/"+room.substring(room.lastIndexOf("-")+1)+".json")){
                             db= new DatabaseM();
                             System.out.println(filename.substring(0,filename.lastIndexOf("-"))+" "+filename.substring(filename.lastIndexOf("-"))+".....  "+uri.substring(uri.lastIndexOf("/")+1));
-                            personDTOs = db.getPeopleInRoom(filename.substring(0, filename.lastIndexOf("-")), filename.substring(filename.lastIndexOf("-") + 1), uri.substring(uri.lastIndexOf("/") + 1,uri.lastIndexOf(".")));
-                            parseOut(out,personDTOs);
+
+                            out.println(db.getPeopleInRoomJson(filename.substring(0, filename.lastIndexOf("-")), filename.substring(filename.lastIndexOf("-") + 1),
+                                    uri.substring(uri.lastIndexOf("/") + 1,uri.lastIndexOf("."))).toString());
+                            /*personDTOs = db.getPeopleInRoom(filename.substring(0, filename.lastIndexOf("-")), filename.substring(filename.lastIndexOf("-") + 1), uri.substring(uri.lastIndexOf("/") + 1,uri.lastIndexOf(".")));
+                            parseOut(out,personDTOs);*/
+                            out.close();
                             return false;
 
                         }
@@ -188,10 +195,10 @@ public class AndroidPeopleServlet extends HttpServlet {
         int counter =0;
 
         for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i)=='_'){
+            if(s.charAt(i)==' '){
                 counter ++;
             }
-            if (!Character.isLetter(s.charAt(i)) && s.charAt(i)!='_'){
+            if (!Character.isLetter(s.charAt(i)) && s.charAt(i)!=' '){
                 System.out.println("il problema e nel controllo spazio lettera");
                 return false;
             }
@@ -204,18 +211,7 @@ public class AndroidPeopleServlet extends HttpServlet {
         return true;
     }
 
-    private boolean controlOfNumberOnly(String s) {
-        if(s.length()<=0){
-            return false;
-        }
 
-        for(int i = 0; i < s.length(); i++) {
-            if (!Character.isDigit(s.charAt(i))){
-                return false;
-            }
-        }
-        return true;
-    }
 
     public ArrayList<String> listRoomsOfFloor(String text){
         ServletContext context = getServletContext();

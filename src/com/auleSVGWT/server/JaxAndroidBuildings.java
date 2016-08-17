@@ -1,61 +1,58 @@
 package com.auleSVGWT.server;
 
-import com.auleSVGWT.client.dto.PersonDTO;
-import jdk.nashorn.internal.ir.ObjectNode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-
-public class AndroidBuildingsServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private static final String addImageAndroid="/res/imageAndroid";
-
-
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException, IOException {
+/**
+ * Created by Utente on 10/08/2016.
+ */
+@Path("/listaEdifici.json")
+public class JaxAndroidBuildings {
+    final String path = "/res/imageAndroid";
 
 
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        try{
-            printBuildings(out);
+    @Context
+    ServletContext servletContext;
 
-        }catch (Exception e){
+    @GET
+    public Response getBuildings( ) {
+
+        try {
+            String json = printBuildings().toString();
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+        }catch(Exception e){
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.close();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-
 
     }
 
-
-
-
-    private void printBuildings(PrintWriter printOut)throws Exception{
+    private JSONObject printBuildings()throws Exception{
 
 
         HashMap<String, ArrayList<String>> buildings = new HashMap<>();
 
         try {
-            ServletContext context = getServletContext();
-            String fullPath = context.getRealPath(addImageAndroid);
 
+            String fullPath = servletContext.getRealPath(path);
+            System.out.println(servletContext.getContextPath()+"++++++questo è il cammino");
+            System.out.println(servletContext.getServletContextName()+"context nme");
+
+            if(fullPath!=null){
+                System.out.println(fullPath+"++++++questo è il cammino completo");
+            }
             File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();
 
@@ -82,7 +79,7 @@ public class AndroidBuildingsServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        printOutBuildingJSON(buildings, printOut);
+        return printOutBuildingJSON(buildings);
 
 
 
@@ -93,7 +90,7 @@ public class AndroidBuildingsServlet extends HttpServlet {
 
 
 
-    private void  printOutBuildingJSON(HashMap<String, ArrayList<String>> buildings,PrintWriter out){
+    private JSONObject  printOutBuildingJSON(HashMap<String, ArrayList<String>> buildings){
 
         int j = 0;
         JSONArray buildingFloors = new JSONArray();
@@ -112,9 +109,7 @@ public class AndroidBuildingsServlet extends HttpServlet {
                 JSONObject floor = new JSONObject();
                 JSONObject link = new JSONObject();
 
-                String building = buildingString;
-                building = building.replace(' ','_');
-
+                String building = buildingString.replace(' ','_');
                 link.put("imageRoom", "/Android/immagine/" + building + "-" + floorString + ".png");
                 link.put("imageRoomSpace","/Android/immagine/occupazione/" + building + "-" + floorString+".png");
                 link.put("imageRoomWork", "/Android/immagine/lavoro/" + building + "-" + floorString +".png");
@@ -122,7 +117,7 @@ public class AndroidBuildingsServlet extends HttpServlet {
                 link.put("peopleWork","/Android/persone/lavoro/"+building+"-"+floorString+".json");
                 link.put("roomsOccu","/Android/stanze/occupazione/"+building+"-"+floorString+".json");
                 floor.put("floor", floorString);
-                floor.put("link",link);
+                floor.put("link", link);
                 arr.add(i, floor);
                 i++;
             }
@@ -139,11 +134,8 @@ public class AndroidBuildingsServlet extends HttpServlet {
         obj.put("buildings", buildingFloors);
 
 
-        out.print(obj);
-        out.close();
+        return obj;
 
     }
 
-
 }
-

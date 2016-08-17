@@ -32,7 +32,11 @@ public class AndroidImageServlet extends HttpServlet {
 
         String uri = request.getRequestURI();
         String servlet = request.getServletPath();
+        ServletContext context = getServletContext();
         uri =  java.net.URLDecoder.decode(uri,"UTF-8");
+        servlet = uri.substring(0,uri.indexOf(servlet,0)) +servlet;
+        uri = uri.replace('_',' ');
+        System.out.println(servlet+"           sdfksdfsd"+"servlet context+++"+context);
 
 
         resp.setContentType("image/png");
@@ -59,6 +63,8 @@ public class AndroidImageServlet extends HttpServlet {
 
     private Boolean ControlPath(String servlet,String uri ,OutputStream out)throws Exception{
         ServletContext context = getServletContext();
+
+
         String imagePath = context.getRealPath(addImageAndroid);
         File folder = new File(imagePath);
         File[] listOfFiles = folder.listFiles();

@@ -32,9 +32,11 @@ public class AndroidRoomServlet extends HttpServlet {
 
         String uri = req.getRequestURI();
         String servlet = req.getServletPath();
+        System.out.println(uri +"........"+servlet);
         uri =  java.net.URLDecoder.decode(uri,"UTF-8");
-
-        resp.setContentType("text/html");
+        uri = uri.replace('_',' ');
+        servlet = uri.substring(0,uri.indexOf(servlet,0)) +servlet;
+        resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
 
         try{
@@ -68,11 +70,10 @@ public class AndroidRoomServlet extends HttpServlet {
             if(controlOfLettersandSpaceOnly(uri.substring(searchPersonRoom.length(),uri.lastIndexOf(".")))){
 
                 String person = uri.substring(uri.lastIndexOf('/')+1,uri.lastIndexOf("."));
-                System.out.println("la string della persona e :" + person + "di cui  " + person.substring(0, person.lastIndexOf('_')) + "   e...." + person.substring(person.lastIndexOf('_') + 1));
+                System.out.println("la string della persona e :" + person + "di cui  " + person.substring(0, person.lastIndexOf(' ')) + "   e...." + person.substring(person.lastIndexOf(' ') + 1));
                 db= new DatabaseM();
-                roomDTOs = db.getOccupedRoomOfPerson(person.substring(0,person.lastIndexOf('_')),person.substring(person.lastIndexOf('_')+1));
-                System.out.println("la dimensione di personDTOS e  " + roomDTOs.size());
-                parseOut(roomDTOs,out);
+                out.println(db.getOccupedRoomOfPersonJson(person.substring(0,person.lastIndexOf(' ')),person.substring(person.lastIndexOf(' ')+1)).toString());
+                out.close();
                 return false;
             }
 
@@ -85,11 +86,12 @@ public class AndroidRoomServlet extends HttpServlet {
                 String s= file.getName();
                 s=servlet+"/"+s.substring(0,s.lastIndexOf("."));
                 System.out.println(""+s+"........"+uri);
+
                 if(uri.equals(servlet+"/occupazione/"+filename+".json")){
                     System.out.println(filename.substring(0,filename.lastIndexOf("-"))+" "+filename.substring(filename.lastIndexOf("-"))+".....  ");
                     db= new DatabaseM();
-                    roomDTOs = db.getOccupyOfFloorwithDimension(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1));
-                    parseOut(roomDTOs,out);
+                    out.print(db.getOccupyOfFloorwithDimensionJson(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1)));
+                    out.close();
                     return false;
                 }
                 if(uri.contains(servlet+"/"+filename) ){
@@ -98,8 +100,8 @@ public class AndroidRoomServlet extends HttpServlet {
                         if(uri.equals(servlet+"/"+filename+"/"+room.substring(room.lastIndexOf("-")+1)+".json")){
                             db= new DatabaseM();
                             System.out.println(filename.substring(0,filename.lastIndexOf("-"))+" "+filename.substring(filename.lastIndexOf("-"))+".....  "+uri.substring(uri.lastIndexOf("/")+1));
-                            roomDTOs = db.getRoomInfo(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1),uri.substring(uri.lastIndexOf("/")+1,uri.lastIndexOf(".")));
-                            parseOut(roomDTOs, out);
+                            out.println(db.getRoomInfoJson(filename.substring(0,filename.lastIndexOf("-")),filename.substring(filename.lastIndexOf("-")+1),uri.substring(uri.lastIndexOf("/")+1,uri.lastIndexOf("."))));
+                            out.close();
                             return false;
 
                         }
@@ -123,19 +125,6 @@ public class AndroidRoomServlet extends HttpServlet {
 
 
 
-
-    private boolean controlOfLettersOnly(String s) {
-        boolean flag= true;
-
-        for(int i = 0; i < s.length(); i++) {
-            if(flag){
-                if (!Character.isLetter(s.charAt(i))){
-                    flag = false;
-                }
-            }
-        }
-        return flag;
-    }
 
 
     private void parseOut(ArrayList<RoomDTO> roomDTOs,PrintWriter out){
@@ -198,10 +187,10 @@ public class AndroidRoomServlet extends HttpServlet {
         int counter =0;
 
         for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i)=='_'){
+            if(s.charAt(i)==' '){
                 counter ++;
             }
-            if (!Character.isLetter(s.charAt(i)) && s.charAt(i)!='_'){
+            if (!Character.isLetter(s.charAt(i)) && s.charAt(i)!=' '){
                 System.out.println("il problema e nel controllo spazio lettera "+s.charAt(i));
                 return false;
             }

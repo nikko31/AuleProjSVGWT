@@ -11,6 +11,7 @@ import org.apache.batik.util.XMLResourceDescriptor;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.svg.*;
 
 import java.io.File;
 import java.io.IOException;
