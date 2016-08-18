@@ -8,12 +8,14 @@ import com.auleSVGWT.client.event.ShowRoomEvent;
 import com.auleSVGWT.client.shared.FloorDetails;
 import com.auleSVGWT.client.shared.Global;
 import com.auleSVGWT.client.view.ShowFloorView;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.RootPanel;
 import org.vectomatic.dom.svg.OMElement;
 import org.vectomatic.dom.svg.OMSVGSVGElement;
 
@@ -76,6 +78,8 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
                 public void onResponseReceived(Request request, Response response) {
                     roomSVGElt = org.vectomatic.dom.svg.utils.OMSVGParser.parse(response.getText());
+                    roomSVGElt.setWidth(Style.Unit.PX, (float) (( (float) RootPanel.get().getOffsetWidth())*0.6));
+                    roomSVGElt.setHeight(Style.Unit.PX, (float) (((float) RootPanel.get().getOffsetHeight()) * 0.9));
 
                     AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
                         @Override
