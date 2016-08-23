@@ -44,4 +44,6 @@ public interface AuleSVGWTServiceAsync {
     void  getBuildingsFileName(AsyncCallback<HashMap<String,ArrayList<String>>> async);
 
     void getOccupySearch(ArrayList<PersonDTO> persons, AsyncCallback<ArrayList<OccupyDTO>> async);
+
+    void updateRoom(RoomDTO roomDTO, AsyncCallback<Integer> async);
 }

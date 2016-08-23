@@ -3,6 +3,7 @@ package com.auleSVGWT.client.presenter;
 import com.auleSVGWT.client.AuleSVGWTServiceAsync;
 import com.auleSVGWT.client.dto.OccupyDTO;
 import com.auleSVGWT.client.dto.PersonDTO;
+import com.auleSVGWT.client.dto.RoomDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.EditPersonEvent;
 import com.auleSVGWT.client.event.ShowRoomEvent;
@@ -41,23 +42,40 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     @Override
     public void onSaveButtonClicked() {
-        ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
-        for(PersonDTO personDTO : selectedPersons){
-            occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
-        }
-        rpcService.saveRoomOccupy(roomPeopleDTO.getOccId(), occupyDTOs, new AsyncCallback<Long>() {
+
+        RoomDTO roomDTO=roomPeopleDTO.getRoomDTO();
+        roomDTO.setDimension(Integer.valueOf(view.getMtQ().getValue()));
+        roomDTO.setMaxPeople(Integer.valueOf(view.getNumSeats().getValue()));
+        rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("errore nel salvataggio");
+
             }
 
             @Override
-            public void onSuccess(Long result) {
-                eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),
-                        new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString()));
+            public void onSuccess(Integer result) {
 
+                ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
+                for(PersonDTO personDTO : selectedPersons){
+                    occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
+                }
+                rpcService.saveRoomOccupy(roomPeopleDTO.getOccId(), occupyDTOs, new AsyncCallback<Long>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("errore nel salvataggio");
+                    }
+
+                    @Override
+                    public void onSuccess(Long result) {
+                        eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),
+                                new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString()));
+
+                    }
+                });
             }
         });
+
+
 
     }
 

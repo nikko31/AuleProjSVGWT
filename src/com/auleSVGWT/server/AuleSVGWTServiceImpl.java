@@ -50,6 +50,27 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         return room.getId();
     }
+    @Override
+    public Integer updateRoom(RoomDTO roomDTO) {
+        com.auleSVGWT.server.domain.Room room = new com.auleSVGWT.server.domain.Room(roomDTO);
+
+        try {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            session.update(room);
+            session.getTransaction().commit();
+
+
+        } catch (Exception e) {
+            System.out.println("ERROR : updatePerson method fail ");
+
+
+        }
+
+        return room.getId();
+
+    }
 
     //---------------------PERSON
 

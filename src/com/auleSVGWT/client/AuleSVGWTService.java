@@ -13,6 +13,8 @@ public interface AuleSVGWTService
 
     Integer saveRoom(RoomDTO roomDTO);
 
+    Integer updateRoom(RoomDTO roomDTO);
+
     Integer savePerson(PersonDTO personDTO);
 
     Long saveOccupy(OccupyDTO occupyDTO);
