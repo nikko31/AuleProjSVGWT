@@ -4,7 +4,8 @@ import com.auleSVGWT.client.dto.*;
 import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
 
-import org.hibernate.classic.Session;
+
+import org.hibernate.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -77,7 +78,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Person> people = new ArrayList<>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
@@ -112,7 +113,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
              people = new ArrayList<>(session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  where o.room.building.name='" + building + "' and " +
@@ -141,7 +142,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Person> persons = new ArrayList<>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
@@ -224,7 +225,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Person> people = new ArrayList<>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
@@ -257,7 +258,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Person> people = new ArrayList<>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
@@ -355,7 +356,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + building + "' and floor=" + floor + " and number="+number).list());
@@ -389,7 +390,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select room from Occupy occ where  " +
@@ -459,7 +460,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + building + "' and floor=" + floor + " and number="+number).list());
@@ -492,7 +493,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             rooms = new ArrayList<>(session.createQuery("select r from Room r join fetch r.building  where r.building.name='" + building + "' and r.floor=" + floor + " " +
@@ -522,7 +523,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select room from Occupy occ where  " +
@@ -591,7 +592,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor + " and room.number="+number).list());
@@ -627,7 +628,7 @@ public class DatabaseM {
 
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor).list());

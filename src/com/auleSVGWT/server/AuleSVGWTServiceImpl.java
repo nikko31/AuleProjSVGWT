@@ -6,7 +6,8 @@ import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+
+import org.hibernate.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -313,7 +314,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         boolean check = true;
 
         try {
-            org.hibernate.classic.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
 
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
