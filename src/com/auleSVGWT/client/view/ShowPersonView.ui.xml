@@ -6,13 +6,13 @@
         <div class="datagrid">
         <table>
             <tr>
-                <td>First name:</td>
+                <td>Nome:</td>
                 <td>
                     <g:Label ui:field="firstNameLbl"/>
                 </td>
             </tr>
             <tr>
-                <td>Last name:</td>
+                <td>Cognome:</td>
                 <td>
                     <g:Label ui:field="lastNameLbl"/>
                 </td>
@@ -24,7 +24,13 @@
                 </td>
             </tr>
             <tr>
-                <td>Role:</td>
+                <td>Numero di telefono:</td>
+                <td>
+                    <g:Label ui:field="phoneLnl"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Ruolo:</td>
                 <td>
                     <g:Label ui:field="rolesLbl"/>
                 </td>

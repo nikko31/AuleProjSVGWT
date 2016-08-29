@@ -25,6 +25,8 @@ public interface EditPersonView<T> {
 
     HasValue<String> getEmailAddress();
 
+    HasValue<String> getPhone();
+
     HasValue<RoleDTO> getRole();
 
     void setPersonData(T personData);

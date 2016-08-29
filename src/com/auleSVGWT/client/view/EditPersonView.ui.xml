@@ -6,13 +6,13 @@
     <g:HTMLPanel>
         <table>
             <tr>
-                <td>First name:</td>
+                <td>Nome:</td>
                 <td>
                     <g:TextBox ui:field="firstNameTxt"/>
                 </td>
             </tr>
             <tr>
-                <td>Last name:</td>
+                <td>Cognome:</td>
                 <td>
                     <g:TextBox ui:field="lastNameTxt"/>
                 </td>
@@ -24,7 +24,13 @@
                 </td>
             </tr>
             <tr>
-                <td>Role:</td>
+                <td>Numero di telefono:</td>
+                <td>
+                    <g:TextBox ui:field="phoneTxt"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Ruolo:</td>
                 <td>
                     <my:RoleDTOListBox ui:field="rolesList"/>
                 </td>

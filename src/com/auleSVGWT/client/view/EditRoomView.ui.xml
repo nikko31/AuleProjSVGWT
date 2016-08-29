@@ -19,6 +19,14 @@
                     <g:TextBox ui:field="mtQTxt"/>
                 </g:customCell>
             </g:row>
+            <g:row>
+                <g:customCell>
+                    <g:Label>Prese di rete  :</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:TextBox ui:field="socketsTxt"/>
+                </g:customCell>
+            </g:row>
         </g:Grid>
 
         <g:Label>Persone: </g:Label>

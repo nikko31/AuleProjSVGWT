@@ -39,13 +39,31 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
     }
 
-
+    public  boolean checkNumb(String str){
+        for(int c=0;c<str.length();c++){
+                if(!Character.isDigit(str.charAt(c))){
+                    return false;
+                }
+        }
+        return true;
+    }
     @Override
     public void onSaveButtonClicked() {
-
+        String strTxt="";
         RoomDTO roomDTO=roomPeopleDTO.getRoomDTO();
         roomDTO.setDimension(Integer.valueOf(view.getMtQ().getValue()));
         roomDTO.setMaxPerson(Integer.valueOf(view.getNumSeats().getValue()));
+        strTxt=view.getSockets().getValue();
+        strTxt=strTxt.replace(" ","");
+        if(strTxt!=""){
+            if(checkNumb(strTxt))
+                roomDTO.setSocket(Integer.valueOf(strTxt));
+            else
+                Window.alert("Errore inserimento numero del numero di porte di rete");
+        }
+        else
+            roomDTO.setSocket(0);
+
         rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
             @Override
             public void onFailure(Throwable caught) {

@@ -25,6 +25,8 @@ public class ShowPersonViewImpl extends Composite implements ShowPersonView<Pers
     @UiField
     Label emailLbl;
     @UiField
+    Label phoneLnl;
+    @UiField
     Label rolesLbl;
 
     @UiField
@@ -49,6 +51,8 @@ public class ShowPersonViewImpl extends Composite implements ShowPersonView<Pers
     public void setPersonData(PersonDTO person) {
         this.firstNameLbl.setText(person.getName());
         this.lastNameLbl.setText(person.getSurname());
+        this.emailLbl.setText(person.getEmail());
+        this.phoneLnl.setText(person.getPhone());
         this.rolesLbl.setText(person.getRole().getName());
     }
 

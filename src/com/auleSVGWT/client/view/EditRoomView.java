@@ -29,6 +29,8 @@ public interface EditRoomView<T> {
 
     HasValue<String> getMtQ();
 
+    HasValue<String> getSockets();
+
     void setRowData(ArrayList<PersonDTO> rowData, RoomPeopleDTO roompeopleDTO);
 
     void setRoomData(RoomDTO roomData);

@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     TextBox lastNameTxt;
     @UiField
     TextBox emailTxt;
+    @UiField
+    TextBox phoneTxt;
     @UiField
     RoleDTOListBox rolesList;
 
@@ -73,6 +76,11 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     }
 
     @Override
+    public HasValue<String> getPhone() {
+        return phoneTxt;
+    }
+
+    @Override
     public HasValue<RoleDTO> getRole() {
         return rolesList;
     }
@@ -81,6 +89,8 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     public void setPersonData(PersonDTO personData) {
         firstNameTxt.setText(personData.getName());
         lastNameTxt.setText(personData.getSurname());
+        emailTxt.setText(personData.getEmail());
+        phoneTxt.setText(personData.getPhone());
     }
 
     @Override

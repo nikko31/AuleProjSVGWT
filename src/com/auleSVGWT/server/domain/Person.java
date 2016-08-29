@@ -30,8 +30,8 @@ public class Person implements Serializable {
         this.role = new Role(personDTO.getRole());
         this.startWork = personDTO.getStartWork();
         this.endWork = personDTO.getEndWork();
-        this.email = getEmail();
-        this.phone = getPhone();
+        this.email = personDTO.getEmail();
+        this.phone = personDTO.getPhone();
     }
 
 
