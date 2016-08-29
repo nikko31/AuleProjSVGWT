@@ -14,6 +14,8 @@ public class PersonDTO implements Serializable {
     private RoleDTO role;
     private Date startWork;
     private Date endWork;
+    private String email;
+    private String phone;
 
 
     public PersonDTO() {
@@ -35,17 +37,20 @@ public class PersonDTO implements Serializable {
         this.role = role;
         startWork = null;
         endWork = null;
+        email = null;
+        phone = null;
 
     }
 
-    public PersonDTO(int id, String name, String surname, RoleDTO role,Date startWork,Date endWork) {
+    public PersonDTO(int id, String name, String surname, RoleDTO role, Date startWork, Date endWork, String email, String phone) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.role = role;
         this.startWork = startWork;
         this.endWork = endWork;
-
+        this.phone = phone;
+        this.email = email;
     }
 
     public int getId() {
@@ -94,6 +99,22 @@ public class PersonDTO implements Serializable {
 
     public Date getEndWork() {
         return endWork;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setEndWork(Date endWork) {

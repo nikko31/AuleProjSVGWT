@@ -802,7 +802,7 @@ public class DatabaseM {
     private PersonDTO createPersonDTO(Person person) {
 
         return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
-                createRoleDTO(person.getRole()),person.getStartWork(),person.getEndWork());
+                createRoleDTO(person.getRole()),person.getStartWork(),person.getEndWork(),person.getEmail(),person.getPhone());
     }
 
     private BuildingDTO createBuildingDTO(Building building) {

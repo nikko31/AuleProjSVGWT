@@ -16,18 +16,22 @@ public class Person implements Serializable {
     private Role role;
     private Date startWork;
     private Date endWork;
+    private String email;
+    private String phone;
 
     public Person() {
     }
 
-    public Person(PersonDTO personDTO){
-        if(personDTO.getId()>=0)
+    public Person(PersonDTO personDTO) {
+        if (personDTO.getId() >= 0)
             this.id = personDTO.getId();
         this.name = personDTO.getName();
         this.surname = personDTO.getSurname();
         this.role = new Role(personDTO.getRole());
         this.startWork = personDTO.getStartWork();
         this.endWork = personDTO.getEndWork();
+        this.email = getEmail();
+        this.phone = getPhone();
     }
 
 
@@ -73,6 +77,22 @@ public class Person implements Serializable {
 
     public Date getEndWork() {
         return endWork;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setEndWork(Date endWork) {

@@ -12,6 +12,8 @@
         <property name="surname" column="person_surname"/>
         <property name="startWork" column="start_work"/>
         <property name="endWork" column="end_work" />
+        <property name="email" column="email" />
+        <property name="phone" column="phone" />
 
         <many-to-one name="role" class="com.auleSVGWT.server.domain.Role" fetch="select">
             <column name="role_id" not-null="true" />

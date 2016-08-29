@@ -45,13 +45,12 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
 
         RoomDTO roomDTO=roomPeopleDTO.getRoomDTO();
         roomDTO.setDimension(Integer.valueOf(view.getMtQ().getValue()));
-        roomDTO.setMaxPeople(Integer.valueOf(view.getNumSeats().getValue()));
+        roomDTO.setMaxPerson(Integer.valueOf(view.getNumSeats().getValue()));
         rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
             @Override
             public void onFailure(Throwable caught) {
-
+                Window.alert("errore nel salvataggio");
             }
-
             @Override
             public void onSuccess(Integer result) {
 
@@ -64,7 +63,6 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
                     public void onFailure(Throwable caught) {
                         Window.alert("errore nel salvataggio");
                     }
-
                     @Override
                     public void onSuccess(Long result) {
                         eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),

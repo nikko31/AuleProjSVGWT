@@ -81,6 +81,6 @@ public class SearchPersonPresenter implements Presenter, SearchPersonView.Presen
         eventBus.fireEvent(new ShowFloorEvent(clickedItem.getRoom().getBuilding().getName(),
                 String.valueOf(clickedItem.getRoom().getFloor()),
                 "visualizzazione",
-                String.valueOf(clickedItem.getRoom().getId())));
+                String.valueOf(clickedItem.getRoom().getNumber())));
     }
 }

@@ -26,9 +26,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
-    private static final String addImageGWT="/res/imageGWT";
+    private static final String addImageGWT = "/res/imageGWT";
     // Implementation of sample interface method
 
 
@@ -37,7 +36,6 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public Integer saveRoom(RoomDTO roomDTO) {
         Room room = new Room(roomDTO);
-
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
@@ -47,29 +45,21 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         } catch (Exception e) {
             System.out.println("ERROR : saveRoom method fail ");
         }
-
         return room.getId();
     }
+
     @Override
     public Integer updateRoom(RoomDTO roomDTO) {
         com.auleSVGWT.server.domain.Room room = new com.auleSVGWT.server.domain.Room(roomDTO);
-
         try {
-
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
             session.update(room);
             session.getTransaction().commit();
-
-
         } catch (Exception e) {
-            System.out.println("ERROR : updatePerson method fail ");
-
-
+            System.out.println("ERROR : updateRoom method fail ");
         }
-
         return room.getId();
-
     }
 
     //---------------------PERSON
@@ -344,7 +334,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
             for (Room room : rooms) {
 
-               // System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
+                // System.out.println(room.getFloor() + " = " + floor + " " + room.getBuilding().getName() + " = " + building + "....................................................");
                 if ((room.getFloor() == floor) && (room.getBuilding().getName().equals(building) && (room.getNumber() == number))) {
                     check = false;
 
@@ -554,7 +544,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();
             for (File file : listOfFiles) {
-                if(file.getName().contains(".svg")){
+                if (file.getName().contains(".svg")) {
                     string.add(file.getName());
                 }
             }
@@ -660,7 +650,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     private PersonDTO createPersonDTO(Person person) {
 
         return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
-                createRoleDTO(person.getRole()), person.getStartWork(), person.getEndWork());
+                createRoleDTO(person.getRole()), person.getStartWork(), person.getEndWork(), person.getEmail(), person.getPhone());
     }
 
     private BuildingDTO createBuildingDTO(Building building) {
@@ -702,10 +692,11 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         return occupyDTO;
     }
-    public ArrayList<OccupyDTO> getOccupySearch(ArrayList<PersonDTO>persons) {
+
+    public ArrayList<OccupyDTO> getOccupySearch(ArrayList<PersonDTO> persons) {
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
-        for(PersonDTO personDTO:persons){
-            occupyDTO.addAll(getOccupySearch(personDTO.getName(),personDTO.getSurname()));
+        for (PersonDTO personDTO : persons) {
+            occupyDTO.addAll(getOccupySearch(personDTO.getName(), personDTO.getSurname()));
         }
         return occupyDTO;
     }
@@ -714,7 +705,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     public ArrayList<String> listaAulePianoNewVersion(String text) {
         ServletContext context = getServletContext();
         String fullPath = context.getRealPath(addImageGWT);
-        URI uri = new File(fullPath+"/" + text + ".svg").toURI();
+        URI uri = new File(fullPath + "/" + text + ".svg").toURI();
         SVGMetaPost converter;
         ArrayList<String> room = new ArrayList<>();
         try {
@@ -747,7 +738,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 }
             }
 
-           // System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
+            // System.out.println("RISULTATO RICERCA NEL FILE " + u + " " + counter);
         } catch (IOException e) {
             System.out.println("ERROr in liste aule piano new");
         }

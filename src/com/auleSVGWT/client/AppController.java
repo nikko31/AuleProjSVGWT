@@ -1,6 +1,5 @@
 package com.auleSVGWT.client;
 
-
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.dto.RoomPeopleDTO;
 import com.auleSVGWT.client.event.*;
@@ -12,6 +11,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class AppController implements Presenter, ValueChangeHandler<String> {
     private final EventBus eventBus;
     private final AuleSVGWTServiceAsync rpcService;
+
     private HasWidgets mapContainer;
     private HasWidgets infoContainer;
     private HasWidgets headerContainer;
@@ -32,12 +34,12 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     private String floor;
     private String roomID;
     private String number;
-    private String modality;
+    private String mode;
     private PersonDTO personDTO;
     private RoomPeopleDTO roomPeopleDTO;
     private String name;
     private String surname;
-    private ArrayList<PersonDTO>selectedPersons;
+    private ArrayList<PersonDTO> selectedPersons;
 
     public AppController(AuleSVGWTServiceAsync auleSVGWTServiceAsync, SimpleEventBus simpleEventBus) {
         this.eventBus = simpleEventBus;
@@ -49,76 +51,85 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
         History.addValueChangeHandler(this);
 
         //metto nel eventbus gli handler di tutte le cose
-        eventBus.addHandler(AddInvaderEvent.TYPE, new AddInvaderEventHandler() {
-            @Override
-            public void onAddInvader(AddInvaderEvent event) {
-                doOnAddInvader();
-            }
-        });
+        eventBus.addHandler(AddInvaderEvent.TYPE,
+                new AddInvaderEventHandler() {
+                    @Override
+                    public void onAddInvader(AddInvaderEvent event) {
+                        doOnAddInvader();
+                    }
+                });
 
-        eventBus.addHandler(AddPersonEvent.TYPE, new AddPersonEventHandler() {
-            @Override
-            public void onAddPerson(AddPersonEvent event) {
-                doOnAddPerson();
-            }
-        });
+        eventBus.addHandler(AddPersonEvent.TYPE,
+                new AddPersonEventHandler() {
+                    @Override
+                    public void onAddPerson(AddPersonEvent event) {
+                        doOnAddPerson();
+                    }
+                });
 
-        eventBus.addHandler(EditRoomEvent.TYPE, new EditRoomEventHandler() {
-            @Override
-            public void onEditRoom(EditRoomEvent event) {
-                roomPeopleDTO = event.getRoomPeopleDTO();
-                doOnEditRoom();
-            }
-        });
+        eventBus.addHandler(EditRoomEvent.TYPE,
+                new EditRoomEventHandler() {
+                    @Override
+                    public void onEditRoom(EditRoomEvent event) {
+                        roomPeopleDTO = event.getRoomPeopleDTO();
+                        doOnEditRoom();
+                    }
+                });
 
-        eventBus.addHandler(EditPersonEvent.TYPE, new EditPersonHandler() {
-            @Override
-            public void onEditPerson(EditPersonEvent event) {
-                personDTO = event.getPersonDTO();
-                doOnEditPerson();
-            }
-        });
+        eventBus.addHandler(EditPersonEvent.TYPE,
+                new EditPersonHandler() {
+                    @Override
+                    public void onEditPerson(EditPersonEvent event) {
+                        personDTO = event.getPersonDTO();
+                        doOnEditPerson();
+                    }
+                });
 
-        eventBus.addHandler(ShowRoomEvent.TYPE, new ShowRoomEventHandler() {
-            @Override
-            public void onShowRoom(ShowRoomEvent event) {
-                number = event.getNumber();
-                doOnShowRoom(number);
-            }
-        });
+        eventBus.addHandler(ShowRoomEvent.TYPE,
+                new ShowRoomEventHandler() {
+                    @Override
+                    public void onShowRoom(ShowRoomEvent event) {
+                        number = event.getNumber();
+                        doOnShowRoom(number);
+                    }
+                });
 
-        eventBus.addHandler(ShowPersonEvent.TYPE, new ShowPersonEventHandler() {
-            @Override
-            public void onShowPerson(ShowPersonEvent event) {
-                personDTO = event.getPersonDTO();
-                doOnShowPerson(personDTO.getId());
-            }
-        });
+        eventBus.addHandler(ShowPersonEvent.TYPE,
+                new ShowPersonEventHandler() {
+                    @Override
+                    public void onShowPerson(ShowPersonEvent event) {
+                        personDTO = event.getPersonDTO();
+                        doOnShowPerson(personDTO.getId());
+                    }
+                });
 
-        eventBus.addHandler(ShowHeaderEvent.TYPE, new ShowHeaderEventHandler() {
-            @Override
-            public void onShowHeader(ShowHeaderEvent event) {
-                doOnShowHeader();
-            }
-        });
+        eventBus.addHandler(ShowHeaderEvent.TYPE,
+                new ShowHeaderEventHandler() {
+                    @Override
+                    public void onShowHeader(ShowHeaderEvent event) {
+                        doOnShowHeader();
+                    }
+                });
 
-        eventBus.addHandler(ShowFloorEvent.TYPE, new ShowFloorEventHandler() {
-            @Override
-            public void onShowFloor(ShowFloorEvent event) {
-                building = event.getBuilding();
-                floor = event.getFloor();
-                modality = event.getModality();
-                roomID = event.getRoomID();
-                doOnShowFloor();
-            }
-        });
-        eventBus.addHandler(SearchPersonEvent.TYPE, new SearchPersonEventHandler() {
-            @Override
-            public void onSearchPerson(SearchPersonEvent event) {
-                selectedPersons=event.getPersonsSelected();
-                doOnSearchPerson();
-            }
-        });
+        eventBus.addHandler(ShowFloorEvent.TYPE,
+                new ShowFloorEventHandler() {
+                    @Override
+                    public void onShowFloor(ShowFloorEvent event) {
+                        building = event.getBuilding();
+                        floor = event.getFloor();
+                        mode = event.getMode();
+                        roomID = event.getRoomID();
+                        doOnShowFloor();
+                    }
+                });
+        eventBus.addHandler(SearchPersonEvent.TYPE,
+                new SearchPersonEventHandler() {
+                    @Override
+                    public void onSearchPerson(SearchPersonEvent event) {
+                        selectedPersons = event.getPersonsSelected();
+                        doOnSearchPerson();
+                    }
+                });
     }
 
     private void doOnShowHeader() {
@@ -127,9 +138,9 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
     private void doOnShowFloor() {
         if (roomID != null)
-            History.newItem("showFloor " + building + "-" + floor + "-" + modality + "-" + roomID);
+            History.newItem("showFloor " + building + "-" + floor + "-" + mode + "&" + roomID);
         else
-            History.newItem("showFloor " + building + "-" + floor + "-" + modality);
+            History.newItem("showFloor " + building + "-" + floor + "-" + mode);
     }
 
     private void doOnShowRoom(String number) {
@@ -157,10 +168,10 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
     }
 
     private void doOnSearchPerson() {
-        String names="";
-        for (PersonDTO personDTO:selectedPersons)
-            names+=personDTO.getName()+"-"+personDTO.getSurname()+" ";
-        History.newItem("searchPerson "+names);
+        String names = "";
+        for (PersonDTO personDTO : selectedPersons)
+            names += personDTO.getName() + "-" + personDTO.getSurname() + " ";
+        History.newItem("searchPerson " + names);
     }
 
 
@@ -192,7 +203,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
                     @Override
                     public void onSuccess() {
-                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor, modality, roomID)
+                        new ShowFloorPresenter(eventBus, rpcService, getShowFloorView(), building, floor, mode, roomID)
                                 .go(mapContainer, infoContainer, headerContainer);
                     }
                 });

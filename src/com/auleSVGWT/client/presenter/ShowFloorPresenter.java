@@ -34,7 +34,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
     private ArrayList<String> string;
     private String building;
     private String floor;
-    private String modality;
+    private String mode;
     private String roomID;
     private OMSVGSVGElement roomSVGElt;
     private OMElement selectedRoom;
@@ -45,7 +45,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                               ShowFloorView<FloorDetails> view,
                               String building,
                               String floor,
-                              String modality,
+                              String mode,
                               String roomID) {
         this.selectedRoom = null;
         this.building = building;
@@ -54,7 +54,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
         this.rpcService = rpcService;
         this.view = view;
         this.view.setPresenter(this);
-        this.modality = modality;
+        this.mode = mode;
         this.roomID = roomID;
     }
 
@@ -91,7 +91,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
                             if (result == null) {
                                 Window.alert("devono essere aggiunti gli handler");
                             }
-                            if (modality.equals("visualizzazione")) {
+                            if (mode.equals("visualizzazione")) {
                                 addHandlers(result);
                                 if(roomID!=null)
                                     colorRoom();
@@ -188,7 +188,7 @@ public class ShowFloorPresenter implements Presenter, ShowFloorView.Presenter<Fl
 
             @Override
             public void onSuccess(ArrayList<RoomPeopleDTO> result) {
-                if (modality.equals("distribuzione spazi")) {
+                if (mode.equals("distribuzione spazi")) {
                     colorRoom(string, result);
                 } else {
                     //Window.alert("entro in modalita mappa 3");

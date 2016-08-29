@@ -8,6 +8,6 @@
         <id name="id" column="role_id">
         </id>
         <property name="name" column="role_name"/>
-        <property name="sqm" column="role_sqm"/>
+        <property name="sqm" column="role_weight"/>
     </class>
 </hibernate-mapping>

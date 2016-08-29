@@ -19,6 +19,7 @@ public class AuleSVGWT implements EntryPoint {
         VerticalPanel mapPnl = new VerticalPanel();
         VerticalPanel infoPnl = new VerticalPanel();
         VerticalPanel headerPnl = new VerticalPanel();
+
         new AppController((
                 AuleSVGWTServiceAsync) GWT.create(AuleSVGWTService.class),
                 new SimpleEventBus()
@@ -26,13 +27,6 @@ public class AuleSVGWT implements EntryPoint {
 
         RootPanel.get("header").add(headerPnl);
         RootPanel.get("room").add(mapPnl);
-        //RootPanel.get("room").setStyleName("roomPnl");
         RootPanel.get("info").add(infoPnl);
-        //RootPanel.get("room").setStyleName("infoPnl");
-
-
-
     }
-
-
 }

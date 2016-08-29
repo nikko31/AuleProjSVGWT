@@ -289,7 +289,7 @@ public class JaxAndroidImage {
                         return;
                     }else{
                         System.out.println("sono in modalita  0  ed il file non esiste"+ fileName );
-                        modalityZero(doc,fileName);
+                        modeZero(doc,fileName);
 
 
                     }
@@ -303,7 +303,7 @@ public class JaxAndroidImage {
                         return;
                     }else {
                         System.out.println("sono in modalita 1 ed il file esiste " + fileName);
-                        modalityOne(doc, idRoom, fileName);
+                        modeOne(doc, idRoom, fileName);
                     }
                 }
                 else{
@@ -333,7 +333,7 @@ public class JaxAndroidImage {
                                 file.delete();
                                 System.out.println("sono passati i due minuti lo cancello modalita occupation");
                                 try{
-                                    modalityTwo(room, occupyDTOs, doc,fileName);
+                                    modeTwo(room, occupyDTOs, doc,fileName);
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
@@ -346,7 +346,7 @@ public class JaxAndroidImage {
 
                         }else {
                             System.out.println("sono in modalita occupation non esiste");
-                            modalityTwo(room, occupyDTOs, doc,fileName);
+                            modeTwo(room, occupyDTOs, doc,fileName);
                         }
 
                     System.out.println("sono nell mod 2");
@@ -362,7 +362,7 @@ public class JaxAndroidImage {
                                 file.delete();
                                 System.out.println("sono passati i due minuti lo cancello modalita lavoro");
                                 try{
-                                    modalityThree(room, occupyDTOs, doc, fileName);
+                                    modeThree(room, occupyDTOs, doc, fileName);
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
@@ -375,7 +375,7 @@ public class JaxAndroidImage {
 
                         }else {
                             System.out.println("sono in modalita occupation non esiste");
-                            modalityThree(room, occupyDTOs, doc, fileName);
+                            modeThree(room, occupyDTOs, doc, fileName);
                         }
 
                     }
@@ -394,7 +394,7 @@ public class JaxAndroidImage {
 
     }
 
-    public void modalityZero(Document doc,String fileName){
+    public void modeZero(Document doc,String fileName){
         System.out.println("sono in modalita 0 "+fileName);
         File file;
         String pngPathOut = servletContext.getRealPath(tmpPath);
@@ -417,7 +417,7 @@ public class JaxAndroidImage {
 
     }
 
-    public void modalityOne(Document doc,String id,String fileName){
+    public void modeOne(Document doc,String id,String fileName){
         System.out.println("sono in modalita  "+fileName+" e id "+id);
 
         File file;
@@ -439,7 +439,7 @@ public class JaxAndroidImage {
     }
 
 
-    public void modalityTwo(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
+    public void modeTwo(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
 
         int sum;
         int dim;
@@ -562,7 +562,7 @@ public class JaxAndroidImage {
 
 
 
-    public void modalityThree(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
+    public void modeThree(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
         DatabaseM db = new DatabaseM();
 
 

@@ -11,12 +11,12 @@ public class ShowFloorEvent extends GwtEvent<ShowFloorEventHandler> {
     private final String floor;
     private final String roomID;
     //aggiunta
-    private final String modality;
+    private final String mode;
 
-    public ShowFloorEvent(String building, String floor, String modality, String roomID) {
+    public ShowFloorEvent(String building, String floor, String mode, String roomID) {
         this.building = building;
         this.floor = floor;
-        this.modality = modality;
+        this.mode = mode;
         this.roomID = roomID;
 
     }
@@ -29,8 +29,8 @@ public class ShowFloorEvent extends GwtEvent<ShowFloorEventHandler> {
         return floor;
     }
 
-    public String getModality() {
-        return modality;
+    public String getMode() {
+        return mode;
     }
 
     public String getRoomID() {
