@@ -101,7 +101,6 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     public HasValue<RoleDTO> getRole() {
         return rolesList;
     }
-
     @Override
     public void setPersonData(PersonDTO personData) {
         firstNameTxt.setText(personData.getName());
