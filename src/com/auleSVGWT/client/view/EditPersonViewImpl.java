@@ -11,8 +11,11 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.user.datepicker.client.DatePicker;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Dark-Linux on 15/03/2016.
@@ -31,6 +34,10 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     TextBox emailTxt;
     @UiField
     TextBox phoneTxt;
+    @UiField
+    DateBox startWTxt;
+    @UiField
+    DateBox endWTxt;
     @UiField
     RoleDTOListBox rolesList;
 
@@ -76,6 +83,16 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
     }
 
     @Override
+    public HasValue<Date> getEndWork() {
+        return endWTxt;
+    }
+
+    @Override
+    public HasValue<Date> getStartWork() {
+        return  startWTxt;
+    }
+
+    @Override
     public HasValue<String> getPhone() {
         return phoneTxt;
     }
@@ -91,6 +108,9 @@ public class EditPersonViewImpl extends Composite implements EditPersonView<Pers
         lastNameTxt.setText(personData.getSurname());
         emailTxt.setText(personData.getEmail());
         phoneTxt.setText(personData.getPhone());
+        startWTxt.setValue(new Date(personData.getStartWork().getTime()));
+        endWTxt.setValue(new Date(personData.getEndWork().getTime()));
+
     }
 
     @Override

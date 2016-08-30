@@ -5,8 +5,10 @@ import com.auleSVGWT.client.common.RoleDTOListBox;
 import com.auleSVGWT.client.dto.RoleDTO;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Dark-Linux on 15/03/2016.
@@ -24,6 +26,10 @@ public interface EditPersonView<T> {
     HasValue<String> getLastName();
 
     HasValue<String> getEmailAddress();
+
+    HasValue<Date> getEndWork();
+
+    HasValue<Date> getStartWork();
 
     HasValue<String> getPhone();
 

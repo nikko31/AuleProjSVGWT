@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +41,9 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
         personDTO.setName(view.getFirstName().getValue());
         personDTO.setSurname(view.getLastName().getValue());
         personDTO.setEmail(view.getEmailAddress().getValue());
+        personDTO.setStartWork( new Date(view.getStartWork().getValue().getTime()));
+        personDTO.setEndWork( new Date(view.getEndWork().getValue().getTime()));
+
         phone=view.getPhone().getValue();
         phone=phone.replace(" ","");
         phone=phone.replace("-","");

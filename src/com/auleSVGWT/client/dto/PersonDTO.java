@@ -120,5 +120,6 @@ public class PersonDTO implements Serializable {
     public void setEndWork(Date endWork) {
         this.endWork = endWork;
     }
+
 }
 
