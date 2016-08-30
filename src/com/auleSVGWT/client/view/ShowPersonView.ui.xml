@@ -20,7 +20,7 @@
             <tr>
                 <td>Email:</td>
                 <td>
-                    <g:Label ui:field="emailLbl"/>
+                    <g:Anchor ui:field="emailLbl"/>
                 </td>
             </tr>
             <tr>

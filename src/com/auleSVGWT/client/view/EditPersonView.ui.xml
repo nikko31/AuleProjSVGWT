@@ -4,8 +4,6 @@
         xmlns:g="urn:import:com.google.gwt.user.client.ui"
         xmlns:my="urn:import:com.auleSVGWT.client.common"
         xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
-    <ui:style>
-    </ui:style>
     <g:HTMLPanel>
         <table>
             <tr>

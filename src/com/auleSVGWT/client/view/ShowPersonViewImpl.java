@@ -23,7 +23,7 @@ public class ShowPersonViewImpl extends Composite implements ShowPersonView<Pers
     @UiField
     Label lastNameLbl;
     @UiField
-    Label emailLbl;
+    Anchor emailLbl;
     @UiField
     Label phoneLnl;
     @UiField
@@ -52,6 +52,7 @@ public class ShowPersonViewImpl extends Composite implements ShowPersonView<Pers
         this.firstNameLbl.setText(person.getName());
         this.lastNameLbl.setText(person.getSurname());
         this.emailLbl.setText(person.getEmail());
+        this.emailLbl.setHref("mailto:"+person.getEmail());
         this.phoneLnl.setText(person.getPhone());
         this.rolesLbl.setText(person.getRole().getName());
     }
