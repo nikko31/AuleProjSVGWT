@@ -32,6 +32,8 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
     @UiField
     TextBox socketsTxt;
     @UiField
+    TextBox maintenanceTxt;
+    @UiField
     ScrollPanel personScroll;
 
     @UiField
@@ -104,6 +106,11 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
     }
 
     @Override
+    public HasValue<String> getMaintenance() {
+        return maintenanceTxt;
+    }
+
+    @Override
     public void setPresenter(EditRoomView.Presenter<RoomPeopleDTO> presenter) {
         this.presenter = presenter;
     }
@@ -145,7 +152,7 @@ public class EditRoomViewImpl extends Composite implements EditRoomView<RoomPeop
         numSeatsTxt.setText(String.valueOf(roomData.getMaxPerson()));
         mtQTxt.setText(String.valueOf(roomData.getDimension()));
         socketsTxt.setText(String.valueOf(roomData.getSocket()));
-
+        maintenanceTxt.setText(roomData.getMaintenance());
         addPersonButton.setStyleName("fm-add-user");
         cancelButton.setStyleName("default-button-cancel");
         saveButton.setStyleName("default-button");

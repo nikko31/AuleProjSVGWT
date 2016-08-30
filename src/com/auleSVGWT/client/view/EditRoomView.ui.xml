@@ -27,6 +27,14 @@
                     <g:TextBox ui:field="socketsTxt"/>
                 </g:customCell>
             </g:row>
+            <g:row>
+                <g:customCell>
+                    <g:Label>Manutenzione :</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:TextBox ui:field="maintenanceTxt"/>
+                </g:customCell>
+            </g:row>
         </g:Grid>
 
         <g:Label>Persone: </g:Label>

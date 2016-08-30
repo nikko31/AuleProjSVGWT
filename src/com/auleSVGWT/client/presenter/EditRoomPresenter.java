@@ -52,17 +52,24 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
         String strTxt="";
         RoomDTO roomDTO=roomPeopleDTO.getRoomDTO();
         roomDTO.setDimension(Integer.valueOf(view.getMtQ().getValue()));
-        roomDTO.setMaxPerson(Integer.valueOf(view.getNumSeats().getValue()));
+        roomDTO.setMaintenance(view.getMaintenance().getValue());
         strTxt=view.getSockets().getValue();
         strTxt=strTxt.replace(" ","");
         if(strTxt!=""){
             if(checkNumb(strTxt))
                 roomDTO.setSocket(Integer.valueOf(strTxt));
             else
-                Window.alert("Errore inserimento numero del numero di porte di rete");
+                Window.alert("Errore inserimento numero del numero di porte di rete.");
         }
-        else
-            roomDTO.setSocket(0);
+
+        strTxt=view.getNumSeats().getValue();
+        strTxt=strTxt.replace(" ","");
+        if(strTxt!=""){
+            if(checkNumb(strTxt))
+                roomDTO.setMaxPerson(Integer.valueOf(strTxt));
+            else
+                Window.alert("Errore inserimento numero del numero massimo di posti.");
+        }
 
         rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
             @Override
