@@ -1,6 +1,5 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-
     <ui:style field="otherStyle" src="View.css"></ui:style>
     <g:VerticalPanel height="100%" width="100%" styleName="{otherStyle.distanceFromTopLeftPanel}">
         <g:Label styleName="{otherStyle.headerFontWidget3}">STANZA</g:Label>

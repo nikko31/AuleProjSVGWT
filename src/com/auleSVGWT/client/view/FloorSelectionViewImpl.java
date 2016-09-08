@@ -4,7 +4,6 @@ import com.auleSVGWT.client.common.AutoSuggestPage;
 import com.auleSVGWT.client.common.MyListBox;
 import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.shared.FloorDetails;
-import com.auleSVGWT.server.domain.Person;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -13,7 +12,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     Button enterBtn;
     @UiField
     VerticalPanel vertPnl;
-    private ArrayList<PersonDTO>selectedPersons;
+    private ArrayList<PersonDTO> selectedPersons;
 
     private AutoSuggestPage autoSuggestPage;
 
@@ -63,7 +61,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
     @UiHandler("searchPersonButton")
     void onSearchButtonClicked(ClickEvent event) {
         if (presenter != null) {
-            selectedPersons=new ArrayList<>();
+            selectedPersons = new ArrayList<>();
             this.selectedPersons.addAll(autoSuggestPage.getSelected());
             presenter.onSearchButtonClicked();
         }
@@ -127,7 +125,7 @@ public class FloorSelectionViewImpl extends Composite implements FloorSelectionV
 
     @Override
     public void setSuggestion(ArrayList<PersonDTO> persons) {
-         autoSuggestPage=new AutoSuggestPage(persons);
+        autoSuggestPage = new AutoSuggestPage(persons);
         vertPnl.add(autoSuggestPage);
     }
 }

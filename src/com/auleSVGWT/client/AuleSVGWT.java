@@ -1,11 +1,8 @@
 package com.auleSVGWT.client;
 
-import com.auleSVGWT.server.domain.Room;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.HeaderPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
