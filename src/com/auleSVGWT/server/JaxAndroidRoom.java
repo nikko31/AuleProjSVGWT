@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class JaxAndroidRoom {
     final String path = "/res/imageAndroid";
     DatabaseM db;
-    //ArrayList<RoomDTO> roomDTOs;
     @Context
     ServletContext servletContext;
 
@@ -36,17 +35,19 @@ public class JaxAndroidRoom {
     public Response getPerson(@PathParam("person") String person){
 
         try {
-            if(person.endsWith(".json")){
-                String per = person.replace('_',' ');
-                if(controlOfLettersandSpaceOnly(per.substring(0, per.lastIndexOf(".")))){
-                    db= new DatabaseM();
-                    //roomDTOs = db.getOccupedRoomOfPerson(person.substring(0, person.lastIndexOf('_')), person.substring(person.lastIndexOf('_') + 1, person.lastIndexOf(".")));
-                    String json = db.getOccupedRoomOfPersonJson(per.substring(0, per.lastIndexOf(' ')), per.substring(per.lastIndexOf(' ') + 1, per.lastIndexOf("."))).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-                }
+            String per = person.replace('_',' ');
+            if(controlOfLettersandSpaceOnly(per)){
+                db= new DatabaseM();
+                String json = db.getOccupedRoomOfPersonJson(per.substring(0, per.lastIndexOf(' ')), per.substring(per.lastIndexOf(' ') + 1)).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
             }
+            /*
+            if(person.endsWith(".json")){
+
+
+            }*/
 
 
 
@@ -64,18 +65,18 @@ public class JaxAndroidRoom {
     public Response getRoomInfo(@PathParam("buildFloor") String buildFloor,@PathParam("room") String room){
        // System.out.println("get room people con "+ buildFloor+ " "+ room);
         try {
-            if(room.endsWith(".json")){
-                String ro = room.substring(0, room.lastIndexOf("."));
-                String build = buildFloor.replace('_',' ');
-                if(controlBuildFloorRoom(build, ro)){
-                    db= new DatabaseM();
-                    //roomDTOs = db.getRoomInfo(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), ro);
-                    String json = db.getRoomInfoJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), ro).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-                }
+            String build = buildFloor.replace('_',' ');
+            if(controlBuildFloorRoom(build, room)){
+                db= new DatabaseM();
+                String json = db.getRoomInfoJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), room).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
             }
+            /*if(room.endsWith(".json")){
+
+
+            }*/
 
 
 
@@ -93,18 +94,19 @@ public class JaxAndroidRoom {
     public Response getOccRoominFloor(@PathParam("buildFloor") String buildFloor){
 
         try {
-            if(buildFloor.endsWith(".json")){
-                String build = buildFloor.substring(0,buildFloor.lastIndexOf("."));
-                build = build.replace('_', ' ');
-                if(controlBuildFloor(build)){
-                    db= new DatabaseM();
-                    //roomDTOs = db.getOccupyOfFloorwithDimension(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1));
-                    String json = db.getOccupyOfFloorwithDimensionJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1)).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-                }
+            String build = buildFloor.replace('_', ' ');
+            if(controlBuildFloor(build)){
+                db= new DatabaseM();
+                String json = db.getOccupyOfFloorwithDimensionJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1)).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
             }
+            /*
+            if(buildFloor.endsWith(".json")){
+                String build = buildFloor.substring(0,buildFloor.lastIndexOf("."));
+
+            }*/
 
 
 
@@ -219,58 +221,4 @@ public class JaxAndroidRoom {
     }
 
 
-    /*
-
-    private JSONObject parseRoom(ArrayList<RoomDTO> roomDTOs){
-        JSONArray ar;
-        JSONObject obj;
-
-
-
-        ar = new JSONArray();
-
-        if(roomDTOs.size() !=0){
-            ar = new JSONArray();
-
-
-            int i=0;
-            for(RoomDTO roomDTO : roomDTOs){
-                obj = new JSONObject();
-                JSONObject link = new JSONObject();
-                if(!obj.containsKey("number")){
-                    obj.put("number",""+roomDTO.getNumber());
-
-                }
-
-                obj.put("building",""+roomDTO.getBuilding().getName());
-                obj.put("floor",""+roomDTO.getFloor());
-                obj.put("info",""+roomDTO.getMaintenance());
-                obj.put("personMax",""+roomDTO.getMaxPeople());
-                obj.put("socket",""+roomDTO.getSocket());
-                obj.put("dimension",""+roomDTO.getDimension());
-                obj.put("code",""+roomDTO.getRoomCode());
-                link.put("peopleInRoom","/Android/persone/"+roomDTO.getBuilding().getName()+"-"+roomDTO.getFloor()+"/"+roomDTO.getNumber()+".json");
-                link.put("imageSelecRoom","/Android/immagine/"+roomDTO.getBuilding().getName()+"-"+roomDTO.getFloor()+"/"+roomDTO.getNumber()+".png");
-                obj.put("link",link);
-                if(obj.size()!=0){
-                    ar.add(i,obj);
-                    i++;
-                }
-
-            }
-
-            obj= new JSONObject();
-            obj.put("rooms",ar);
-
-        }else{
-            obj= new JSONObject();
-            obj.put("rooms",ar);
-
-
-        }
-
-
-        return obj;
-
-    }*/
 }

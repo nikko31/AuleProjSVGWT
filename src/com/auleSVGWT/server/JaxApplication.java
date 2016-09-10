@@ -11,12 +11,10 @@ public class JaxApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
-        s.add(JaxAndroidBuildings.class);
-        s.add(JaxAndroidPeople.class);
-        s.add(JaxAndroidRoom.class);
-        s.add(JaxAndroidFloorRoomList.class);
-        s.add(JaxAndroidImage.class);
-        s.add(JaxAndroidBase.class);
+        s.add(JaxRestBuildings.class);
+        s.add(JaxRestPeople.class);
+        s.add(JaxRestImage.class);
+        s.add(JaxRestBase.class);
         return s;
     }
 

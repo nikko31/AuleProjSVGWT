@@ -1,300 +1,313 @@
 package com.auleSVGWT.server;
 
-import com.auleSVGWT.client.dto.*;
 import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
 
-
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.stream.Collectors;
+import java.util.Collections;
+
 
 
 public class DatabaseM {
-    Session session;
 
-
-    public DatabaseM() {
-
-    }
-
-    public Boolean createSession(){
-
-
-        if(session.isOpen()){
-            return true;
-        }
-
-        return false;
-    }
-
-    public void closeSession(){
-        if(session.isOpen()){
-            session.close();
-        }
-    }
 
 
 
     //----------------------------------------------------------PERSON----------------------------------------------------
 
-    public ArrayList<PersonDTO> getPerson(String part1,String part2) {
-        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            session.beginTransaction();
-
-            ArrayList<Person> person =  new ArrayList<>(( session.createQuery("select o from Person o where o.name='" + part1 + "' and o.surname='" + part2 + "'").list()));
-
-            if(person.size() != 0){
-                personDTOs.add(createPersonDTO(person.get(0)));
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
-            e.printStackTrace();
-        }
-
-        return personDTOs;
-    }
-
-
-    public ArrayList<PersonDTO> getPeopleInRoom(String building, String floorSt, String numberSt){
-        int number = Integer.parseInt(numberSt);
-        int floor = Integer.parseInt(floorSt);
-
-        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Person> people = new ArrayList<>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
-                    "o.room.floor=" + floor + " and o.room.number="+number).list());
-
-            if(people.size()>0){
-                for (Person person : people) {
-                    personDTOs.add(createPersonDTO(person));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return personDTOs;
-
-    }
-
-
-    public ArrayList<Person> getPeopleInRoomNotDTO(String building, String floorSt, String numberSt){
+    public ArrayList<Person> getPeopleInRoom(String building, String floorSt, String numberSt){
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
 
         ArrayList<Person> people = new ArrayList<>();
-
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-             people = new ArrayList<>(session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  where o.room.building.name='" + building + "' and " +
+            tx = session.beginTransaction();
+            people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  where o.room.building.name='" + building + "' and " +
                     "o.room.floor=" + floor + " and o.room.number="+number).list());
 
-
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPeopleInRoom fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
         return people;
 
     }
 
 
-    public ArrayList<PersonDTO> getOccupyOfFloorwithDate(String building, String floorSt){
 
-        int floor = Integer.parseInt(floorSt);
-
-        ArrayList<PersonDTO> personDTOs = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Person> persons = new ArrayList<>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
-                    "' and occ.room.floor=" + floor +" and occ.person.endWork < CURRENT_DATE() group by occ.person.id").list() );
-
-            if(persons.size()>0){
-                for (Person person : persons) {
-                    personDTOs.add(createPersonDTO(person));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return personDTOs;
-
-    }
-
-
-
-    public ArrayList<PersonDTO> getPeople() {
-        ArrayList<PersonDTO> personDTO = new ArrayList<>();
-        try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
-
-            personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
-            session.getTransaction().commit();
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getPerson method fail ");
-            e.printStackTrace();
-        }
-        return personDTO;
-    }
 
     //-----------------------------------------PersonJSON-----------------------------------
     public JSONObject getPersonJson(String part1,String part2) {
-        JSONObject peopleJson = new JSONObject();
+        boolean nullFlag=false;
+        JSONObject personJson = new JSONObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+            ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where (o.name='" + part1 + "' and o.surname='" + part2 + "') or (" +
+                    "o.surname='"+part1+"' and o.name='"+part2+"')").list()));
+            if(people.size()==1){
+                personJson = parsePerson(people.get(0));
+            }else{
+                nullFlag = true;
+            }
 
-            session.beginTransaction();
 
-            ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where o.name='" + part1 + "' and o.surname='" + part2 + "'").list()));
-
-            peopleJson = parsePeople(people);
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
-            e.printStackTrace();
+            tx.commit();
         }
-        if(peopleJson!= null){
-            return peopleJson;
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPersonJson fail");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(nullFlag){
+            return null;
         }else{
-            peopleJson.put("people",new JSONArray());
-            return peopleJson;
+            return personJson;
         }
     }
 
+    public JSONObject getPersonWithIDJson(String id) {
+        Integer i = new Integer(id);
+        boolean nullFlag=false;
+        JSONObject personJson = new JSONObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
 
-    public JSONObject getPeopleInRoomJson(String building, String floorSt, String numberSt){
+
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where o.id="+i).list()));
+            if(people.size()==1){
+                personJson = parsePerson(people.get(0));
+            }else{
+                nullFlag = true;
+            }
+
+
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPersonJson fail");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(nullFlag){
+            return null;
+        }else{
+            return personJson;
+        }
+    }
+
+    public JSONArray getPersonSearchJson(int number,String search) {
+
+        System.out.println("cerco dentro alle persone.............................................................................");
+        JSONArray peopleJson = new JSONArray();
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Person> people = new ArrayList<Person>((session.createQuery("select o from Person o where o.name like '" + search + "%' or o.surname like '" + search + "%'").list()));
+
+            Collections.sort(people, Person.getCompByNameaftSurname());
+
+            if (people.size() != 0) {
+                if (number > people.size()) {
+                    peopleJson = parsePeopleNew(new ArrayList<Person>(people.subList(0, people.size())));
+                } else {
+                    peopleJson = parsePeopleNew(new ArrayList<Person>(people.subList(0, number)));
+                }
+
+            }
+
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            System.out.println("error: getPersonSearchJson fail ");
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        if (peopleJson != null) {
+            if (peopleJson.size() > 0) {
+                return peopleJson;
+            }
+
+        }
+        return null;
+    }
+
+
+    public JSONArray getPeopleInRoomWithIdJson(String id){
+        Integer i = new Integer(id);
+        JSONArray peopleJson = new JSONArray();
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.id=" + i).list());
+
+            Collections.sort(people,Person.getCompByNameaftSurname());
+            peopleJson = parsePeopleNew(people);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPeopleInRoom fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(peopleJson != null){
+            if(peopleJson.size() >0){
+                return peopleJson;
+            }
+
+        }
+        return null;
+
+
+    }
+
+
+    public JSONArray getPeopleInRoomJson(String building, String floorSt, String numberSt){
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        JSONObject peopleJson = new JSONObject();
+        JSONArray peopleJson = new JSONArray();
 
-
-
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Person> people = new ArrayList<>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
+            tx = session.beginTransaction();
+            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + building + "' and " +
                     "o.room.floor=" + floor + " and o.room.number="+number).list());
 
-            peopleJson = parsePeople(people);
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
+            Collections.sort(people,Person.getCompByNameaftSurname());
+            peopleJson = parsePeopleNew(people);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPeopleInRoom fail ");
             e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(peopleJson != null){
+            if(peopleJson.size() >0){
+                return peopleJson;
+            }
 
         }
-        if(peopleJson!= null){
-            return peopleJson;
-        }else{
-            peopleJson.put("people",new JSONArray());
-            return peopleJson;
-        }
+        return null;
+
 
     }
 
 
-    public JSONObject getOccupyOfFloorwithDateJson(String building, String floorSt){
+    public JSONArray getOccupyOfFloorwithDateJson(String building, String floorSt){
 
         int floor = Integer.parseInt(floorSt);
-
-        JSONObject peopleJson = new JSONObject();
+        JSONArray peopleJson = new JSONArray();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
 
 
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Person> people = new ArrayList<>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
-                    "' and occ.room.floor=" + floor +" and occ.person.endWork < CURRENT_DATE() group by occ.person.id").list() );
+            tx = session.beginTransaction();
+            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + building +
+                    "' and occ.room.floor=" + floor +" and occ.person.endWork <= CURRENT_DATE() group by occ.person.id").list() );
 
             ArrayList<Person> filteredPeople = new ArrayList<>();
             for(Person person : people){
                 if(person.getEndWork()!=null){
-                   // System.out.println(""+person.getSurname()+person.getName());
+                    // System.out.println(""+person.getSurname()+person.getName());
                     filteredPeople.add(person);
                 }
             }
-            peopleJson = parsePeople(filteredPeople);
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
+            Collections.sort(people,Person.getCompByNameaftSurname());
+            peopleJson = parsePeopleNew(filteredPeople);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupyOfFloorwithDateJson ");
             e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(peopleJson != null){
+            if(peopleJson.size() >0){
+                return peopleJson;
+            }
 
         }
-        if(peopleJson!= null){
-            return peopleJson;
-        }else{
-            peopleJson.put("people",new JSONArray());
-            return peopleJson;
-        }
+        return null;
 
 
     }
 
 
 
-    public JSONObject getPeopleJson() {
-        JSONObject peopleJson = new JSONObject();
+    public JSONArray getPeopleJson() {
+        JSONArray peopleJson = new JSONArray();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("from Person ").list());
+
+            peopleJson = parsePeopleNew(people);
+
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPeopleJson fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(peopleJson != null){
+            if(peopleJson.size() >0){
+                return peopleJson;
+            }
+
+        }
+        return null;
+
+        /*
 
         try {
 
@@ -314,105 +327,193 @@ public class DatabaseM {
         }else{
             peopleJson.put("people",new JSONArray());
             return peopleJson;
-        }
+        }*/
 
     }
 
 
 
     //-----------------------------------------RoomJson------------------------
-    public JSONObject getOccupedRoomOfPersonJson(String part1,String part2) {
-        JSONObject roomsJson = new JSONObject();
+    public JSONArray getOccupedRoomOfPersonJson(String part1,String part2) {
+        JSONArray roomsJson = new JSONArray();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+            ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where o.person.name='" + part1 + "' and o.person.surname='" + part2 + "'").list()));
 
-            session.beginTransaction();
-
-            ArrayList<Room> rooms =  new ArrayList<>(( session.createQuery("select o.room from Occupy o where o.person.name='" + part1 + "' and o.person.surname='" + part2 + "'").list()));
-
-            roomsJson = parseRoom(rooms);
-
-            session.getTransaction().commit();
+            Collections.sort(rooms,Room.getCompByName());
+            Collections.sort(rooms,Room.getCompByNumber());
+            roomsJson = parseRoomsNew(rooms);
 
 
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
+
+
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupedRoomOfPersonJson");
             e.printStackTrace();
+        }finally {
+            session.close();
         }
 
-        if(roomsJson!= null){
-            return roomsJson;
-        }else{
-            roomsJson.put("rooms",new JSONArray());
-            return roomsJson;
+        if(roomsJson != null){
+            if(roomsJson.size() >0){
+                return roomsJson;
+            }
+
         }
+        return null;
     }
+
+    public JSONArray getOccupedRoomOfPersonWithIdJson(String id) {
+        Integer i = new Integer(id);
+        JSONArray roomsJson = new JSONArray();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where o.person.id=" +i).list()));
+
+            Collections.sort(rooms,Room.getCompByName());
+            Collections.sort(rooms,Room.getCompByNumber());
+            roomsJson = parseRoomsNew(rooms);
+
+
+
+
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupedRoomOfPersonJson");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(roomsJson != null){
+            if(roomsJson.size() >0){
+                return roomsJson;
+            }
+
+        }
+        return null;
+    }
+
+    public JSONObject getRoomInfowithIdJson(String id){
+        boolean nullFlag=false;
+        Integer i = new Integer(id);
+        JSONObject roomJson = new JSONObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+
+
+        try {
+            tx = session.beginTransaction();
+            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where Room.id="+i).list());
+            if(rooms.size()==1){
+                roomJson = parseRoom(rooms.get(0));
+            }else{
+                nullFlag = true;
+            }
+
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoomInfoJson fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+
+        if(nullFlag){
+            return null;
+        }else{
+            return roomJson;
+        }
+
+    }
+
 
 
     public JSONObject getRoomInfoJson(String building, String floorSt, String numberSt){
+        boolean nullFlag=false;
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        JSONObject roomsJson = new JSONObject();
+        JSONObject roomJson = new JSONObject();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
 
 
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
+            tx = session.beginTransaction();
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + building + "' and floor=" + floor + " and number="+number).list());
+            if(rooms.size()==1){
+                roomJson = parseRoom(rooms.get(0));
+            }else{
+                nullFlag = true;
+            }
 
-            roomsJson = parseRoom(rooms);
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
+            tx.commit();
         }
-        if(roomsJson!= null){
-            return roomsJson;
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoomInfoJson fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+
+        if(nullFlag){
+            return null;
         }else{
-            roomsJson.put("rooms",new JSONArray());
-            return roomsJson;
+            return roomJson;
         }
 
     }
 
 
 
-    public JSONObject getOccupyOfFloorwithDimensionJson(String building, String floorSt){
+    public JSONArray getOccupyOfFloorwithDimensionJson(String building, String floorSt){
 
         int floor = Integer.parseInt(floorSt);
-
-        JSONObject roomsJson = new JSONObject();
-
+        JSONArray roomsJson = new JSONArray();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
 
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select room from Occupy occ where  " +
+            tx = session.beginTransaction();
+            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("select room from Occupy occ where  " +
                     "occ.room.building.name ='"+building+"'" +"and occ.room.floor="+floor +
                     " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());
 
-           roomsJson = parseRoom(rooms);
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
+            Collections.sort(rooms,Room.getCompByNumber());
+            roomsJson = parseRoomsNew(rooms);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupyFloorwithDimensionJson ");
             e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+        if(roomsJson != null){
+            if(roomsJson.size() >0){
+                return roomsJson;
+            }
 
         }
-        if(roomsJson!= null){
-            return roomsJson;
-        }else{
-            roomsJson.put("rooms",new JSONArray());
-            return roomsJson;
-        }
+        return null;
 
     }
 
@@ -422,255 +523,34 @@ public class DatabaseM {
 
 
 
-
-    public ArrayList<RoomDTO> getOccupedRoomOfPerson(String part1,String part2) {
-        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
-            session.beginTransaction();
-
-            ArrayList<Room> rooms =  new ArrayList<>(( session.createQuery("select o.room from Occupy o where o.person.name='" + part1 + "' and o.person.surname='" + part2 + "'").list()));
-
-            if(rooms.size()>0){
-                for (Room room : rooms) {
-                    roomDTOs.add(createRoomDTO(room));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
-            e.printStackTrace();
-        }
-
-        return roomDTOs;
-    }
-
-
-    public ArrayList<RoomDTO> getRoomInfo(String building, String floorSt, String numberSt){
+    public ArrayList<Room> getRoomInfo(String building, String floorSt, String numberSt){
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-
-        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + building + "' and floor=" + floor + " and number="+number).list());
-
-            if(rooms.size()>0){
-                for (Room room : rooms) {
-                    roomDTOs.add(createRoomDTO(room));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return roomDTOs;
-
-    }
-
-    public ArrayList<Room> getRoomInfoNotDTO(String building, String floorSt, String numberSt){
-        int number = Integer.parseInt(numberSt);
-        int floor = Integer.parseInt(floorSt);
-
         ArrayList<Room> rooms = new ArrayList<>();
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
 
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            rooms = new ArrayList<>(session.createQuery("select r from Room r join fetch r.building  where r.building.name='" + building + "' and r.floor=" + floor + " " +
+            tx = session.beginTransaction();
+            rooms = new ArrayList<Room>(session.createQuery("select r from Room r join fetch r.building  where r.building.name='" + building + "' and r.floor=" + floor + " " +
                     "and r.number="+number).list());
-
-
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoomInfo fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+
         return rooms;
 
     }
 
 
 
-    public ArrayList<RoomDTO> getOccupyOfFloorwithDimension(String building, String floorSt){
-
-        int floor = Integer.parseInt(floorSt);
-
-        ArrayList<RoomDTO> roomDTOs = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select room from Occupy occ where  " +
-                    "occ.room.building.name ='"+building+"'" +"and occ.room.floor="+floor +
-                    " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());
-
-            if(rooms.size()>0){
-                for (Room room : rooms) {
-                    roomDTOs.add(createRoomDTO(room));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return roomDTOs;
-
-    }
-
-
-
-    //----------------------------Occupy-----------------
-
-
-    public ArrayList<OccupyDTO> getOccupyOfPerson(String part1,String part2) {
-        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
-            session.beginTransaction();
-
-            ArrayList<Occupy> occup =  new ArrayList<>(( session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
-
-            if(occup.size()>0){
-                for (Occupy occupy : occup) {
-                    occupyDTO.add(createOccupyDTO(occupy));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
-            e.printStackTrace();
-        }
-
-        return occupyDTO;
-    }
-
-
-    public ArrayList<OccupyDTO> getOccupyOfRoom(String building, String floorSt, String numberSt){
-        int number = Integer.parseInt(numberSt);
-        int floor = Integer.parseInt(floorSt);
-
-        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor + " and room.number="+number).list());
-
-            if(occupies.size()>0){
-                for (Occupy occupy : occupies) {
-                    occupyDTO.add(createOccupyDTO(occupy));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return occupyDTO;
-
-    }
-
-
-
-
-    public ArrayList<OccupyDTO> getOccupyOfFloor(String building, String floorSt){
-
-        int floor = Integer.parseInt(floorSt);
-
-        ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
-
-
-        try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
-            ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy where room.building.name='" + building + "' and room.floor=" + floor).list());
-
-            if(occupies.size()>0){
-                for (Occupy occupy : occupies) {
-                    occupyDTO.add(createOccupyDTO(occupy));
-                }
-
-
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
-        }
-        return occupyDTO;
-
-    }
-
-
-    public ArrayList<PersonDTO> getPerson() {
-        ArrayList<PersonDTO> personDTO = new ArrayList<>();
-        try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-            ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
-
-            personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
-            session.getTransaction().commit();
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getPerson method fail ");
-            e.printStackTrace();
-        }
-        return personDTO;
-    }
 
 
     //------------------------------------------------------private Metod---------------------------------------------------------
@@ -685,7 +565,7 @@ public class DatabaseM {
             int j = 0;
             for(Person person : people){
                 personJSON = new JSONObject();
-                JSONObject link = new JSONObject();
+
 
                 personJSON.put("id",person.getId());
                 personJSON.put("name", person.getName());
@@ -710,9 +590,31 @@ public class DatabaseM {
 
                 }
 
-                link.put("roomsOccPerson","/Android/stanze/persone/"+person.getName()+"_"+person.getSurname()+".json");
+                if(person.getPhone() != null){
+                    String phone = person.getPhone();
 
-                personJSON.put("link",link);
+                    personJSON.put("phone",phone);
+
+
+                }else{
+                    personJSON.put("phone","null");
+
+                }
+                if(person.getEmail() != null){
+                    String email = person.getEmail();
+
+                    personJSON.put("email",email);
+
+
+                }else{
+                    personJSON.put("email","null");
+
+                }
+
+                //hateoas
+
+                personJSON.put("infoRoomsOfPerson","/rest/persone/"+person.getName()+"_"+person.getSurname()+"/stanze");
+
 
                 arrayPersonJ.add(j,personJSON);
                 j++;
@@ -729,7 +631,7 @@ public class DatabaseM {
     }
 
 
-    private JSONObject parseRoom(ArrayList<Room> rooms){
+    private JSONObject parseRooms(ArrayList<Room> rooms){
         JSONArray ar;
         JSONObject obj;
 
@@ -744,29 +646,31 @@ public class DatabaseM {
             int i=0;
             for(Room room : rooms){
                 obj = new JSONObject();
-                JSONObject link = new JSONObject();
-                if(!obj.containsKey("number")){
-                    obj.put("number",""+room.getNumber());
+                JSONObject image = new JSONObject();
 
-                }
 
+                obj.put("id",room.getId());
                 obj.put("building",""+room.getBuilding().getName());
                 obj.put("floor",""+room.getFloor());
+                obj.put("number",""+room.getNumber());
                 if(room.getMaintenance()==null){
-                    obj.put("info","null");
+                    obj.put("maintenance","null");
                 }else{
-                    obj.put("info",""+room.getMaintenance());
+                    obj.put("maintenance",""+room.getMaintenance());
                 }
-
                 obj.put("personMax",""+room.getMaxPeople());
                 obj.put("socket",""+room.getSocket());
                 obj.put("dimension",""+room.getDimension());
                 obj.put("code",""+room.getRoomCode());
+
+                //hateoas
                 String build = room.getBuilding().getName();
                 build = build.replace(' ','_');
-                link.put("peopleInRoom","/Android/persone/"+build+"-"+room.getFloor()+"/"+room.getNumber()+".json");
-                link.put("imageSelecRoom","/Android/immagine/"+build+"-"+room.getFloor()+"/"+room.getNumber()+".png");
-                obj.put("link",link);
+                obj.put("infoPeopleInRoom","/rest/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber()+"/persone");
+                image.put("restLink","/rest/immagini/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber());
+                image.put("PNGLink","/risorse/immagini/edifici/stanze/"+build+"-"+room.getFloor()+"-"+room.getNumber()+".png");
+                obj.put("imageSelectRoom",image);
+
                 ar.add(i,obj);
                 i++;
 
@@ -790,30 +694,144 @@ public class DatabaseM {
 
 
 
-    private OccupyDTO createOccupyDTO(Occupy occupy) {
-        return new OccupyDTO(occupy.getId(), createRoomDTO(occupy.getRoom()), createPersonDTO(occupy.getPerson()));
+    private JSONArray parsePeopleNew(ArrayList<Person> people){
+        JSONArray arrayPeopleJson = new JSONArray();
+
+
+
+        if(people.size()>0){
+
+            for(Person person : people ){
+                JSONObject obj;
+                obj = parsePerson(person);
+                arrayPeopleJson.add(obj);
+            }
+
+            return arrayPeopleJson;
+
+        }else{
+            return null;
+        }
+
+
     }
 
-    private RoleDTO createRoleDTO(Role role) {
+    private JSONArray parseRoomsNew(ArrayList<Room> rooms){
+        JSONArray arrayRoomsJson = new JSONArray();
 
-        return new RoleDTO(role.getId(), role.getName(), role.getSqm());
+
+
+        if(rooms.size()>0){
+
+            for(Room room : rooms){
+                JSONObject obj;
+                obj = parseRoom(room);
+                arrayRoomsJson.add(obj);
+            }
+
+            return arrayRoomsJson;
+
+        }else{
+            return null;
+        }
+
+
     }
 
-    private PersonDTO createPersonDTO(Person person) {
 
-        return new PersonDTO(person.getId(), person.getName(), person.getSurname(),
-                createRoleDTO(person.getRole()),person.getStartWork(),person.getEndWork(),person.getEmail(),person.getPhone());
+    private JSONObject parsePerson(Person person){
+
+        JSONObject personJSON = new JSONObject();
+        JSONObject obj;
+
+        personJSON.put("id",person.getId());
+        personJSON.put("name", person.getName());
+        personJSON.put("surname", person.getSurname());
+        personJSON.put("role", person.getRole().getName());
+        if(person.getStartWork() != null){
+            String sW = person.getStartWork().toString();
+            sW = sW.replaceAll("-"," ");
+            personJSON.put("startWork",sW);
+        }else{
+            personJSON.put("startWork","null");
+
+        }
+        if(person.getEndWork() != null){
+            String eW = person.getEndWork().toString();
+            eW = eW.replaceAll("-", " ");
+            personJSON.put("endWork",eW);
+
+
+        }else{
+            personJSON.put("endWork","null");
+
+        }
+
+        if(person.getPhone() != null){
+            String phone = person.getPhone();
+
+            personJSON.put("phone",phone);
+
+
+        }else{
+            personJSON.put("phone","null");
+
+        }
+        if(person.getEmail() != null){
+            String email = person.getEmail();
+
+            personJSON.put("email",email);
+
+
+        }else{
+            personJSON.put("email","null");
+
+        }
+
+
+
+        personJSON.put("infoRoomsOfPerson","/rest/persone/"+person.getName()+"_"+person.getSurname()+"/stanze");
+
+        return personJSON;
     }
 
-    private BuildingDTO createBuildingDTO(Building building) {
 
-        return new BuildingDTO(building.getNumber(), building.getName());
+    private JSONObject parseRoom(Room room){
+        JSONObject roomJson = new JSONObject();
+        JSONObject image = new JSONObject();
+
+
+        roomJson.put("id",room.getId());
+        roomJson.put("building",""+room.getBuilding().getName());
+        roomJson.put("floor",""+room.getFloor());
+        roomJson.put("number",""+room.getNumber());
+        if(room.getMaintenance()==null){
+            roomJson.put("maintenance","null");
+        }else{
+            roomJson.put("maintenance",""+room.getMaintenance());
+        }
+        roomJson.put("personMax",""+room.getMaxPeople());
+        roomJson.put("socket",""+room.getSocket());
+        roomJson.put("dimension",""+room.getDimension());
+        roomJson.put("code",""+room.getRoomCode());
+
+        //hateoas
+        String build = room.getBuilding().getName();
+        build = build.replace(' ','_');
+        roomJson.put("infoPeopleInRoom","/rest/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber()+"/persone");
+        image.put("restLink","/rest/immagini/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber());
+        image.put("PNGLink","/risorse/immagini/edifici/stanze/"+build+"-"+room.getFloor()+"-"+room.getNumber()+".png");
+        roomJson.put("imageSelectRoom",image);
+
+
+        return roomJson;
+
     }
 
-    private RoomDTO createRoomDTO(Room room) {
 
-        return new RoomDTO(room.getId(), room.getNumber(), room.getFloor(),
-                createBuildingDTO(room.getBuilding()), room.getMaxPeople(), room.getDimension(),room.getRoomCode(),room.getMaintenance(),room.getSocket());
-    }
+
+
+
+
 
 }

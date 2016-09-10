@@ -37,14 +37,17 @@ public class JaxAndroidFloorRoomList {
     public Response getListOfRoom(@PathParam("buildingFloor") String buildingFloor){
         try {
 
+
+            String build = buildingFloor.replace('_', ' ');
+            if(controlBuildFloor(build)){
+                String json = parseRoomList(roomFloorList(build),build).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
+            }
+
+            /*
             if(buildingFloor.endsWith(".json")){
                 String build = buildingFloor.substring(0, buildingFloor.lastIndexOf("."));
-                build = build.replace('_', ' ');
-                if(controlBuildFloor(build)){
-                    String json = parseRoomList(roomFloorList(build),build).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
-                }
-            }
+            }*/
 
 
 
@@ -72,9 +75,9 @@ public class JaxAndroidFloorRoomList {
                 buildingFloor = buildingFloor.replace(' ','_');
                 String num =""+ String.valueOf(room);
 
-                link.put("imageSelecRoom","/Android/immagine/"+buildingFloor+"/"+num+".png");
-                link.put("roomSelectInfo","/Android/stanze/"+buildingFloor + "/" + num+".json");
-                link.put("peopleInRoom","/Android/persone/"+buildingFloor + "/" + num+".json");
+                link.put("imageSelecRoom","/Risorse/immagini/"+buildingFloor+"/"+num+".png");
+                link.put("roomSelectInfo","/Risorse/stanze/"+buildingFloor + "/" + num);
+                link.put("peopleInRoom","/Risorse/persone/"+buildingFloor + "/" + num);
 
                 ro.put("link", link);
                 ro.put("room",""+room);

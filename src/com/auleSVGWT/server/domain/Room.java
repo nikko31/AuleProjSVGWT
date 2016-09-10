@@ -4,6 +4,7 @@ package com.auleSVGWT.server.domain;
 import com.auleSVGWT.client.dto.RoomDTO;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Created by FEDE on 21/03/2016.
@@ -106,5 +107,36 @@ public class Room implements Serializable {
 
     public void setSocket(int socket) {
         this.socket = socket;
+    }
+    public static Comparator<Room> getCompByNumber()
+    {
+        Comparator comp = new Comparator<Room>(){
+            @Override
+            public int compare(Room r1, Room r2)
+            {
+
+                Integer n1 =new Integer(r1.getNumber());
+                Integer n2 =new Integer(r2.getNumber());
+                return n1.compareTo(n2);
+
+
+            }
+        };
+        return comp;
+    }
+    public static Comparator<Room> getCompByName()
+    {
+        Comparator comp = new Comparator<Room>(){
+            @Override
+            public int compare(Room r1, Room r2)
+            {
+
+
+                return r1.getBuilding().getName().compareTo(r2.building.getName());
+
+
+            }
+        };
+        return comp;
     }
 }

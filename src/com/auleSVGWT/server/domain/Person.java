@@ -5,6 +5,7 @@ import com.auleSVGWT.client.dto.PersonDTO;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Comparator;
 
 /**
  * Created by FEDE on 21/03/2016.
@@ -97,6 +98,24 @@ public class Person implements Serializable {
 
     public void setEndWork(Date endWork) {
         this.endWork = endWork;
+    }
+
+    public static Comparator<Person> getCompByNameaftSurname()
+    {
+        Comparator comp = new Comparator<Person>(){
+            @Override
+            public int compare(Person p1, Person p2)
+            {
+                if(!p1.getName().equalsIgnoreCase(p2.getName())){
+                    return p1.getName().compareTo(p2.getName());
+                }else{
+
+                    return p1.getSurname().compareTo(p2.getSurname());
+                }
+
+            }
+        };
+        return comp;
     }
 }
 

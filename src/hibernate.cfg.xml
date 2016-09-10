@@ -9,7 +9,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3307/spazigwt</property>
+        <property name="connection.url">jdbc:mysql://localhost:4000/spazigwt</property>
         <property name="connection.username">spazigwt</property>
         <property name="connection.password">spazigwtp</property>
 

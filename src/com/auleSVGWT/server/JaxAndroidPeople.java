@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,17 +29,26 @@ public class JaxAndroidPeople {
 
 
     @GET
-    public Response getAllPeople(){
-        try {
+    public Response getAllPeople(@QueryParam("number") int number, @QueryParam("search") String search){
+
+        if(number!=0 && search!=null){
+
             db= new DatabaseM();
-            /*personDTOs = db.getPerson();
-            String json = parsePeople(personDTOs).toString();*/
-            String json = db.getPeopleJson().toString();
+            String json = db.getPersonSearchJson(number,search).toString();
             return Response.ok(json, MediaType.APPLICATION_JSON).build();
-        }catch(Exception e){
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+
+        }else{
+            try {
+                db= new DatabaseM();
+                String json = db.getPeopleJson().toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
+            }catch(Exception e){
+                e.printStackTrace();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+
         }
+
 
     }
     @GET
@@ -46,20 +56,20 @@ public class JaxAndroidPeople {
     public Response getPerson(@PathParam("person") String person){
 
         try {
-            if(person.endsWith(".json")){
-                String per = person;
-                per = per.replace('_',' ');
-                System.out.println("la diggerenza è "+ per+"  "+person);
-                if(controlOfLettersandSpaceOnly(per.substring(0, per.lastIndexOf(".")))){
-                    db= new DatabaseM();
-                    /*personDTOs = db.getPerson(person.substring(0,person.lastIndexOf('_')),person.substring(person.lastIndexOf('_')+1,person.lastIndexOf(".")));
-                    String json = parsePeople(personDTOs).toString();*/
-                    String json = db.getPersonJson(per.substring(0,per.lastIndexOf(' ')),per.substring(per.lastIndexOf(' ')+1,per.lastIndexOf("."))).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
-
-                }
+            String per = person.replace('_',' ');
+            System.out.println("la diggerenza è "+ per+"  "+person);
+            if(controlOfLettersandSpaceOnly(per)){
+                db= new DatabaseM();
+                String json = db.getPersonJson(per.substring(0,per.lastIndexOf(' ')),per.substring(per.lastIndexOf(' ')+1)).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
             }
+            /*
+            if(person.endsWith(".json")){
+                String per = person;
+
+
+            }*/
 
 
 
@@ -77,19 +87,19 @@ public class JaxAndroidPeople {
     public Response getPeopleInRoom(@PathParam("buildFloor") String buildFloor,@PathParam("room") String room){
         System.out.println("get room people con "+ buildFloor+ " "+ room);
         try {
-            if(room.endsWith(".json")){
-                String ro = room.substring(0, room.lastIndexOf("."));
-                String build = buildFloor.replace('_',' ');
-                if(controlBuildFloorRoom(build, ro)){
-                    db= new DatabaseM();/*
-                    personDTOs = db.getPeopleInRoom(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), ro);
-                    String json = parsePeople(personDTOs).toString();*/
-                    String json = db.getPeopleInRoomJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), ro).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-                }
+            String build = buildFloor.replace('_',' ');
+            if(controlBuildFloorRoom(build, room)){
+                db= new DatabaseM();
+                String json = db.getPeopleInRoomJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1), room).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
             }
+            /*if(room.endsWith(".json")){
+                String ro = room.substring(0, room.lastIndexOf("."));
+
+
+            }*/
 
 
 
@@ -104,23 +114,24 @@ public class JaxAndroidPeople {
 
     @GET
     @Path("/lavoro/{buildFloor}")
-    public Response getWorkRoominFloor(@PathParam("buildFloor") String buildFloor){
+    public Response getWorkPeopleInFloor(@PathParam("buildFloor") String buildFloor){
 
         try {
-            if(buildFloor.endsWith(".json")){
-                String build = buildFloor.substring(0,buildFloor.lastIndexOf("."));
-                build = build.replace('_', ' ');
-                if(controlBuildFloor(build)){
-                    db= new DatabaseM();/*
-                    personDTOs = db.getOccupyOfFloorwithDate(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1));
-                    String json = parsePeople(personDTOs).toString();*/
-                    String json = db.getOccupyOfFloorwithDateJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1)).toString();
-                    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
+            String build = buildFloor.replace('_', ' ');
+            if(controlBuildFloor(build)){
+                db= new DatabaseM();
+                String json = db.getOccupyOfFloorwithDateJson(build.substring(0, build.lastIndexOf("-")), build.substring(build.lastIndexOf("-") + 1)).toString();
+                return Response.ok(json, MediaType.APPLICATION_JSON).build();
 
-                }
 
             }
+            /*
+            if(buildFloor.endsWith(".json")){
+                String build = buildFloor.substring(0, buildFloor.lastIndexOf("."));
+
+
+            }*/
 
 
 
@@ -182,6 +193,21 @@ public class JaxAndroidPeople {
 
     }
 
+    private boolean controlOfLettersOnly(String s) {
+
+
+        for(int i = 0; i < s.length(); i++) {
+
+            if (!Character.isLetter(s.charAt(i))){
+                System.out.println("il problema e nel controllo spazio lettera");
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
 
 
 
@@ -235,58 +261,8 @@ public class JaxAndroidPeople {
     }
 
 
-    /*
-
-    private JSONObject parsePeople(ArrayList<PersonDTO> personDTOs){
-        JSONArray arrayPersonJ = new JSONArray();
-        JSONObject personJSON;
-        JSONObject obj;
-
-        if(personDTOs.size()>0){
-
-            int j = 0;
-            for(PersonDTO personDTO : personDTOs){
-                personJSON = new JSONObject();
-                JSONObject link = new JSONObject();
-
-
-                personJSON.put("name", personDTO.getName());
-                personJSON.put("surname", personDTO.getSurname());
-                personJSON.put("role", personDTO.getRole().getName());
-                if(personDTO.getStartWork() != null){
-                    String sW = personDTO.getStartWork().toString();
-                    sW = sW.replaceAll("-"," ");
-                    personJSON.put("startWork",sW);
-                }else{
-                    personJSON.put("startWork","null");
-
-                }
-                if(personDTO.getEndWork() != null){
-                    String eW = personDTO.getEndWork().toString();
-                    eW = eW.replaceAll("-", " ");
-                    personJSON.put("endWork",eW);
-
-
-                }else{
-                    personJSON.put("endWork","null");
-
-                }
-
-                link.put("roomsOccPerson","/Android/stanze/persone/"+personDTO.getName()+"_"+personDTO.getSurname()+".json");
-
-                personJSON.put("link",link);
-
-                arrayPersonJ.add(j,personJSON);
-                j++;
 
 
 
-            }
 
-        }
-
-        obj= new JSONObject();
-        obj.put("people", arrayPersonJ);
-        return obj;
-    }*/
 }

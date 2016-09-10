@@ -2,11 +2,9 @@ package com.auleSVGWT.server;
 
 import com.auleSVGWT.client.dto.OccupyDTO;
 import com.auleSVGWT.client.dto.PersonDTO;
-import com.auleSVGWT.client.dto.RoomDTO;
 import com.auleSVGWT.client.shared.Global;
 import com.auleSVGWT.server.domain.Person;
 import com.auleSVGWT.server.domain.Room;
-import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
@@ -22,7 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.URI;
@@ -32,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by Utente on 10/08/2016.
  */
-@Path("/immagine")
+@Path("/immagini")
 public class JaxAndroidImage {
     final String path = "/res/imageAndroid";
     final String tmpPath = "/res/imagePng";
@@ -268,7 +265,7 @@ public class JaxAndroidImage {
 
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("non esiste il file cercato");
+            System.out.println("errore server nella ricerca svg");
 
         }
 
@@ -285,10 +282,10 @@ public class JaxAndroidImage {
                 if("map".equals(mod)){
 
                     if(file.exists()) {
-                        System.out.println("il file esiste modalita 0");
+                        System.out.println("il file esiste modalità 0");
                         return;
                     }else{
-                        System.out.println("sono in modalita  0  ed il file non esiste"+ fileName );
+                        System.out.println("modalità  0  ed il file non esiste"+ fileName );
                         modeZero(doc,fileName);
 
 
@@ -296,16 +293,86 @@ public class JaxAndroidImage {
 
 
                 }
-                if("selection".equals(mod)){
+                else if("selection".equals(mod)){
 
                     if(file.exists()) {
-                        System.out.println("il file esiste modalita 1");
+                        System.out.println("il file esiste modalità 1");
                         return;
                     }else {
-                        System.out.println("sono in modalita 1 ed il file esiste " + fileName);
+                        System.out.println("modalità 1 ed il file non esiste " + fileName);
                         modeOne(doc, idRoom, fileName);
                     }
                 }
+                else if("occupation".equals(mod)){
+                    System.out.println("modalità occupation "+fileName);
+
+
+                    ArrayList<String> room;
+                    room = listRoomsOfFloor(name);
+
+
+                        if(file.exists()) {
+                            java.util.Date date = new java.util.Date();
+                            long diff = date.getTime() - file.lastModified();
+
+                            if (diff >   2* 60 * 1000) {
+                                file.delete();
+                                System.out.println("sono passati i due minuti lo cancello modalita occupation");
+                                try{
+                                    modeTwo(room, doc,fileName);
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                            else{
+                                System.out.println("sono in modalita occupation non cacello");
+                                return;
+
+                            }
+
+                        }else {
+                            System.out.println("sono in modalita occupation non esiste");
+                            modeTwo(room, doc, fileName);
+                        }
+
+                        System.out.println("sono nella mod 2");
+
+
+
+
+                }
+                else if("work".equals(mod)){
+                     System.out.println("sono in modalità work "+fileName);
+
+                     ArrayList<String> room;
+                     room = listRoomsOfFloor(name);
+
+
+                    if(file.exists()) {
+                        java.util.Date date = new java.util.Date();
+                        long diff = date.getTime() - file.lastModified();
+
+                        if (diff >   2* 60 * 1000) {
+                            file.delete();
+                            System.out.println("sono passati i due minuti lo cancello modalità lavoro");
+                            try{
+                                modeThree(room, doc, fileName);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            System.out.println("sono in modalià lavoro non cacello");
+                            return;
+
+                        }
+
+                    }else {
+                        System.out.println("sono in modalità lavoro non esiste");
+                        modeThree(room, doc, fileName);
+                    }
+
+                }/*
                 else{
                     System.out.println("sono in modalita 2/3 "+fileName);
 
@@ -380,7 +447,7 @@ public class JaxAndroidImage {
 
                     }
 
-                }
+                }*/
 
 
 
@@ -395,14 +462,14 @@ public class JaxAndroidImage {
     }
 
     public void modeZero(Document doc,String fileName){
-        System.out.println("sono in modalita 0 "+fileName);
+        System.out.println("modalità 0 "+fileName);
         File file;
         String pngPathOut = servletContext.getRealPath(tmpPath);
         file = new File(pngPathOut+"/"+fileName);
-        System.out.println("sono in modalita 0 " + fileName);
+
 
         try{
-            System.out.println("il file non esiste");
+            System.out.println("modalità 0 il file non esiste");
 
             transcode(file,doc);
 
@@ -418,7 +485,7 @@ public class JaxAndroidImage {
     }
 
     public void modeOne(Document doc,String id,String fileName){
-        System.out.println("sono in modalita  "+fileName+" e id "+id);
+        System.out.println("modalità 1 "+fileName+" e id "+id);
 
         File file;
         String pngPathOut = servletContext.getRealPath(tmpPath);
@@ -439,11 +506,13 @@ public class JaxAndroidImage {
     }
 
 
-    public void modeTwo(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
+    public void modeTwo(ArrayList<String> strings,Document doc,String fileName){
+        System.out.println("modalità 2 "+fileName);
 
         int sum;
         int dim;
-        DatabaseM db = new DatabaseM();
+        //DatabaseM db = new DatabaseM();
+        db = new DatabaseM();
 
 
         for (String room : strings) {
@@ -452,23 +521,14 @@ public class JaxAndroidImage {
 
             String numRoom = room.substring(room.lastIndexOf("-")+1);
             String buildFLoor = room.substring(0, room.lastIndexOf("-"));
-            /*ArrayList<RoomDTO> rooms = db.getRoomInfo(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
-            if(rooms.size()!=0){
-                dim = rooms.get(0).getDimension();
-                System.out.println("la dim e:::."+dim);
 
-            }
-            ArrayList<OccupyDTO> occ = db.getOccupyOfRoom(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
-            for(OccupyDTO occupyDTO :occ){
-                sum += occupyDTO.getPerson().getRole().getSqm();
-            }*/
-            ArrayList<Room> rooms = db.getRoomInfoNotDTO(buildFLoor.substring(0, buildFLoor.lastIndexOf("-")), buildFLoor.substring(buildFLoor.lastIndexOf("-") + 1), numRoom);
+            ArrayList<Room> rooms = db.getRoomInfo(buildFLoor.substring(0, buildFLoor.lastIndexOf("-")), buildFLoor.substring(buildFLoor.lastIndexOf("-") + 1), numRoom);
             if(rooms.size()!=0){
                 dim = rooms.get(0).getDimension();
                 //System.out.println("la dim e:::."+dim);
 
             }
-            ArrayList<Person> persons = db.getPeopleInRoomNotDTO(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
+            ArrayList<Person> persons = db.getPeopleInRoom(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
             for(Person person :persons){
                 sum += person.getRole().getSqm();
             }
@@ -542,6 +602,45 @@ public class JaxAndroidImage {
 
     }
 
+    public void modeThree(ArrayList<String> strings,Document doc,String fileName){
+        System.out.println("modalità 3 "+fileName);
+        db = new DatabaseM();
+
+
+        File file;
+        String pngPathOut = servletContext.getRealPath(tmpPath);
+        file = new File(pngPathOut+"/"+fileName);
+
+
+        for (String room : strings) {
+
+            String numRoom = room.substring(room.lastIndexOf("-")+1);
+            String buildFLoor = room.substring(0, room.lastIndexOf("-"));
+
+            ArrayList<Person> persons = db.getPeopleInRoom(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
+            for(Person person :persons){
+                if(person.getEndWork()!= null){
+
+                    if(person.getEndWork().before(new Date(new java.util.Date().getTime()))){
+
+                        String style = doc.getElementById(room).getAttribute("style");
+                        style = style.replaceFirst("fill:none", Global.RED_FILL);
+                        doc.getElementById(room).setAttribute("style", style);
+                    }
+
+                }
+            }
+        }
+
+        try {
+            transcode(file,doc);
+
+        } catch (Exception c) {
+            c.printStackTrace();
+        }
+
+    }
+
 
 
     public void transcode(File file, Document doc)throws Exception{
@@ -562,75 +661,7 @@ public class JaxAndroidImage {
 
 
 
-    public void modeThree(ArrayList<String> strings, ArrayList<OccupyDTO> occupyDTOs,Document doc,String fileName){
-        DatabaseM db = new DatabaseM();
 
-
-        File file;
-        String pngPathOut = servletContext.getRealPath(tmpPath);
-        file = new File(pngPathOut+"/"+fileName);
-
-
-        for (String room : strings) {
-
-            String numRoom = room.substring(room.lastIndexOf("-")+1);
-            String buildFLoor = room.substring(0, room.lastIndexOf("-"));
-
-            ArrayList<Person> persons = db.getPeopleInRoomNotDTO(buildFLoor.substring(0,buildFLoor.lastIndexOf("-")),buildFLoor.substring(buildFLoor.lastIndexOf("-")+1),numRoom);
-            for(Person person :persons){
-                if(person.getEndWork()!= null){
-
-                    if(person.getEndWork().before(new Date(new java.util.Date().getTime()))){
-
-                        String style = doc.getElementById(room).getAttribute("style");
-                        style = style.replaceFirst("fill:none", Global.RED_FILL);
-                        doc.getElementById(room).setAttribute("style", style);
-
-                    }
-
-
-
-                }
-
-            }
-
-
-            /*
-
-            for (OccupyDTO occupyDTO : occupyDTOs) {
-                String s = "";
-                s += occupyDTO.getRoom().getBuilding().getName() + "-" + Integer.toString(occupyDTO.getRoom().getFloor()) +
-                        "-" + Integer.toString(occupyDTO.getRoom().getNumber());
-                if (room.equals(s)) {
-                    if(occupyDTO.getPerson().getEndWork() != null){
-                        if(occupyDTO.getPerson().getEndWork().before(new Date(new java.util.Date().getTime()))){
-                            String style = doc.getElementById(room).getAttribute("style");
-                            style = style.replaceFirst("fill:none", Global.RED_FILL);
-                            doc.getElementById(room).setAttribute("style", style);
-
-                        }
-                    }
-
-
-
-
-                }
-
-            }*/
-
-
-        }
-
-        try {
-            transcode(file,doc);
-
-
-
-        } catch (Exception c) {
-            c.printStackTrace();
-        }
-
-    }
 
 
 
@@ -647,28 +678,28 @@ public class JaxAndroidImage {
 
 
 
-            int counter =0;
-            String u ="";
+            //int counter =0;
+            //String u ="";
             NodeList n = doc.getElementsByTagName("rect");
             NodeList p = doc.getElementsByTagName("path");
             for(int i =0 ;i<n.getLength();i++){
                 //System.out.println(n.item(i).getTextContent());
                 if(((Element) n.item(i)).getAttribute("id").contains(text)){
-                    u+=((Element) n.item(i)).getAttribute("id")+" ";
+                    //u+=((Element) n.item(i)).getAttribute("id")+" ";
                     //System.out.println(((Element) n.item(i)).getAttribute("id"));
                     room.add(((Element) n.item(i)).getAttribute("id"));
 
-                    counter ++;
+                    //counter ++;
                 }
             }
             for(int i =0 ;i<p.getLength();i++) {
                 //System.out.println(p.item(i).getTextContent());
                 if(((Element) p.item(i)).getAttribute("id").contains(text)){
-                    u+=((Element) p.item(i)).getAttribute("id")+" ";
+                    //u+=((Element) p.item(i)).getAttribute("id")+" ";
                    // System.out.println(((Element) p.item(i)).getAttribute("id"));
                     room.add(((Element) p.item(i)).getAttribute("id"));
 
-                    counter ++;
+                    //counter ++;
                 }
             }
 

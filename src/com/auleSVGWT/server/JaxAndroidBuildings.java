@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by Utente on 10/08/2016.
  */
-@Path("/listaEdifici.json")
+@Path("/listaEdifici")
 public class JaxAndroidBuildings {
     final String path = "/res/imageAndroid";
 
@@ -34,7 +34,7 @@ public class JaxAndroidBuildings {
             return Response.ok(json, MediaType.APPLICATION_JSON).build();
         }catch(Exception e){
             e.printStackTrace();
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
     }
@@ -110,12 +110,12 @@ public class JaxAndroidBuildings {
                 JSONObject link = new JSONObject();
 
                 String building = buildingString.replace(' ','_');
-                link.put("imageRoom", "/Android/immagine/" + building + "-" + floorString + ".png");
-                link.put("imageRoomSpace","/Android/immagine/occupazione/" + building + "-" + floorString+".png");
-                link.put("imageRoomWork", "/Android/immagine/lavoro/" + building + "-" + floorString +".png");
-                link.put("roomsList","/Android/listaStanzePiano/"+building+"-"+floorString+".json");
-                link.put("peopleWork","/Android/persone/lavoro/"+building+"-"+floorString+".json");
-                link.put("roomsOccu","/Android/stanze/occupazione/"+building+"-"+floorString+".json");
+                link.put("imageFloor", "/Risorse/immagini/" + building + "-" + floorString + ".png");
+                link.put("imageRoomSpace","/Risorse/immagini/occupazione/" + building + "-" + floorString+".png");
+                link.put("imageRoomWork", "/Risorse/immagini/lavoro/" + building + "-" + floorString +".png");
+                link.put("roomsList","/Risorse/listaStanzePiano/"+building+"-"+floorString);
+                link.put("peopleWork","/Risorse/persone/lavoro/"+building+"-"+floorString);
+                link.put("roomsOccu","/Risorse/stanze/occupazione/"+building+"-"+floorString);
                 floor.put("floor", floorString);
                 floor.put("link", link);
                 arr.add(i, floor);
