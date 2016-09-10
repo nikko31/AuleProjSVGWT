@@ -25,7 +25,7 @@ USE `spazigwt` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `spazigwt`.`building` (
   `building_number` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `building_name` CHAR(30) NULL DEFAULT NULL COMMENT '',
+  `building_name` CHAR(30) NOT NULL COMMENT '',
   PRIMARY KEY (`building_number`)  COMMENT '',
   UNIQUE INDEX `building_name` (`building_name` ASC)  COMMENT '')
 ENGINE = InnoDB
