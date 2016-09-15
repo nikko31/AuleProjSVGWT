@@ -87,7 +87,7 @@ public class JaxRestBuildings {
 
             String build = buildingFloor.replace('_', ' ');
             if(controlBuildFloor(build)){
-                JSONArray arr = parseRoomList(listRoomsOnFloor(build), build);
+                JSONArray arr = parseSimpleRoomsList(listRoomsOnFloor(build), build);
                 if(arr != null){
                     String json = arr.toString();
                     return Response.ok(json, MediaType.APPLICATION_JSON).build();
@@ -309,7 +309,7 @@ public class JaxRestBuildings {
 
     //---------------------------------------------------METHOD FOR SIMPLE ROOM LIST-----------------------------------------
 
-    private JSONArray parseRoomList(ArrayList<Integer> rooms, String buildingFloor) {
+    private JSONArray parseSimpleRoomsList(ArrayList<Integer> rooms, String buildingFloor) {
 
         JSONArray arr = new JSONArray();
         Collections.sort(rooms);

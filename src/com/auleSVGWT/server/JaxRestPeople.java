@@ -35,7 +35,7 @@ public class JaxRestPeople {
         if(number!=0 && search!=null){
 
             String s= search.replace('_',' ');
-            if(controlOfLettersandSpaceOnly(s)){
+            if(controlOfLettersandSpaces(s)){
                 db= new DatabaseM();
                 JSONArray arr = db.getPersonSearchJson(number,s);
                 if(arr != null){
@@ -198,6 +198,18 @@ public class JaxRestPeople {
         }
 
         return counter == 1;
+
+    }
+    private boolean controlOfLettersandSpaces(String s) {
+
+        for(int i = 0; i < s.length(); i++) {
+            if (!Character.isLetter(s.charAt(i)) && s.charAt(i)!=' '){
+                System.out.println("il problema e nel controllo spazio lettera");
+                return false;
+            }
+        }
+
+       return true;
 
     }
 

@@ -136,9 +136,9 @@ public class DatabaseM {
 
             if (people.size() != 0) {
                 if (number > people.size()) {
-                    peopleJson = parsePeopleNew(new ArrayList<Person>(people.subList(0, people.size())));
+                    peopleJson = parsePeople(new ArrayList<Person>(people.subList(0, people.size())));
                 } else {
-                    peopleJson = parsePeopleNew(new ArrayList<Person>(people.subList(0, number)));
+                    peopleJson = parsePeople(new ArrayList<Person>(people.subList(0, number)));
                 }
 
             }
@@ -174,7 +174,7 @@ public class DatabaseM {
             ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.id=" + i).list());
 
             Collections.sort(people,Person.getCompByNameaftSurname());
-            peopleJson = parsePeopleNew(people);
+            peopleJson = parsePeople(people);
             tx.commit();
         }
         catch (Exception e) {
@@ -210,7 +210,7 @@ public class DatabaseM {
                     "o.room.floor=" + floor + " and o.room.number="+number).list());
 
             Collections.sort(people,Person.getCompByNameaftSurname());
-            peopleJson = parsePeopleNew(people);
+            peopleJson = parsePeople(people);
             tx.commit();
         }
         catch (Exception e) {
@@ -254,7 +254,7 @@ public class DatabaseM {
                 }
             }
             Collections.sort(people,Person.getCompByNameaftSurname());
-            peopleJson = parsePeopleNew(filteredPeople);
+            peopleJson = parsePeople(filteredPeople);
             tx.commit();
         }
         catch (Exception e) {
@@ -287,7 +287,7 @@ public class DatabaseM {
             tx = session.beginTransaction();
             ArrayList<Person> people = new ArrayList<Person>(session.createQuery("from Person ").list());
 
-            peopleJson = parsePeopleNew(people);
+            peopleJson = parsePeople(people);
 
             tx.commit();
         }
@@ -345,7 +345,7 @@ public class DatabaseM {
 
             Collections.sort(rooms,Room.getCompByName());
             Collections.sort(rooms,Room.getCompByNumber());
-            roomsJson = parseRoomsNew(rooms);
+            roomsJson = parseRooms(rooms);
 
 
 
@@ -381,7 +381,7 @@ public class DatabaseM {
 
             Collections.sort(rooms,Room.getCompByName());
             Collections.sort(rooms,Room.getCompByNumber());
-            roomsJson = parseRoomsNew(rooms);
+            roomsJson = parseRooms(rooms);
 
 
 
@@ -496,7 +496,7 @@ public class DatabaseM {
                     " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());
 
             Collections.sort(rooms,Room.getCompByNumber());
-            roomsJson = parseRoomsNew(rooms);
+            roomsJson = parseRooms(rooms);
             tx.commit();
         }
         catch (Exception e) {
@@ -554,7 +554,7 @@ public class DatabaseM {
 
 
     //------------------------------------------------------private Metod---------------------------------------------------------
-
+    /*
     private JSONObject parsePeople(ArrayList<Person> people){
         JSONArray arrayPersonJ = new JSONArray();
         JSONObject personJSON;
@@ -690,11 +690,11 @@ public class DatabaseM {
 
         return obj;
 
-    }
+    }*/
 
 
 
-    private JSONArray parsePeopleNew(ArrayList<Person> people){
+    private JSONArray parsePeople(ArrayList<Person> people){
         JSONArray arrayPeopleJson = new JSONArray();
 
 
@@ -716,7 +716,7 @@ public class DatabaseM {
 
     }
 
-    private JSONArray parseRoomsNew(ArrayList<Room> rooms){
+    private JSONArray parseRooms(ArrayList<Room> rooms){
         JSONArray arrayRoomsJson = new JSONArray();
 
 
@@ -742,16 +742,15 @@ public class DatabaseM {
     private JSONObject parsePerson(Person person){
 
         JSONObject personJSON = new JSONObject();
-        JSONObject obj;
 
-        personJSON.put("id",person.getId());
-        personJSON.put("name", person.getName());
-        personJSON.put("surname", person.getSurname());
-        personJSON.put("role", person.getRole().getName());
+        personJSON.put("id",""+person.getId());
+        personJSON.put("name",""+ person.getName());
+        personJSON.put("surname",""+ person.getSurname());
+        personJSON.put("role",""+ person.getRole().getName());
         if(person.getStartWork() != null){
             String sW = person.getStartWork().toString();
             sW = sW.replaceAll("-"," ");
-            personJSON.put("startWork",sW);
+            personJSON.put("startWork",""+sW);
         }else{
             personJSON.put("startWork","null");
 
@@ -759,7 +758,7 @@ public class DatabaseM {
         if(person.getEndWork() != null){
             String eW = person.getEndWork().toString();
             eW = eW.replaceAll("-", " ");
-            personJSON.put("endWork",eW);
+            personJSON.put("endWork",""+eW);
 
 
         }else{
@@ -770,7 +769,7 @@ public class DatabaseM {
         if(person.getPhone() != null){
             String phone = person.getPhone();
 
-            personJSON.put("phone",phone);
+            personJSON.put("phone",""+phone);
 
 
         }else{
@@ -780,7 +779,7 @@ public class DatabaseM {
         if(person.getEmail() != null){
             String email = person.getEmail();
 
-            personJSON.put("email",email);
+            personJSON.put("email",""+email);
 
 
         }else{
@@ -801,7 +800,7 @@ public class DatabaseM {
         JSONObject image = new JSONObject();
 
 
-        roomJson.put("id",room.getId());
+        roomJson.put("id",""+room.getId());
         roomJson.put("building",""+room.getBuilding().getName());
         roomJson.put("floor",""+room.getFloor());
         roomJson.put("number",""+room.getNumber());

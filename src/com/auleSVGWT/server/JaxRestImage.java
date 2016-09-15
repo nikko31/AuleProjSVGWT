@@ -55,29 +55,28 @@ public class JaxRestImage {
             String build = buildingFloor.replace('_', ' ');
             if (controlBuildFloor(build)) {
                 JSONObject obj = new JSONObject();
-                JSONObject link = new JSONObject();
                 JSONObject image;
                 obj.put("name",""+buildingFloor);
                 obj.put("extension","png");
                 obj.put("height","1280");
                 obj.put("width","720");
-                obj.put("PNGLink","/risorse/immagini//edifici/"+build+".png");
+                obj.put("PNGLink","/risorse/immagini/edifici/"+buildingFloor+".png");
 
                 image = new JSONObject();
-                image.put("restLink","/rest/immagini/edifici/"+build+ "/occupazione");
+                image.put("restLink","/rest/immagini/edifici/"+buildingFloor+ "/occupazione");
                 obj.put("imageFloorSpace",image);
 
                 image = new JSONObject();
-                image.put("restLink", "/rest/immagini/edifici/" + build + "/lavoro");
+                image.put("restLink", "/rest/immagini/edifici/" + buildingFloor + "/lavoro");
                 obj.put("imageFloorWork",image);
 
                 image = new JSONObject();
-                image.put("restLink", "/rest/immagini/edifici/"+build+"/stanze");
-                obj.put("imagesSelectRooms",image);
+                image.put("restLink", "/rest/immagini/edifici/"+buildingFloor+"/stanze");
+                obj.put("imagesSelectRoom",image);
 
-                obj.put("infoBuildingFloor","/rest/edifici/"+build);
+                obj.put("infoBuildingFloor","/rest/edifici/"+buildingFloor);
 
-                return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
+                return Response.ok(obj.toString(), MediaType.APPLICATION_JSON).build();
 
             }
         }catch (Exception e) {
@@ -103,8 +102,8 @@ public class JaxRestImage {
                 image.put("extension","png");
                 image.put("height","1280");
                 image.put("width","720");
-                image.put("PNGLink","/risorse/immagini/edifici/occupazione/"+build+".png");
-                image.put("infoFloorSpace","rest/edifici/"+build+"/occupazione/stanze");
+                image.put("PNGLink","/risorse/immagini/edifici/occupazione/"+buildingFloor+".png");
+                image.put("infoFloorSpace","rest/edifici/"+buildingFloor+"/occupazione/stanze");
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
 
@@ -136,8 +135,8 @@ public class JaxRestImage {
                 image.put("extension","png");
                 image.put("height","1280");
                 image.put("width","720");
-                image.put("PNGLink","/risorse/immagini/edifici/lavoro/"+build+".png");
-                image.put("peopleWork","rest/edifici/"+build+"lavoro/persone");
+                image.put("PNGLink","/risorse/immagini/edifici/lavoro/"+buildingFloor+".png");
+                image.put("infoFloorWork","rest/edifici/"+buildingFloor+"lavoro/persone");
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
             }
@@ -165,6 +164,7 @@ public class JaxRestImage {
 
                 for(String room : rooms){
                     String buildFloor = room.substring(0,room.lastIndexOf('-'));
+                    buildFloor = buildFloor.replace(' ', '_');
                     String number = room.substring(room.lastIndexOf('-')+1);
                     link.add("/rest/immagini/edifici/"+buildFloor+"/stanze/"+number);
                 }
@@ -199,8 +199,8 @@ public class JaxRestImage {
                 image.put("extension","png");
                 image.put("height", "1280");
                 image.put("width","720");
-                image.put("PNGLink","/risorse/immagini/edifici/stanze/"+build+"-"+numRoom+".png");
-                image.put("roomSelectInfo","/rest/edifici/"+build + "/stanze/" + numRoom);
+                image.put("PNGLink","/risorse/immagini/edifici/stanze/"+buildingFloor+"-"+numRoom+".png");
+                image.put("infoSelectRoom","/rest/edifici/"+buildingFloor+ "/stanze/" + numRoom);
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
             }
@@ -373,15 +373,15 @@ public class JaxRestImage {
 
                 floor.put("infoBuildingFloor","/rest/edifici/"+building+"-"+floorString);
 
-                floor.put("buildingFloor", "" + building + "-" + floorString);
+                //floor.put("buildingFloor", "" + building + "-" + floorString);
                 floor.put("floor", floorString);
-                floor.put("building", building);
 
                 arr.add( floor);
 
             }
-            //senza spazio
-            buildingFloors.put("name", buildingString);
+            //con spazio
+
+            buildingFloors.put("building", buildingString);
 
             buildingFloors.put("floors", arr);
 

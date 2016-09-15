@@ -224,7 +224,7 @@ public class ImagesHandler {
     public boolean controlBuildFloorRoom(String buildFloor,String room)throws Exception{
 
         if(controlBuildFloor(buildFloor)){
-            ArrayList<String> numberRooms = listRoomsOfFloor(buildFloor);
+            ArrayList<String> numberRooms = listRoomsOnFloor(buildFloor);
             for(String numberRoom : numberRooms){
                 if(numberRoom.equals(buildFloor + "-" + room)){
                     return true;
@@ -311,7 +311,7 @@ public class ImagesHandler {
 
 
                     ArrayList<String> room;
-                    room = listRoomsOfFloor(name);
+                    room = listRoomsOnFloor(name);
 
 
                     if(file.exists()) {
@@ -348,7 +348,7 @@ public class ImagesHandler {
                     System.out.println("sono in modalità work "+fileName);
 
                     ArrayList<String> room;
-                    room = listRoomsOfFloor(name);
+                    room = listRoomsOnFloor(name);
 
 
                     if(file.exists()) {
@@ -593,7 +593,7 @@ public class ImagesHandler {
 
 
 
-    public ArrayList<String> listRoomsOfFloor(String text){
+    public ArrayList<String> listRoomsOnFloor(String text){
         String fullPath = servletContext.getRealPath(path);
 
         URI uri = new File(fullPath+"/" + text + ".svg").toURI();
