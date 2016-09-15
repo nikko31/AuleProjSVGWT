@@ -106,11 +106,11 @@ public class Person implements Serializable {
             @Override
             public int compare(Person p1, Person p2)
             {
-                if(!p1.getName().equalsIgnoreCase(p2.getName())){
-                    return p1.getName().compareTo(p2.getName());
+                if(!p1.getSurname().equalsIgnoreCase(p2.getSurname())){
+                    return p1.getSurname().compareTo(p2.getSurname());
                 }else{
 
-                    return p1.getSurname().compareTo(p2.getSurname());
+                    return p1.getName().compareTo(p2.getName());
                 }
 
             }

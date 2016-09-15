@@ -80,10 +80,36 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
             public void onSuccess(Integer result) {
 
                 ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
+                Boolean flag;
                 for(PersonDTO personDTO : selectedPersons){
-                    occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
+                    flag = true;
+                    for (PersonDTO personDTO1 : roomPeopleDTO.getPeopleDTO()){
+                        if(personDTO1.getId() == personDTO.getId()){
+                            flag = false;
+                        }
+
+                    }
+                    if(flag){
+                        occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
+                    }
+
                 }
-                rpcService.saveRoomOccupy(roomPeopleDTO.getOccId(), occupyDTOs, new AsyncCallback<Long>() {
+                ArrayList<Long> occupyDTOsToRemove = new ArrayList<>();
+                int pos=0;
+                for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+                    flag = true;
+                    for(PersonDTO personDTO1 : selectedPersons){
+                        if(personDTO.getId() == personDTO1.getId()){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        occupyDTOsToRemove.add(roomPeopleDTO.getOccId().get(pos));
+                    }
+                    pos++;
+                }
+
+                rpcService.saveRoomOccupy(occupyDTOsToRemove, occupyDTOs, new AsyncCallback<Long>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         Window.alert("errore nel salvataggio");

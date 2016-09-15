@@ -8,6 +8,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.Query;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,29 +37,43 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public Integer saveRoom(RoomDTO roomDTO) {
         Room room = new Room(roomDTO);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(room);
-            session.getTransaction().commit();
-
-        } catch (Exception e) {
-            System.out.println("ERROR : saveRoom method fail ");
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: saveRoom method fail");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
         return room.getId();
     }
 
     @Override
     public Integer updateRoom(RoomDTO roomDTO) {
         com.auleSVGWT.server.domain.Room room = new com.auleSVGWT.server.domain.Room(roomDTO);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            System.out.println("provo a salvare la modifica...................");
+            tx = session.beginTransaction();
             session.update(room);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println("ERROR : updateRoom method fail ");
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: updateRoom method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
         return room.getId();
     }
 
@@ -66,57 +81,67 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     public ArrayList<PersonDTO> getPerson() {
         ArrayList<PersonDTO> personDTO = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             ArrayList<Person> persons = new ArrayList<>(session.createQuery("from Person ").list());
-
+            Collections.sort(persons,Person.getCompByNameaftSurname());
             personDTO.addAll(persons.stream().map(this::createPersonDTO).collect(Collectors.toList()));
-            session.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.out.println("ERROR : getPerson method fail ");
-            e.printStackTrace();
+
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getPerson method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
         return personDTO;
     }
 
     @Override
     public Integer deletePerson(int id) {
         deleteOccupyPerson(id);//prima elimino le relazioni
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             Query q = session.createQuery("delete Person p where p.id = " + id);
             q.executeUpdate();
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : deletePerson method fail");
-
+            tx.commit();
         }
-
-
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: deletePerson method fail");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
         return id;
     }
 
     @Override
     public Integer savePerson(PersonDTO personDTO) {
         Person person = new Person(personDTO);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(person);
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : savePerson method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: savePerson method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return person.getId();
     }
@@ -125,19 +150,21 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     public Integer updatePerson(PersonDTO personDTO) {
         com.auleSVGWT.server.domain.Person person = new com.auleSVGWT.server.domain.Person(personDTO);
 
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.update(person);
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : updatePerson method fail ");
-
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: updatePerson method fail");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return person.getId();
 
@@ -157,35 +184,41 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         for (Long id : ids) {
             //System.out.println("sto cancellando id ................" + id);
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction tx = null;
             try {
-                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-                session.beginTransaction();
+                tx = session.beginTransaction();
                 Query q = session.createQuery("delete Occupy o where o.id = " + id);
                 q.executeUpdate();
-                session.getTransaction().commit();
-
-
-            } catch (Exception e) {
-                System.out.println("ERROR : saveRoomOccupy method fail ");
-
+                tx.commit();
             }
+            catch (Exception e) {
+                if (tx!=null) tx.rollback();
+                System.out.println("error: saveRoomOccupy method fail");
+                e.printStackTrace();
+            }finally {
+                session.close();
+            }
+
         }
         for (OccupyDTO occupyDTO : occupyDTOs) {
 
             Occupy occupy = new Occupy(occupyDTO);
-
-
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction tx = null;
             try {
-                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-                session.beginTransaction();
+                tx = session.beginTransaction();
                 session.save(occupy);
-                session.getTransaction().commit();
-
-
-            } catch (Exception e) {
-                System.out.println("ERROR : saveRoomOccupy method fail ");
-
+                tx.commit();
             }
+            catch (Exception e) {
+                if (tx!=null) tx.rollback();
+                System.out.println("error: saveRoomOccupy method fail ");
+                e.printStackTrace();
+            }finally {
+                session.close();
+            }
+
         }
 
 
@@ -196,37 +229,45 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public Long saveOccupy(OccupyDTO occupyDTO) {
         Occupy occupy = new Occupy(occupyDTO);
-
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(occupy);
-            session.getTransaction().commit();
 
-
-        } catch (Exception e) {
-            System.out.println("ERROR : saveOccupy method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: saveOccupy method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return occupy.getId();
     }
 
     @Override
     public Long deleteOccupy(Long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             Query q = session.createQuery("delete Occupy o where o.id = " + id);
             q.executeUpdate();
-            session.getTransaction().commit();
 
-
-        } catch (Exception e) {
-            System.out.println("ERROR : deleteOccupy method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: deleteOccupy method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return id;
     }
@@ -234,22 +275,20 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public ArrayList<OccupyDTO> getOccupy() {
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             ArrayList<Occupy> occup = new ArrayList<>(session.createQuery("from Occupy ").list());
 
-            for (Occupy occupy : occup) {
-                occupyDTO.add(createOccupyDTO(occupy));
-            }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupy method fail ");
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupy method fail");
             e.printStackTrace();
+        }finally {
+            session.close();
         }
 
         return occupyDTO;
@@ -257,16 +296,23 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     //questo metodo serve perchè se elimino una persona prima devo eliminare tutte le sue relazioni con room
     private int deleteOccupyPerson(int id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             Query q = session.createQuery("delete Occupy O where O.person.id = " + id);
             q.executeUpdate();
-            session.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.out.println("ERROR : deleteOccupyPerson method fail ");
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: deleteOccupyPerson method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return id;
     }
@@ -279,9 +325,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<>();
         ArrayList<Person> people;
         ArrayList<Long> occ;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            org.hibernate.Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room ").list());
 
@@ -303,12 +350,17 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                     roomPeopleDTO.add(createRoomPeopleDTO(room, people, occ));
                 }
             }
-            session.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomsPeople method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoomsPeople method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return roomPeopleDTO;
     }
@@ -323,11 +375,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         ArrayList<Person> people = new ArrayList<>();
         RoomPeopleDTO roomPeopleDTO = new RoomPeopleDTO();
         boolean check = true;
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
-
+            tx = session.beginTransaction();
             ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("from Occupy ").list());
             ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room ").list());
 
@@ -359,14 +410,16 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             }
 
 
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoomPeople method fail ");
-            e.printStackTrace();
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoomPeople method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return roomPeopleDTO;
 
@@ -429,20 +482,22 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public ArrayList<RoleDTO> getRoles() {
         ArrayList<RoleDTO> rolesDTO = new ArrayList<>();
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             ArrayList<Role> roles = new ArrayList<>(session.createQuery("from Role").list());
             rolesDTO.addAll(roles.stream().map(this::createRoleDTO).collect(Collectors.toList()));
-            session.getTransaction().commit();
 
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getRoles method fail ");
-
+            tx.commit();
         }
-
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getRoles method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
 
         return rolesDTO;
     }
@@ -451,6 +506,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     public ArrayList<String> listaAulePiano(String edificiopiano) {
         ArrayList<String> aule = new ArrayList<>();
         JSONParser parser = new JSONParser();
+
         try {
 
             Object obj = parser.parse(new FileReader("doc.JSON"));
@@ -495,17 +551,21 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     public Integer saveRole(RoleDTO roleDTO) {
         Role role = new Role(roleDTO);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(role);
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : saveRole  method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: saveRole  method fail ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return new Integer(role.getId());
 
@@ -513,17 +573,21 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     public Integer updateRole(RoleDTO roleDTO) {
         Role role = new Role(roleDTO);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.update(role);
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : updateRole method fail ");
-
+            tx.commit();
         }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error:  updateRole method fail  ");
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 
         return role.getId();
 
@@ -668,10 +732,10 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     public ArrayList<OccupyDTO> getOccupySearch(String part1, String part2) {
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try {
-
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             ArrayList<Occupy> occup = new ArrayList<>((session.createQuery("from Occupy where person.name='" + part1 + "' and person.surname='" + part2 + "'").list()));
 
             if (occup.size() > 0) {
@@ -681,13 +745,14 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
 
             }
-
-            session.getTransaction().commit();
-
-
-        } catch (Exception e) {
-            System.out.println("ERROR : getOccupySearch method fail ");
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            System.out.println("error: getOccupySearch method fail ");
             e.printStackTrace();
+        }finally {
+            session.close();
         }
 
         return occupyDTO;

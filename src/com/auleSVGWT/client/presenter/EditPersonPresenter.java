@@ -38,24 +38,40 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
     @Override
     public void onSaveButtonClicked() {
         String phone="";
-        personDTO.setName(view.getFirstName().getValue());
-        personDTO.setSurname(view.getLastName().getValue());
-        personDTO.setEmail(view.getEmailAddress().getValue());
-        personDTO.setStartWork( new Date(view.getStartWork().getValue().getTime()));
-        personDTO.setEndWork( new Date(view.getEndWork().getValue().getTime()));
-
-        phone=view.getPhone().getValue();
-        phone=phone.replace(" ","");
-        phone=phone.replace("-","");
-        if(phone!=""){
-            if(checkPhoneNumber(phone))
-                personDTO.setPhone(phone);
-            else
-                Window.alert("Errore inserimento numero di telefono");
+        if(view.getFirstName().getValue() != null){
+            personDTO.setName(view.getFirstName().getValue());
         }
-        else
-            personDTO.setPhone("");
-        personDTO.setRole(view.getRole().getValue());
+        if(view.getLastName().getValue() != null){
+            personDTO.setSurname(view.getLastName().getValue());
+        }
+        if(view.getEmailAddress().getValue() != null){
+            if(view.getEmailAddress().getValue().contains("@") ){
+                personDTO.setEmail(view.getEmailAddress().getValue());
+            }
+
+        }
+        if(view.getStartWork().getValue() != null){
+            personDTO.setStartWork(new Date(view.getStartWork().getValue().getTime()));
+        }
+        if(view.getEndWork().getValue() != null){
+            personDTO.setEndWork(new Date(view.getEndWork().getValue().getTime()));
+        }
+        if(view.getPhone().getValue() != null){
+            phone=view.getPhone().getValue();
+            phone=phone.replace(" ","");
+            phone=phone.replace("-","");
+            if(phone!=""){
+                if(checkPhoneNumber(phone))
+                    personDTO.setPhone(phone);
+                else
+                    Window.alert("Errore inserimento numero di telefon");
+            }
+            else
+                personDTO.setPhone(null);
+        }
+        if(view.getRole().getValue() != null) {
+            personDTO.setRole(view.getRole().getValue());
+        }
         if(this.personDTO.getId()<0){
             rpcService.savePerson(personDTO, new AsyncCallback<Integer>() {
                 @Override
