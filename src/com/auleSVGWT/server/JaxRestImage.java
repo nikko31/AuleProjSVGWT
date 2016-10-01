@@ -102,7 +102,7 @@ public class JaxRestImage {
                 image.put("extension","png");
                 image.put("height","1280");
                 image.put("width","720");
-                image.put("PNGLink","/risorse/immagini/edifici/occupazione/"+buildingFloor+".png");
+                image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_"+buildingFloor+".png");
                 image.put("infoFloorSpace","rest/edifici/"+buildingFloor+"/occupazione/stanze");
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
@@ -135,7 +135,7 @@ public class JaxRestImage {
                 image.put("extension","png");
                 image.put("height","1280");
                 image.put("width","720");
-                image.put("PNGLink","/risorse/immagini/edifici/lavoro/"+buildingFloor+".png");
+                image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+buildingFloor+".png");
                 image.put("infoFloorWork","rest/edifici/"+buildingFloor+"lavoro/persone");
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 

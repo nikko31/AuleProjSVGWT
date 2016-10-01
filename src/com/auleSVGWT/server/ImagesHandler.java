@@ -82,9 +82,12 @@ public class ImagesHandler {
     @Path("/occupazione/{buildingFloor}")
     public Response getOccupationImage(@PathParam("buildingFloor")String buildingFloor) {
 
+
+
         try {
-            if (buildingFloor.endsWith(".png")) {
-                String build = buildingFloor.substring(0, buildingFloor.lastIndexOf("."));
+            if (buildingFloor.startsWith("occu_") && buildingFloor.endsWith(".png")) {
+                String build = buildingFloor.substring(buildingFloor.indexOf('_')+1);
+                build = build.substring(0,build.lastIndexOf("."));
                 build = build.replace('_', ' ');
                 if (controlBuildFloor(build)) {
                     String pngPathOut = servletContext.getRealPath(tmpPath);
@@ -125,8 +128,9 @@ public class ImagesHandler {
     public Response getWorkImage(@PathParam("buildingFloor")String buildingFloor) {
 
         try {
-            if (buildingFloor.endsWith(".png")) {
-                String build = buildingFloor.substring(0, buildingFloor.lastIndexOf("."));
+            if (buildingFloor.startsWith("work_") && buildingFloor.endsWith(".png")) {
+                String build = buildingFloor.substring(buildingFloor.indexOf('_')+1);
+                build = build.substring(0, build.lastIndexOf("."));
                 build = build.replace('_', ' ');
                 if (controlBuildFloor(build)) {
 
@@ -171,10 +175,11 @@ public class ImagesHandler {
                 String room = buildingFloorNumb.substring(string.lastIndexOf('-')+1,string.indexOf(".png"));
                 System.out.println(room+"...........");
                 if(controlBuildFloorRoom(buildFloor, room)){
-                    Convert(buildFloor,"selection",buildFloor+"-"+room,buildFloor+"-"+room);
+                    Convert(buildFloor,"selection",buildFloor+"-"+room,buildingFloorNumb);
                     String pngPathOut = servletContext.getRealPath(tmpPath);
 
-                    File f = new File(pngPathOut+"/"+buildFloor+"-"+room);
+                    //modifico
+                    File f = new File(pngPathOut+"/"+buildingFloorNumb);
                     // System.out.println(pngPathOut+"/"+buildingFloor+"-"+numRoom);
 
                     if (!f.exists()) {
@@ -290,8 +295,6 @@ public class ImagesHandler {
                     }else{
                         System.out.println("modalità  0  ed il file non esiste"+ fileName );
                         modeZero(doc,fileName);
-
-
                     }
 
 
@@ -320,7 +323,7 @@ public class ImagesHandler {
 
                         if (diff >   2* 60 * 1000) {
                             file.delete();
-                            System.out.println("sono passati i due minuti lo cancello modalita occupation");
+                            System.out.println("sono passati i due minuti lo cancello modalità 2");
                             try{
                                 modeTwo(room, doc,fileName);
                             }catch (Exception e){
@@ -328,13 +331,13 @@ public class ImagesHandler {
                             }
                         }
                         else{
-                            System.out.println("sono in modalita occupation non cacello");
+                            System.out.println("sono in modalità 2 non cacello");
                             return;
 
                         }
 
                     }else {
-                        System.out.println("sono in modalita occupation non esiste");
+                        System.out.println("sono in modalità 2 non esiste");
                         modeTwo(room, doc, fileName);
                     }
 
@@ -345,7 +348,7 @@ public class ImagesHandler {
 
                 }
                 else if("work".equals(mod)){
-                    System.out.println("sono in modalità work "+fileName);
+                    System.out.println("sono in modalità 3 "+fileName);
 
                     ArrayList<String> room;
                     room = listRoomsOnFloor(name);
@@ -357,7 +360,7 @@ public class ImagesHandler {
 
                         if (diff >   2* 60 * 1000) {
                             file.delete();
-                            System.out.println("sono passati i due minuti lo cancello modalità lavoro");
+                            System.out.println("sono passati i due minuti lo cancello modalità 3");
                             try{
                                 modeThree(room, doc, fileName);
                             }catch (Exception e){
@@ -365,13 +368,13 @@ public class ImagesHandler {
                             }
                         }
                         else{
-                            System.out.println("sono in modalià lavoro non cacello");
+                            System.out.println("sono in modalià 3 non cacello");
                             return;
 
                         }
 
                     }else {
-                        System.out.println("sono in modalità lavoro non esiste");
+                        System.out.println("sono in modalità 3 non esiste");
                         modeThree(room, doc, fileName);
                     }
 
@@ -380,8 +383,9 @@ public class ImagesHandler {
 
 
 
-            } catch (IOException v) {
-                v.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("errore server nella conversione");
+                e.printStackTrace();
             }
 
         }
@@ -579,9 +583,9 @@ public class ImagesHandler {
 
         TranscoderInput input = new TranscoderInput(doc);
         TranscoderOutput output = new TranscoderOutput(ostream);
-        System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+        System.out.println("Inizio conversione AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
         transcoder.transcode(input, output);
-        System.out.println("AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
+        System.out.println("Fine conversione AllocatedMemory: \t" + (Runtime.getRuntime().totalMemory() / 1024) + " Kb");
         ostream.flush();
         ostream.close();
 

@@ -429,12 +429,12 @@ public class JaxRestBuildings {
 
                     image = new JSONObject();
                     image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/occupazione");
-                    image.put("PNGLink","/risorse/immagini/edifici/occupazione/" + building + "-" + floorString+".png");
+                    image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + building + "-" + floorString+".png");
                     floor.put("imageFloorSpace",image);
 
                     image = new JSONObject();
                     image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/lavoro");
-                    image.put("PNGLink","/risorse/immagini/edifici/lavoro/"+ building + "-" + floorString +".png");
+                    image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ building + "-" + floorString +".png");
                     floor.put("imageFloorWork",image);
 
 
@@ -479,12 +479,12 @@ public class JaxRestBuildings {
 
         image = new JSONObject();
         image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/occupazione");
-        image.put("PNGLink","/risorse/immagini/edifici/occupazione/" + buildFloor+".png");
+        image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + buildFloor+".png");
         build.put("imageFloorSpace",image);
 
         image = new JSONObject();
         image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/lavoro");
-        image.put("PNGLink","/risorse/immagini/edifici/lavoro/"+ buildFloor +".png");
+        image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ buildFloor +".png");
         build.put("imageFloorWork",image);
 
 

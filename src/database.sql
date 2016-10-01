@@ -59,7 +59,6 @@ CREATE TABLE IF NOT EXISTS `spazigwt`.`person` (
   `email` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
   `phone` VARCHAR(15) NULL DEFAULT NULL COMMENT '',
   PRIMARY KEY (`person_id`)  COMMENT '',
-  UNIQUE INDEX `person_name` (`person_name` ASC, `person_surname` ASC)  COMMENT '',
   UNIQUE INDEX `person_email_uindex` (`email` ASC)  COMMENT '',
   UNIQUE INDEX `person_phone_uindex` (`phone` ASC)  COMMENT '',
   INDEX `ibfk_4` (`role_id` ASC)  COMMENT '',
