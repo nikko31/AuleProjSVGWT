@@ -24,6 +24,7 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
     private final AuleSVGWTServiceAsync rpcService;
     private EditPersonView<PersonDTO> view;
     private final EventBus eventBus;
+    private boolean flag;
 
     public EditPersonPresenter(EventBus eventBus, AuleSVGWTServiceAsync rpcService, EditPersonViewImpl editPersonView, PersonDTO personDTO) {
         this.rpcService = rpcService;
@@ -32,77 +33,131 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
         this.view = editPersonView;
         this.view.setPresenter(this);
 
+
     }
 
 
     @Override
     public void onSaveButtonClicked() {
-        String phone="";
-        if(view.getFirstName().getValue() != null){
-            personDTO.setName(view.getFirstName().getValue());
-        }
-        if(view.getLastName().getValue() != null){
-            personDTO.setSurname(view.getLastName().getValue());
-        }
-        if(view.getEmailAddress().getValue() != null){
-            if(view.getEmailAddress().getValue().contains("@") ){
-                personDTO.setEmail(view.getEmailAddress().getValue());
-            }
 
-        }
-        if(view.getStartWork().getValue() != null){
-            personDTO.setStartWork(new Date(view.getStartWork().getValue().getTime()));
-        }
-        if(view.getEndWork().getValue() != null){
-            personDTO.setEndWork(new Date(view.getEndWork().getValue().getTime()));
-        }
-        if(view.getPhone().getValue() != null){
-            phone=view.getPhone().getValue();
-            phone=phone.replace(" ","");
-            phone=phone.replace("-","");
-            if(phone!=""){
-                if(checkPhoneNumber(phone))
-                    personDTO.setPhone(phone);
-                else
-                    Window.alert("Errore inserimento numero di telefon");
+
+        String name = view.getFirstName().getValue();
+        String surname = view.getLastName().getValue();
+        String email = view.getEmailAddress().getValue();
+        String phone = view.getPhone().getValue();
+        boolean flag2 = false;
+
+        String msg1 = "Questi parametri sono stati inseriti in modo errato:\n";
+
+        if(name != null){
+            if(checkPersonNameOrSurname(name) && name.length()>2 && name.length()<30){
+                personDTO.setName(name);
+            }else{
+                msg1+=" nome,";
+                flag2 = true;
             }
-            else
-                personDTO.setPhone(null);
+        }else{
+            msg1+=" nome,";
+            flag2 = true;
         }
+        //-----------------------------
+        if(surname != null){
+            if(checkPersonNameOrSurname(surname) && surname.length()>2 && surname.length()<30){
+                personDTO.setSurname(surname);
+            }else{
+                msg1+=" cognome,";
+                flag2 = true;
+            }
+        }else{
+            msg1+=" cognome,";
+            flag2 = true;
+        }
+        //----------------------------
         if(view.getRole().getValue() != null) {
             personDTO.setRole(view.getRole().getValue());
+        }else{
+            msg1+=" ruolo,";
+            flag2 = true;
         }
-        if(this.personDTO.getId()<0){
-            rpcService.savePerson(personDTO, new AsyncCallback<Integer>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    Window.alert("Errore durante il salvataggio della persona.");
+        //------------------------------
+        if(email != null){
+            email = email.replace(" ","");
+            if(!email.equals("") ){
+                if(checkEmail(email) && email.contains("@") && email.length()<255){
+                    personDTO.setEmail(email);
+                }else{
+                    msg1+=" email,";
+                    flag2 = true;
+
+                }
+            }
+
+
+        }
+        //--------------------------------------------
+        if(phone != null){
+            phone=phone.replace(" ","");
+            phone=phone.replace("-","");
+            if(!phone.equals("")){
+                if(checkPhoneNumber(phone)  && phone.length()>5 && phone.length()<15){
+                    personDTO.setPhone(phone);
+                }
+                else{
+                    flag2 = true;
+                    msg1+=" numero di telefono,";
                 }
 
-                @Override
-                public void onSuccess(Integer result) {
-                    History.back();
-                }
-            });
-        }
-        else {
-            rpcService.updatePerson(personDTO, new AsyncCallback<Integer>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    Window.alert("Errore nell'update della persona.");
-                }
+            }
 
-                @Override
-                public void onSuccess(Integer result) {
-                    History.back();
-                }
-            });
         }
+        //--------------------------------------
+        if (view.getStartWork().getValue() != null){
+            personDTO.setStartWork(new Date(view.getStartWork().getValue().getTime()));
+        }
+        //-------------------------------------
+        if (view.getEndWork().getValue() != null){
+            personDTO.setEndWork(new Date(view.getEndWork().getValue().getTime()));
+        }
+        //--------------------------------------
+
+        if (flag2){
+            Window.alert(msg1);
+        }
+
+        if(!flag2){
+            if(this.personDTO.getId()<0){
+                rpcService.savePerson(personDTO, new AsyncCallback<Integer>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Errore durante il salvataggio della persona.");
+                    }
+
+                    @Override
+                    public void onSuccess(Integer result) {
+                        History.back();
+                    }
+                });
+            }
+            else {
+                rpcService.updatePerson(personDTO, new AsyncCallback<Integer>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Errore nell'update della persona.");
+                    }
+
+                    @Override
+                    public void onSuccess(Integer result) {
+                        History.back();
+                    }
+                });
+            }
+
+        }
+
     }
 
     public boolean checkPhoneNumber(String phone){
-        phone=phone.replace(" ","");
-        phone=phone.replace("-","");
+
         for(int c=0;c<phone.length();c++){
             if(c==0 && !(phone.charAt(0)=='+'||Character.isDigit(phone.charAt(0)))){
                 return false;
@@ -114,6 +169,26 @@ public class EditPersonPresenter implements Presenter, EditPersonView.Presenter<
             }
         }
         return true;
+    }
+
+    public boolean checkPersonNameOrSurname(String string){
+        for(int c=0;c<string.length();c++){
+            if(!Character.isLetter(string.charAt(c)) && string.charAt(c)!='\'' && string.charAt(c) !=' ' ){
+                return false;
+            }
+        }
+        return true;
+
+    }
+    public boolean checkEmail(String string){
+        for(int c=0;c<string.length();c++){
+            if(!Character.isLetter(string.charAt(c)) && !Character.isDigit(string.charAt(c))  &&  string.charAt(c)!='\''
+                    && string.charAt(c) !=' ' &&  string.charAt(c)!='.'  &&  string.charAt(c)!='@'){
+                return false;
+            }
+        }
+        return true;
+
     }
     @Override
     public void onCancelButtonClicked() {

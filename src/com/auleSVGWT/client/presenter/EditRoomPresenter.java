@@ -49,80 +49,130 @@ public class EditRoomPresenter implements Presenter, EditRoomView.Presenter<Room
     }
     @Override
     public void onSaveButtonClicked() {
-        String strTxt="";
+
         RoomDTO roomDTO=roomPeopleDTO.getRoomDTO();
-        roomDTO.setDimension(Integer.valueOf(view.getMtQ().getValue()));
-        roomDTO.setMaintenance(view.getMaintenance().getValue());
-        strTxt=view.getSockets().getValue();
-        strTxt=strTxt.replace(" ","");
-        if(strTxt!=""){
-            if(checkNumb(strTxt))
-                roomDTO.setSocket(Integer.valueOf(strTxt));
-            else
-                Window.alert("Errore inserimento numero del numero di porte di rete.");
-        }
 
-        strTxt=view.getNumSeats().getValue();
-        strTxt=strTxt.replace(" ","");
-        if(strTxt!=""){
-            if(checkNumb(strTxt))
-                roomDTO.setMaxPerson(Integer.valueOf(strTxt));
-            else
-                Window.alert("Errore inserimento numero del numero massimo di posti.");
-        }
+        String mtq = view.getMtQ().getValue();
+        String maintenance = view.getMaintenance().getValue();
+        String socket = view.getSockets().getValue();
+        String seat = view.getNumSeats().getValue();
+        boolean flag2 = false;
 
-        rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("errore nel salvataggio");
+        String msg1 = "Questi parametri sono stati inseriti in modo errato:\n";
+
+        if(mtq != null){
+            mtq = mtq.replace(" ","");
+            if(!mtq.equals("") && checkNumb(mtq) && mtq.length()>=1 && mtq.length()<10){
+                roomDTO.setDimension(Integer.valueOf(mtq));
+            }else{
+                flag2 = true;
+                msg1+=" metri quadrati,";
+                roomDTO.setDimension(0);
             }
-            @Override
-            public void onSuccess(Integer result) {
+        }else{
+            roomDTO.setDimension(0);
+        }
+        //--------------------------------------------------
+        if(socket != null){
+            socket = socket.replace(" ","");
+            if(!socket.equals("") && checkNumb(socket) && socket.length()>=1 && socket.length()<10){
+                roomDTO.setSocket(Integer.valueOf(socket));
+            }else{
+                flag2 = true;
+                msg1+=" socket,";
+                roomDTO.setSocket(0);
+            }
+        }else{
+            roomDTO.setSocket(0);
+        }
+        //---------------------------------
+        if(seat != null){
+            seat = seat.replace(" ","");
+            if(!seat.equals("") &&checkNumb(seat) && seat.length()>=1 && seat.length()<10){
+                roomDTO.setMaxPeople(Integer.valueOf(seat));
+            }else{
+                flag2 = true;
+                msg1+=" numero posti,";
+                roomDTO.setMaxPeople(0);
+            }
+        }else{
+            roomDTO.setMaxPeople(0);
+        }
+        //---------------------------------
+        if(maintenance !=null){
+            if(maintenance.length()>=5 && maintenance.length()<200){
+                roomDTO.setMaintenance(maintenance);
+            }else{
+                roomDTO.setMaintenance("nessuna informazione");
+            }
 
-                ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
-                Boolean flag;
-                for(PersonDTO personDTO : selectedPersons){
-                    flag = true;
-                    for (PersonDTO personDTO1 : roomPeopleDTO.getPeopleDTO()){
-                        if(personDTO1.getId() == personDTO.getId()){
-                            flag = false;
+        }else{
+            roomDTO.setMaintenance(null);
+        }
+
+
+
+
+        if(flag2){
+            Window.alert(msg1);
+        }
+
+        if(!flag2){
+            rpcService.updateRoom(roomDTO, new AsyncCallback<Integer>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    Window.alert("errore nel salvataggio");
+                }
+                @Override
+                public void onSuccess(Integer result) {
+
+                    ArrayList<OccupyDTO> occupyDTOs = new ArrayList<>();
+                    Boolean flag;
+                    for(PersonDTO personDTO : selectedPersons){
+                        flag = true;
+                        for (PersonDTO personDTO1 : roomPeopleDTO.getPeopleDTO()){
+                            if(personDTO1.getId() == personDTO.getId()){
+                                flag = false;
+                            }
+
+                        }
+                        if(flag){
+                            occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
                         }
 
                     }
-                    if(flag){
-                        occupyDTOs.add(new OccupyDTO(roomPeopleDTO.getRoomDTO(),personDTO));
-                    }
-
-                }
-                ArrayList<Long> occupyDTOsToRemove = new ArrayList<>();
-                int pos=0;
-                for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
-                    flag = true;
-                    for(PersonDTO personDTO1 : selectedPersons){
-                        if(personDTO.getId() == personDTO1.getId()){
-                            flag = false;
+                    ArrayList<Long> occupyDTOsToRemove = new ArrayList<>();
+                    int pos=0;
+                    for(PersonDTO personDTO : roomPeopleDTO.getPeopleDTO()){
+                        flag = true;
+                        for(PersonDTO personDTO1 : selectedPersons){
+                            if(personDTO.getId() == personDTO1.getId()){
+                                flag = false;
+                            }
                         }
+                        if(flag){
+                            occupyDTOsToRemove.add(roomPeopleDTO.getOccId().get(pos));
+                        }
+                        pos++;
                     }
-                    if(flag){
-                        occupyDTOsToRemove.add(roomPeopleDTO.getOccId().get(pos));
-                    }
-                    pos++;
+
+                    rpcService.saveRoomOccupy(occupyDTOsToRemove, occupyDTOs, new AsyncCallback<Long>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert("errore nel salvataggio");
+                        }
+                        @Override
+                        public void onSuccess(Long result) {
+                            eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),
+                                    new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString()));
+
+                        }
+                    });
                 }
+            });
 
-                rpcService.saveRoomOccupy(occupyDTOsToRemove, occupyDTOs, new AsyncCallback<Long>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        Window.alert("errore nel salvataggio");
-                    }
-                    @Override
-                    public void onSuccess(Long result) {
-                        eventBus.fireEvent(new ShowRoomEvent(roomPeopleDTO.getRoomDTO().getBuilding().getName(), new Integer(roomPeopleDTO.getRoomDTO().getFloor()).toString(),
-                                new Integer(roomPeopleDTO.getRoomDTO().getNumber()).toString()));
+        }
 
-                    }
-                });
-            }
-        });
 
 
 
