@@ -13,17 +13,24 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 @Path("/edifici")
 public class JaxRestBuildings {
     private final String path = "/res/imageAndroid";
     private DatabaseM db;
+    public static String REST="/rest";
+    public static String RESOURCE ="/risorse/immagini";
+    private String s;
+    private UriBuilder u;
+    private Map<String,String> m;
     @Context
     private ServletContext servletContext;
 
@@ -197,7 +204,7 @@ public class JaxRestBuildings {
 
     }
     @GET
-    @Path("{buildFloor}/lavoro/persone")
+    @Path("/{buildFloor}/lavoro/persone")
     public Response getEndWorkPeopleOnFloor(@PathParam("buildFloor") String buildFloor){
 
         try {
@@ -311,6 +318,7 @@ public class JaxRestBuildings {
 
     private JSONArray parseSimpleRoomsList(ArrayList<Integer> rooms, String buildingFloor) {
 
+
         JSONArray arr = new JSONArray();
         Collections.sort(rooms);
 
@@ -326,11 +334,51 @@ public class JaxRestBuildings {
                 String num =""+ String.valueOf(room);
 
 
-                image.put("restLink","/rest/immagini/edifici/"+buildingFloor+"/stanze/"+num);
-                image.put("PNGLink","/risorse/immagini/edifici/stanze/"+buildingFloor+"-"+num+".png");
+
+                //--------------------------------
+                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getRoomImage");
+                m = new HashMap<>();
+                m.put("buildingFloor",buildingFloor);
+                m.put("numRoom",num);
+                s+=u.buildFromEncodedMap(m).toString();
+                //System.out.println("mi da ................" + s);
+                //image.put("restLink","/rest/immagini/edifici/"+buildingFloor+"/stanze/"+num);
+                image.put("restLink",REST+s);
+
+                //--------------------------------
+                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getRoomImage");
+                m = new HashMap<>();
+                m.put("buildingFloorNumb",buildingFloor+"-"+num+".png");
+                m.put("room",num);
+                s+=u.buildFromEncodedMap(m).toString();
+                //System.out.println("mi da ................" + s + ".png");
+                //image.put("PNGLink","/risorse/immagini/edifici/stanze/"+buildingFloor+"-"+num+".png");
+                image.put("PNGLink",RESOURCE+s);
                 ro.put("imageSelectRoom",image);
-                ro.put("infoSelectRoom","/rest/edifici/"+buildingFloor + "/stanze/" + num);
-                ro.put("infoPeopleInRoom","/rest/edifici/"+buildingFloor + "/stanze/" + num+"/persone");
+
+                //--------------------------------
+                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getRoomInfo");
+                m = new HashMap<>();
+                m.put("buildFloor",buildingFloor);
+                m.put("room", num);
+                s+=u.buildFromEncodedMap(m).toString();
+                //System.out.println("mi da ................" + s);
+                //ro.put("infoSelectRoom","/rest/edifici/"+buildingFloor + "/stanze/" + num);
+                ro.put("infoSelectRoom",REST+s);
+
+                //--------------------------------
+                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getPeopleInRoom");
+                m = new HashMap<>();
+                m.put("buildFloor",buildingFloor);
+                m.put("room", num);
+                s+=u.buildFromEncodedMap(m).toString();
+                //System.out.println("mi da ................" + s);
+                //ro.put("infoPeopleInRoom","/rest/edifici/"+buildingFloor + "/stanze/" + num+"/persone");
+                ro.put("infoPeopleInRoom",REST+s);
 
 
                 ro.put("room", "" + room);
@@ -404,6 +452,7 @@ public class JaxRestBuildings {
     private JSONArray  parseBuildingsJSON(HashMap<String, ArrayList<String>> buildings){
 
 
+
         JSONArray buildingsFloors = new JSONArray();
         if(buildings.keySet().size()>0){
             for (String buildingString : buildings.keySet()) {
@@ -422,25 +471,105 @@ public class JaxRestBuildings {
 
                     String building = buildingString.replace(' ','_');
 
+
+
+
+
+                    //--------------------------------
                     image = new JSONObject();
-                    image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString);
-                    image.put("PNGLink","/risorse/immagini/edifici/" + building + "-" + floorString + ".png");
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getFloorImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor",building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString);
+                    image.put("restLink",REST+s);
+
+                    //-----------------------------
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getFloorImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor",building + "-" + floorString+".png");
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s + ".png");
+                    //image.put("PNGLink","/risorse/immagini/edifici/" + building + "-" + floorString + ".png");
+                    image.put("PNGLink",RESOURCE+s);
                     floor.put("imageFloor",image);
 
+                    //---------------------------
                     image = new JSONObject();
-                    image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/occupazione");
-                    image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + building + "-" + floorString+".png");
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getOccupationImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor",building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/occupazione");
+                    image.put("restLink",REST+s);
+                    //----------------------------
+
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getOccupationImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor","occu_"+building + "-" + floorString+".png");
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s + ".png");
+                    //image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + building + "-" + floorString+".png");
+                    image.put("PNGLink",RESOURCE+s);
                     floor.put("imageFloorSpace",image);
 
+                    //------------------------------------------
                     image = new JSONObject();
-                    image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/lavoro");
-                    image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ building + "-" + floorString +".png");
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getWorkImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor",building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString + "/lavoro");
+                    image.put("restLink",REST+s);
+
+                    //---------------------------------
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getWorkImage");
+                    m = new HashMap<>();
+                    m.put("buildingFloor","work_"+building + "-" + floorString+".png");
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s + ".png");
+                    //image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ building + "-" + floorString +".png");
+                    image.put("PNGLink",RESOURCE+s);
                     floor.put("imageFloorWork",image);
 
+                    //-------------------
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getSimpleListOfRoomOnFloor");
+                    m = new HashMap<>();
+                    m.put("buildingFloor", building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //floor.put("infoRoomsList","/rest/edifici/"+building+"-"+floorString+"/stanze");
+                    floor.put("infoRoomsList",REST+s);
 
-                    floor.put("infoRoomsList","/rest/edifici/"+building+"-"+floorString+"/stanze");
-                    floor.put("infoFloorWork","/rest/edifici/"+building+"-"+floorString+"/lavoro/persone");
-                    floor.put("infoFloorSpace","/rest/edifici/"+building+"-"+floorString+"/occupazione/stanze");
+                    //-------------------
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getEndWorkPeopleOnFloor");
+                    m = new HashMap<>();
+                    m.put("buildFloor", building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //floor.put("infoFloorWork","/rest/edifici/"+building+"-"+floorString+"/lavoro/persone");
+                    floor.put("infoFloorWork",REST+s);
+
+                    //-------------------
+                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getOccRoomsOnFloor");
+                    m = new HashMap<>();
+                    m.put("buildFloor", building + "-" + floorString);
+                    s+=u.buildFromEncodedMap(m).toString();
+                    //System.out.println("mi da ................" + s);
+                    //floor.put("infoFloorSpace","/rest/edifici/"+building+"-"+floorString+"/occupazione/stanze");
+                    floor.put("infoFloorSpace",REST+s);
                     //senza spazio
                     floor.put("floor", floorString);
                     arr.add(floor);
@@ -466,6 +595,7 @@ public class JaxRestBuildings {
     }
 
     private JSONObject parseBuildingFloorJson(String buildingFloor){
+
         JSONObject build = new JSONObject();
         JSONObject image;
         String buildFloor = buildingFloor.replace(' ','_');
@@ -473,25 +603,100 @@ public class JaxRestBuildings {
         image = new JSONObject();
         build.put("buildingFloor",""+buildFloor);
 
-        image.put("restLink","/rest/immagini/edifici/" + buildFloor);
-        image.put("PNGLink","/risorse/immagini/edifici/" + buildFloor + ".png");
+        //--------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getFloorImage");
+        m = new HashMap<>();
+        m.put("buildingFloor",buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //image.put("restLink","/rest/immagini/edifici/" + buildFloor);
+        image.put("restLink",REST+s);
+
+        //-----------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getFloorImage");
+        m = new HashMap<>();
+        m.put("buildingFloor",buildFloor+".png");
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s + ".png");
+        //image.put("PNGLink","/risorse/immagini/edifici/" + buildFloor + ".png");
+        image.put("PNGLink",RESOURCE+s);
         build.put("imageFloor",image);
 
+        //----------------------
         image = new JSONObject();
-        image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/occupazione");
-        image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + buildFloor+".png");
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getOccupationImage");
+        m = new HashMap<>();
+        m.put("buildingFloor",buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/occupazione");
+        image.put("restLink",REST+s);
+
+        //--------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getOccupationImage");
+        m = new HashMap<>();
+        m.put("buildingFloor","occu_"+buildFloor+".png");
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s + ".png");
+        //image.put("PNGLink","/risorse/immagini/edifici/occupazione/occu_" + buildFloor+".png");
+        image.put("PNGLink",RESOURCE+s);
         build.put("imageFloorSpace",image);
 
+        //------------------------------------------------------------------------------
         image = new JSONObject();
-        image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/lavoro");
-        image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ buildFloor +".png");
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getWorkImage");
+        m = new HashMap<>();
+        m.put("buildingFloor",buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //image.put("restLink","/rest/immagini/edifici/" + buildFloor + "/lavoro");
+        image.put("restLink",REST+s);
+
+        //-------------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getWorkImage");
+        m = new HashMap<>();
+        m.put("buildingFloor","work_"+buildFloor+".png");
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s + ".png");
+        //image.put("PNGLink","/risorse/immagini/edifici/lavoro/work_"+ buildFloor +".png");
+        image.put("PNGLink",RESOURCE+s);
         build.put("imageFloorWork",image);
 
+        //-----------------------------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getSimpleListOfRoomOnFloor");
+        m = new HashMap<>();
+        m.put("buildingFloor", buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //build.put("roomsList","/rest/edifici/"+buildFloor+"/stanze");
+        build.put("roomsList",REST+s);
 
+        //-------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getEndWorkPeopleOnFloor");
+        m = new HashMap<>();
+        m.put("buildFloor", buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //build.put("infoFloorWork","/rest/edifici/"+buildFloor+"/lavoro/persone");
+        build.put("infoFloorWork",REST+s);
 
-        build.put("roomsList","/rest/edifici/"+buildFloor+"/stanze");
-        build.put("infoFloorWork","/rest/edifici/"+buildFloor+"/lavoro/persone");
-        build.put("infoFloorSpace","/rest/edifici/"+buildFloor+"/occupazione/stanze");
+        //-------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getOccRoomsOnFloor");
+        m = new HashMap<>();
+        m.put("buildFloor", buildFloor);
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................" + s);
+        //build.put("infoFloorSpace","/rest/edifici/"+buildFloor+"/occupazione/stanze");
+        build.put("infoFloorSpace",REST+s);
 
 
         return build;

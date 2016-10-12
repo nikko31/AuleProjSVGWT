@@ -3,19 +3,26 @@ package com.auleSVGWT.server;
 import com.auleSVGWT.server.domain.*;
 import com.auleSVGWT.util.HibernateUtil;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import javax.ws.rs.core.UriBuilder;
+import java.util.*;
 
 
 public class DatabaseM {
+    public static String REST="/rest";
+    public static String RESOURCE ="/risorse/immagini";
+    private String s;
+    private UriBuilder u;
+    private Map<String,String> m;
 
 
+    public DatabaseM() {
+    }
 
 
     //----------------------------------------------------------PERSON----------------------------------------------------
@@ -24,15 +31,21 @@ public class DatabaseM {
     public ArrayList<Person> getPeopleInRoom(String building, String floorSt, String numberSt){
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        String correctBuilding= building.replace("'","''");
+        //String correctBuilding= building.replace("'","''");
 
         ArrayList<Person> people = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  where o.room.building.name='" + correctBuilding + "' and " +
-                    "o.room.floor=" + floor + " and o.room.number="+number).list());
+            /*people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  where o.room.building.name='" + correctBuilding + "' and " +
+                    "o.room.floor=" + floor + " and o.room.number="+number).list());*/
+            Query q = session.createQuery("select o.person from Occupy o join o.person  join fetch o.person.role  " +
+                    "where o.room.building.name= :building  and o.room.floor= :floor and o.room.number= :number");
+            q.setString("building", building);
+            q.setInteger("floor", floor);
+            q.setInteger("number", number);
+            people=new ArrayList<Person>(q.list());
 
             tx.commit();
         }
@@ -59,13 +72,20 @@ public class DatabaseM {
 
         String sost1 = part1;
         String sost2 = part2;
-        sost1 = sost1.replaceAll("'","''");
-        sost2 = sost2.replaceAll("'", "''");
+        //sost1 = sost1.replaceAll("'","''");
+        //sost2 = sost2.replaceAll("'", "''");
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where (o.name='" + sost1 + "' and o.surname='" + sost2 + "') or (" +
-                    "o.surname='"+sost1+"' and o.name='"+sost2+"')").list()));
+            Query q = session.createQuery("select p from Person p join fetch p.role where (p.name = :name1 and p.surname = :surname1) or(p.name = :name2 and p.surname = :surname2)");
+            /*ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where (o.name='" + sost1 + "' and o.surname='" + sost2 + "') or (" +
+                    "o.surname='"+sost1+"' and o.name='"+sost2+"')").list()));*/
+            q.setString("name1",part1);
+            q.setString("surname1",part2);
+            q.setString("name2", part2);
+            q.setString("surname2", part1);
+
+            ArrayList<Person> people = new ArrayList<>(q.list());
 
             peopleJson = parsePeople(people);
             tx.commit();
@@ -104,7 +124,12 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where o.id="+i).list()));
+            //ArrayList<Person> people =  new ArrayList<>(( session.createQuery("select o from Person o where o.id="+i).list()));
+            Query q = session.createQuery("select p from Person p join fetch p.role where p.id= :id");
+            q.setInteger("id", i);
+            ArrayList<Person> people =  new ArrayList<>(q.list());
+
+
             if(people.size()==1){
                 nullFlag=false;
                 personJson = parsePerson(people.get(0));
@@ -139,8 +164,12 @@ public class DatabaseM {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people = new ArrayList<Person>((session.createQuery("select o from Person o where o.name like '" + searchCorrect + "%' or o.surname like '" + searchCorrect + "%'").list()));
-
+            /*ArrayList<Person> people = new ArrayList<Person>((session.createQuery("select o from Person o
+            where o.name like '" + searchCorrect + "%' or o.surname like '" + searchCorrect + "%'").list()));*/
+            Query q = session.createQuery("select o from Person o where o.name like :search1  or o.surname like :search2");
+            q.setString("search1",search+"%");
+            q.setString("search2", search + "%");
+            ArrayList<Person> people = new ArrayList<Person>(q.list());
             Collections.sort(people, Person.getCompByNameaftSurname());
 
             if (people.size() != 0) {
@@ -180,7 +209,11 @@ public class DatabaseM {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.id=" + i).list());
+            //ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.id=" + i).list());
+            Query q = session.createQuery("select o.person from Occupy o where o.room.id= :i");
+            q.setInteger("i", i);
+            ArrayList<Person> people = new ArrayList<Person>(q.list());
+
 
             Collections.sort(people,Person.getCompByNameaftSurname());
             peopleJson = parsePeople(people);
@@ -209,15 +242,22 @@ public class DatabaseM {
     public JSONArray getPeopleInRoomJson(String building, String floorSt, String numberSt){
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        String correctBuilding= building.replace("'", "''");
+        //String correctBuilding= building.replace("'", "''");
         JSONArray peopleJson = new JSONArray();
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + correctBuilding+ "' and " +
-                    "o.room.floor=" + floor + " and o.room.number="+number).list());
+            /*ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select o.person from Occupy o where o.room.building.name='" + correctBuilding+ "' and " +
+                    "o.room.floor=" + floor + " and o.room.number="+number).list());*/
+            Query q = session.createQuery("select o.person from Occupy o join o.person join fetch o.person.role " +
+                    "where o.room.building.name= :building and  o.room.floor= :floor and o.room.number= :number");
+            q.setInteger("number",number);
+            q.setInteger("floor",floor);
+            q.setString("building", building);
+
+            ArrayList<Person> people = new ArrayList<Person>(q.list());
 
             Collections.sort(people,Person.getCompByNameaftSurname());
             peopleJson = parsePeople(people);
@@ -246,7 +286,7 @@ public class DatabaseM {
     public JSONArray getOccupyOfFloorwithDateJson(String building, String floorSt){
 
         int floor = Integer.parseInt(floorSt);
-        String correctBuilding= building.replace("'", "''");
+        //String correctBuilding= building.replace("'", "''");
         JSONArray peopleJson = new JSONArray();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -254,8 +294,14 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + correctBuilding +
-                    "' and occ.room.floor=" + floor +" and occ.person.endWork <= CURRENT_DATE() group by occ.person.id").list() );
+            /*ArrayList<Person> people = new ArrayList<Person>(session.createQuery("select occ.person from Occupy occ where occ.room.building.name='" + correctBuilding +
+                    "' and occ.room.floor=" + floor +" and occ.person.endWork <= CURRENT_DATE() group by occ.person.id").list() );*/
+            Query q = session.createQuery("select distinct occ.person from Occupy occ " +
+                    "where occ.room.building.name= :building and occ.room.floor= :floor and occ.person.endWork <= CURRENT_DATE()");
+            q.setInteger("floor",floor);
+            q.setString("building",building);
+            ArrayList<Person> people = new ArrayList<>(q.list());
+
 
             ArrayList<Person> filteredPeople = new ArrayList<>();
             for(Person person : people){
@@ -329,13 +375,20 @@ public class DatabaseM {
         Transaction tx = null;
         String sost1 = part1;
         String sost2 = part2;
-        sost1 = sost1.replaceAll("'","''");
-        sost2 = sost2.replaceAll("'", "''");
+        //sost1 = sost1.replaceAll("'","''");
+        //sost2 = sost2.replaceAll("'", "''");
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where (o.person.name='" + sost1 + "' and o.person.surname='" + sost2 + "')" +
-                    "or(o.person.name='" + sost2 +"' and o.person.surname='" + sost1 + "')").list()));
+            /*ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where (o.person.name='" + sost1 + "' and o.person.surname='" + sost2 + "')" +
+                    "or(o.person.name='" + sost2 +"' and o.person.surname='" + sost1 + "')").list()));*/
+            Query q = session.createQuery("select o.room from Occupy o " +
+                    "where (o.person.name= :name1 and o.person.surname=:surname1) or(o.person.name= :name2 and o.person.surname= :surname2)");
+            q.setString("name1",part1);
+            q.setString("surname1",part2);
+            q.setString("name2",part2);
+            q.setString("surname2",part1);
+            ArrayList<Room> rooms =  new ArrayList<Room>(q.list());
 
             Collections.sort(rooms,Room.getCompByName());
             Collections.sort(rooms,Room.getCompByNumber());
@@ -369,7 +422,11 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where o.person.id=" +i).list()));
+            //ArrayList<Room> rooms =  new ArrayList<Room>(( session.createQuery("select o.room from Occupy o where o.person.id=" +i).list()));
+            Query q = session.createQuery("select o.room from Occupy o where o.person.id= :i");
+            q.setInteger("i", i);
+            ArrayList<Room> rooms =  new ArrayList<Room>(q.list());
+
 
             Collections.sort(rooms,Room.getCompByName());
             Collections.sort(rooms,Room.getCompByNumber());
@@ -407,7 +464,11 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where Room.id="+i).list());
+            //ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where Room.id="+i).list());
+            Query q = session.createQuery("select o.room from Occupy o where o.id= :i");
+            q.setInteger("i", i);
+            ArrayList<Room> rooms =  new ArrayList<Room>(q.list());
+
             if(rooms.size()==1){
                 roomJson = parseRoom(rooms.get(0));
             }else{
@@ -439,7 +500,7 @@ public class DatabaseM {
         boolean nullFlag=true;
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        String correctBuilding= building.replace("'", "''");
+        //String correctBuilding= building.replace("'", "''");
         JSONObject roomJson = new JSONObject();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -447,7 +508,13 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + correctBuilding + "' and floor=" + floor + " and number="+number).list());
+            //ArrayList<Room> rooms = new ArrayList<>(session.createQuery("from Room where building.name='" + correctBuilding + "' and floor=" + floor + " and number="+number).list());
+            Query q = session.createQuery("from Room where building.name= :building and floor= :floor and number= :number");
+            q.setInteger("number",number);
+            q.setInteger("floor",floor);
+            q.setString("building", building);
+            ArrayList<Room> rooms = new ArrayList<>(q.list());
+
             if(rooms.size()==1){
                 nullFlag= false;
                 roomJson = parseRoom(rooms.get(0));
@@ -479,16 +546,23 @@ public class DatabaseM {
     public JSONArray getOccupyOfFloorwithDimensionJson(String building, String floorSt){
 
         int floor = Integer.parseInt(floorSt);
-        String correctBuilding= building.replace("'", "''");
+        //String correctBuilding= building.replace("'", "''");
         JSONArray roomsJson = new JSONArray();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
 
         try {
             tx = session.beginTransaction();
-            ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("select room from Occupy occ where  " +
+            /*ArrayList<Room> rooms = new ArrayList<Room>(session.createQuery("select room from Occupy occ where  " +
                     "occ.room.building.name ='"+correctBuilding+"'" +"and occ.room.floor="+floor +
-                    " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());
+                    " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ").list());*/
+
+            Query q = session.createQuery("select room from Occupy occ " +
+                    "where occ.room.building.name = :building and occ.room.floor = :floor" +
+                    " and occ.room.dimension <(select sum(o.person.role.sqm) from Occupy o where o.room.id = occ.room.id) Group by occ.room.id ");
+            q.setInteger("floor", floor);
+            q.setString("building", building);
+            ArrayList<Room> rooms = new ArrayList<Room>(q.list());
 
             Collections.sort(rooms,Room.getCompByNumber());
             roomsJson = parseRooms(rooms);
@@ -528,8 +602,15 @@ public class DatabaseM {
 
         try {
             tx = session.beginTransaction();
-            rooms = new ArrayList<Room>(session.createQuery("select r from Room r join fetch r.building  where r.building.name='" + correctBuilding + "' and r.floor=" + floor + " " +
-                    "and r.number="+number).list());
+            /*rooms = new ArrayList<Room>(session.createQuery("select r from Room r join fetch r.building  where r.building.name='" + correctBuilding + "' and r.floor=" + floor + " " +
+                    "and r.number="+number).list());*/
+            Query q = session.createQuery("select r from Room r join fetch r.building  " +
+                            "where r.building.name= :building  and r.floor= :floor and r.number= :number");
+            q.setInteger("number",number);
+            q.setInteger("floor",floor);
+            q.setString("building",building);
+            rooms = new ArrayList<Room>(q.list());
+
             tx.commit();
         }
         catch (Exception e) {
@@ -649,8 +730,14 @@ public class DatabaseM {
         }
 
 
-
-        personJSON.put("infoRoomsOfPerson","/rest/persone/"+person.getId()+"/stanze");
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestPeople.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestPeople.class, "getRoomsOfPerson");
+        m = new HashMap<>();
+        m.put("person", "" + person.getId());
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("mi da ................"+s);
+        //personJSON.put("infoRoomsOfPerson","/rest/persone/"+person.getId()+"/stanze");
+        personJSON.put("infoRoomsOfPerson",REST+s);
 
         return personJSON;
     }
@@ -677,10 +764,41 @@ public class DatabaseM {
 
         //hateoas
         String build = room.getBuilding().getName();
-        build = build.replace(' ','_');
-        roomJson.put("infoPeopleInRoom","/rest/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber()+"/persone");
-        image.put("restLink","/rest/immagini/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber());
-        image.put("PNGLink","/risorse/immagini/edifici/stanze/"+build+"-"+room.getFloor()+"-"+room.getNumber()+".png");
+        build = build.replace(' ', '_');
+
+
+
+        //--------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class,"getPeopleInRoom");
+        m = new HashMap<>();
+        m.put("buildFloor", ""+build+"-"+room.getFloor());
+        m.put("room", "" +room.getNumber());
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("esece..................." + s);
+        //roomJson.put("infoPeopleInRoom", "/rest/edifici/" + build + "-" + room.getFloor() + "/stanze/" + room.getNumber() + "/persone");
+        roomJson.put("infoPeopleInRoom", REST+s);
+
+        //-------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class,"getRoomImage");
+        m=new HashMap<>();
+        m.put("buildingFloor",""+build+"-"+room.getFloor());
+        m.put("numRoom", "" + room.getNumber());
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("esece..................." + s);
+        //image.put("restLink","/rest/immagini/edifici/"+build+"-"+room.getFloor()+"/stanze/"+room.getNumber());
+        image.put("restLink",REST+s);
+
+        //------------------------------
+        s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
+        u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getRoomImage");
+        m=new HashMap<>();
+        m.put("buildingFloorNumb",""+build+"-"+room.getFloor()+"-"+room.getNumber()+".png");
+        s+=u.buildFromEncodedMap(m).toString();
+        //System.out.println("esece..................."+s);
+        //image.put("PNGLink","/risorse/immagini/edifici/stanze/"+build+"-"+room.getFloor()+"-"+room.getNumber()+".png");
+        image.put("PNGLink",RESOURCE+s);
         roomJson.put("imageSelectRoom",image);
 
 
