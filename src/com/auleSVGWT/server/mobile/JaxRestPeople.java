@@ -1,12 +1,9 @@
-package com.auleSVGWT.server;
+package com.auleSVGWT.server.mobile;
+
 
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,14 +12,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
 
 @Path("/persone")
 public class JaxRestPeople {
-    private final String path = "/res/imageAndroid";
     private DatabaseM db;
     @Context
     private ServletContext servletContext;
@@ -242,36 +234,6 @@ public class JaxRestPeople {
     //-----------------------Controls------------------
 
 
-    private boolean controlBuildFloor( String buildFloor)throws Exception{
-        String fullPath = servletContext.getRealPath(path);
-        File folder = new File(fullPath);
-        File[] listOfFiles = folder.listFiles();
-        if(listOfFiles != null){
-            for (File file : listOfFiles) {
-
-                String filename = file.getName();
-                filename = filename.substring(0,filename.lastIndexOf("."));
-                if(buildFloor.equals(filename)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean controlBuildFloorRoom(String buildFloor,String room)throws Exception{
-
-        if(controlBuildFloor(buildFloor)){
-            ArrayList<String> numberRooms = listRoomsOnFloor(buildFloor);
-            for(String numberRoom : numberRooms){
-                if(numberRoom.equals(buildFloor+"-"+room)){
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
 
     private boolean controlOfLettersandSpaceOnly(String s) {
         System.out.println("control letter space only");
@@ -291,11 +253,7 @@ public class JaxRestPeople {
             }
         }
 
-        if(counter <=3 && counter>=1){
-            return true;
-        }else{
-            return false;
-        }
+        return counter <= 3 && counter >= 1;
 
 
 
@@ -330,61 +288,5 @@ public class JaxRestPeople {
         return true;
 
     }
-
-
-
-
-
-    public ArrayList<String> listRoomsOnFloor(String text){
-        String fullPath = servletContext.getRealPath(path);
-        URI uri = new File(fullPath+"/" + text + ".svg").toURI();
-        SVGMetaPost converter;
-        ArrayList<String> room = new ArrayList<>();
-        try{
-            converter = new SVGMetaPost( uri.toString() );
-            Document doc = converter.getSVGDocument();
-
-
-            NodeList n = doc.getElementsByTagName("rect");
-            NodeList p = doc.getElementsByTagName("path");
-            for(int i =0 ;i<n.getLength();i++){
-                //System.out.println(n.item(i).getTextContent());
-                if(((Element) n.item(i)).getAttribute("id").contains(text)){
-
-                    //System.out.println(((Element) n.item(i)).getAttribute("id"));
-                    room.add(((Element) n.item(i)).getAttribute("id"));
-
-
-                }
-            }
-            for(int i =0 ;i<p.getLength();i++) {
-                //System.out.println(p.item(i).getTextContent());
-                if(((Element) p.item(i)).getAttribute("id").contains(text)){
-
-                    System.out.println(((Element) p.item(i)).getAttribute("id"));
-                    room.add(((Element) p.item(i)).getAttribute("id"));
-
-
-                }
-            }
-
-
-        }catch (IOException e){
-            e.printStackTrace();
-            System.out.println("error: listRoomsOnFloor");
-        }
-
-
-
-
-
-        return room;
-
-    }
-
-
-
-
-
 
 }

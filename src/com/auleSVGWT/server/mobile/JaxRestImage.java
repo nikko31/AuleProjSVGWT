@@ -1,5 +1,7 @@
-package com.auleSVGWT.server;
+package com.auleSVGWT.server.mobile;
 
+import com.auleSVGWT.server.SVGMetaPost;
+import com.auleSVGWT.server.mobile.Converter.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
@@ -13,23 +15,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("/immagini/edifici")
 public class JaxRestImage {
     private final String path = "/res/imageAndroid";
     public static String REST="/rest";
     public static String RESOURCE ="/risorse/immagini";
-    private String s;
-    private UriBuilder u;
-    private Map<String,String> m;
+
 
     @Context
     private ServletContext servletContext;
@@ -40,8 +36,9 @@ public class JaxRestImage {
     public Response getBuildingsFloor() {
 
         try {
-
-                String buildings = parseBuildings().toString();
+                ImageBuildingsToJson imageBuildingsToJson = new ImageBuildingsToJson();
+                JSONArray arr = imageBuildingsToJson.convert(servletContext.getRealPath(path));
+                String buildings = arr.toString();
                 return Response.ok(buildings, MediaType.APPLICATION_JSON).build();
 
 
@@ -61,8 +58,10 @@ public class JaxRestImage {
         try {
             String build = buildingFloor.replace('_', ' ');
             if (controlBuildFloor(build)) {
-                JSONObject obj = new JSONObject();
-                JSONObject image;
+                ImageBuildingToJson imageBuildingToJson = new ImageBuildingToJson();
+
+                JSONObject obj = imageBuildingToJson.convert(buildingFloor);
+                /*JSONObject image;
                 obj.put("name",""+buildingFloor);
                 obj.put("extension","png");
                 obj.put("height","1280");
@@ -70,8 +69,8 @@ public class JaxRestImage {
 
 
                 //----------------------------image-floor-link---------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class,"getFloorImage");
+                s=UriBuilder.fromResource(ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(ImagesHandler.class,"getFloorImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",buildingFloor+".png");
                 s+=u.buildFromEncodedMap(m).toString();
@@ -80,8 +79,8 @@ public class JaxRestImage {
                 obj.put("PNGLink",RESOURCE+s);
 
                 //--------------------rest-occupation-floor-link-------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class,"getOccupationImage");
+                s=UriBuilder.fromResource(JaxRestImage.class).toString();
+                u =UriBuilder.fromMethod(JaxRestImage.class,"getOccupationImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
@@ -92,8 +91,8 @@ public class JaxRestImage {
                 obj.put("imageFloorSpace",image);
 
                 //----------------------------------rest-work-image-link----------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getWorkImage");
+                s=UriBuilder.fromResource(JaxRestImage.class).toString();
+                u =UriBuilder.fromMethod(JaxRestImage.class, "getWorkImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
@@ -104,8 +103,8 @@ public class JaxRestImage {
                 obj.put("imageFloorWork",image);
 
                 //--------------------rest-rooms-image-link----------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getRoomsImage");
+                s=UriBuilder.fromResource(JaxRestImage.class).toString();
+                u =UriBuilder.fromMethod(JaxRestImage.class, "getRoomsImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
@@ -116,14 +115,14 @@ public class JaxRestImage {
                 obj.put("imagesSelectRoom",image);
 
                 //-----------------rest---building-info-link
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getBuildingFloorInfo");
+                s=UriBuilder.fromResource(JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(JaxRestBuildings.class, "getBuildingFloorInfo");
                 m = new HashMap<>();
                 m.put("buildingFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
                 //System.out.println("mi da ................" + s);
                 obj.put("infoBuildingFloor", REST + s);
-                //obj.put("infoBuildingFloor","/rest/edifici/"+buildingFloor);
+                //obj.put("infoBuildingFloor","/rest/edifici/"+buildingFloor);*/
 
                 return Response.ok(obj.toString(), MediaType.APPLICATION_JSON).build();
 
@@ -146,15 +145,17 @@ public class JaxRestImage {
         try {
             String build = buildingFloor.replace('_', ' ');
             if (controlBuildFloor(build)) {
-                JSONObject image = new JSONObject();
+                ImageOccupationToJson imageOccupationToJson = new ImageOccupationToJson();
+                JSONObject image = imageOccupationToJson.convert(buildingFloor);
+                /*
                 image.put("name","occu_"+buildingFloor);
                 image.put("extension","png");
                 image.put("height","1280");
                 image.put("width","720");
 
                 //--------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getOccupationImage");
+                s=UriBuilder.fromResource(ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(ImagesHandler.class, "getOccupationImage");
                 m = new HashMap<>();
                 m.put("buildingFloor","occu_"+buildingFloor+".png");
                 s+=u.buildFromEncodedMap(m).toString();
@@ -163,14 +164,14 @@ public class JaxRestImage {
                 image.put("PNGLink",RESOURCE+s);
 
                 //--------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getOccRoomsOnFloor");
+                s=UriBuilder.fromResource(JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(JaxRestBuildings.class, "getOccRoomsOnFloor");
                 m = new HashMap<>();
                 m.put("buildFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
                 //System.out.println("mi da ................" + s);
                 //image.put("infoFloorSpace","rest/edifici/"+buildingFloor+"/occupazione/stanze");
-                image.put("infoFloorSpace",REST+s);
+                image.put("infoFloorSpace",REST+s);*/
 
 
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
@@ -198,8 +199,9 @@ public class JaxRestImage {
             String build = buildingFloor.replace('_', ' ');
             if (controlBuildFloor(build)) {
 
-
-                JSONObject image = new JSONObject();
+                ImageWorkToJson imageWorkToJson = new ImageWorkToJson();
+                JSONObject image = imageWorkToJson.convert(buildingFloor);
+                /*
                 image.put("name", "work_" + buildingFloor);
                 image.put("extension","png");
                 image.put("height","1280");
@@ -207,8 +209,8 @@ public class JaxRestImage {
 
 
                 //--------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class, "getWorkImage");
+                s=UriBuilder.fromResource(ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(ImagesHandler.class, "getWorkImage");
                 m = new HashMap<>();
                 m.put("buildingFloor","work_"+buildingFloor+".png");
                 s+=u.buildFromEncodedMap(m).toString();
@@ -217,14 +219,14 @@ public class JaxRestImage {
                 image.put("PNGLink",RESOURCE+s);
 
                 //------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getEndWorkPeopleOnFloor");
+                s=UriBuilder.fromResource(JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(JaxRestBuildings.class, "getEndWorkPeopleOnFloor");
                 m = new HashMap<>();
                 m.put("buildFloor",buildingFloor);
                 s+=u.buildFromEncodedMap(m).toString();
                 //System.out.println("mi da ................" + s);
                 //image.put("infoFloorWork","rest/edifici/"+buildingFloor+"/lavoro/persone");
-                image.put("infoFloorWork",REST+s);
+                image.put("infoFloorWork",REST+s);*/
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
             }
@@ -247,6 +249,9 @@ public class JaxRestImage {
 
             String build = buildingFloor.replace('_', ' ');
             if(controlBuildFloor(build)){
+                ImageRoomsListToJson imageRoomsListToJson = new ImageRoomsListToJson(buildingFloor);
+                JSONObject image = imageRoomsListToJson.convert(listRoomsOnFloor(build));
+                /*
                 JSONObject image = new JSONObject();
                 image.put("buildingFloor", "" + buildingFloor);
                 JSONArray link = new JSONArray();
@@ -258,8 +263,8 @@ public class JaxRestImage {
                     String number = room.substring(room.lastIndexOf('-')+1);
 
                     //--------------------------------
-                    s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
-                    u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class, "getRoomImage");
+                    s=UriBuilder.fromResource(JaxRestImage.class).toString();
+                    u =UriBuilder.fromMethod(JaxRestImage.class, "getRoomImage");
                     m = new HashMap<>();
                     m.put("buildingFloor",buildFloor);
                     m.put("numRoom",number);
@@ -268,7 +273,7 @@ public class JaxRestImage {
                     //link.add("/rest/immagini/edifici/"+buildFloor+"/stanze/"+number);
                     link.add(REST+s);
                 }
-                image.put("link",link);
+                image.put("link",link);*/
 
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
@@ -294,7 +299,10 @@ public class JaxRestImage {
         try{
             String build = buildingFloor.replace('_', ' ');
             if(controlBuildFloorRoom(build, numRoom)){
-                JSONObject image = new JSONObject();
+
+                ImageRoomToJson imageRoomToJson = new ImageRoomToJson(buildingFloor);
+                JSONObject image = imageRoomToJson.convert(numRoom);
+                /*
                 image.put("name", ""+buildingFloor+"-"+numRoom);
                 image.put("extension","png");
                 image.put("height", "1280");
@@ -302,8 +310,8 @@ public class JaxRestImage {
 
 
                 //--------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class,"getRoomImage");
+                s=UriBuilder.fromResource(ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(ImagesHandler.class,"getRoomImage");
                 m = new HashMap<>();
                 m.put("buildingFloorNumb",buildingFloor+"-"+numRoom+".png");
                 s+=u.buildFromEncodedMap(m).toString();
@@ -312,15 +320,15 @@ public class JaxRestImage {
                 image.put("PNGLink",RESOURCE+s);
 
                 //------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class, "getRoomInfo");
+                s=UriBuilder.fromResource(JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(JaxRestBuildings.class, "getRoomInfo");
                 m = new HashMap<>();
                 m.put("buildFloor",buildingFloor);
                 m.put("room",numRoom);
                 s+=u.buildFromEncodedMap(m).toString();
                 //System.out.println("mi da ................" + s);
                 //image.put("infoSelectRoom","/rest/edifici/"+buildingFloor+ "/stanze/" + numRoom);
-                image.put("infoSelectRoom",REST+s);
+                image.put("infoSelectRoom",REST+s);*/
                 return Response.ok(image.toString(), MediaType.APPLICATION_JSON).build();
 
             }
@@ -411,6 +419,7 @@ public class JaxRestImage {
 
     }
 
+    /*
     private JSONArray parseBuildings()throws Exception{
 
 
@@ -488,8 +497,8 @@ public class JaxRestImage {
 
 
                 //--------------------------------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestImage.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestImage.class,"getFloorImage");
+                s=UriBuilder.fromResource(JaxRestImage.class).toString();
+                u =UriBuilder.fromMethod(JaxRestImage.class,"getFloorImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",building+"-"+floorString);
                 s+=u.buildFromEncodedMap(m).toString();
@@ -497,8 +506,8 @@ public class JaxRestImage {
                 //image.put("restLink","/rest/immagini/edifici/" + building + "-" + floorString);
                 image.put("restLink",REST+s);
                 //-------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.ImagesHandler.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.ImagesHandler.class,"getFloorImage");
+                s=UriBuilder.fromResource(ImagesHandler.class).toString();
+                u =UriBuilder.fromMethod(ImagesHandler.class,"getFloorImage");
                 m = new HashMap<>();
                 m.put("buildingFloor",building+"-"+floorString+".png");
                 s+=u.buildFromEncodedMap(m).toString();
@@ -507,8 +516,8 @@ public class JaxRestImage {
                 image.put("PNGLink",RESOURCE+s);
                 floor.put("imageFloor",image);
                 //-----------
-                s=UriBuilder.fromResource(com.auleSVGWT.server.JaxRestBuildings.class).toString();
-                u =UriBuilder.fromMethod(com.auleSVGWT.server.JaxRestBuildings.class,"getBuildingFloorInfo");
+                s=UriBuilder.fromResource(JaxRestBuildings.class).toString();
+                u =UriBuilder.fromMethod(JaxRestBuildings.class,"getBuildingFloorInfo");
                 m = new HashMap<>();
                 m.put("buildingFloor", building + "-" + floorString);
                 s+=u.buildFromEncodedMap(m).toString();
@@ -533,6 +542,6 @@ public class JaxRestImage {
         }
 
         return buildingsFloors;
-    }
+    }*/
 }
 

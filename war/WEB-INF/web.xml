@@ -20,7 +20,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
-            <param-value>com.auleSVGWT.server.JaxApplication</param-value>
+            <param-value>com.auleSVGWT.server.mobile.JaxApplication</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -33,7 +33,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
-            <param-value>com.auleSVGWT.server.JaxApplicationTwo</param-value>
+            <param-value>com.auleSVGWT.server.mobile.JaxApplicationTwo</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

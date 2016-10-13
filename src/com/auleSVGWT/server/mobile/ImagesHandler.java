@@ -1,10 +1,11 @@
-package com.auleSVGWT.server;
+package com.auleSVGWT.server.mobile;
 
 
-import com.auleSVGWT.client.dto.PersonDTO;
 import com.auleSVGWT.client.shared.Global;
+import com.auleSVGWT.server.SVGMetaPost;
 import com.auleSVGWT.server.domain.Person;
 import com.auleSVGWT.server.domain.Room;
+import com.auleSVGWT.server.mobile.DatabaseM;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;

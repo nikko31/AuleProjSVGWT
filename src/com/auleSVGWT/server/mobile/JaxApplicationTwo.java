@@ -1,4 +1,4 @@
-package com.auleSVGWT.server;
+package com.auleSVGWT.server.mobile;
 
 import javax.ws.rs.core.Application;
 import java.util.HashSet;

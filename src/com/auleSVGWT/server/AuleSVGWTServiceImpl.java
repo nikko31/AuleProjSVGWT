@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSVGWTService {
     private static final String addImageGWT = "/res/imageGWT";
-    // Implementation of sample interface method
+
 
 
     //--------------------------ROOM
@@ -171,18 +171,12 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
     @Override
     public Long saveRoomOccupy(ArrayList<Long> ids, ArrayList<OccupyDTO> occupyDTOs) {
-        /*System.out.println("sono nel saveroom");
-        for(OccupyDTO occupyDTO: occupyDTOs){
-            System.out.println(occupyDTO.getPerson().getName() + occupyDTO.getPerson().getSurname());
 
-        }*/
-
-        System.out.println("sono quie e......." +ids.size()+occupyDTOs.size());
 
 
 
         for (Long id : ids) {
-            System.out.println("sto cancellando id ................" + id);
+
             Session session = HibernateUtil.getSessionFactory().openSession();
             Transaction tx = null;
             try {
@@ -324,7 +318,6 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     @Override
     public ArrayList<RoomPeopleDTO> getRoomsPeople(String building, String floorSt) {
         int floor = Integer.parseInt(floorSt);
-        //String correctBuilding= building.replace("'", "''");
         ArrayList<RoomPeopleDTO> roomPeopleDTO = new ArrayList<>();
         ArrayList<Person> people;
         ArrayList<Long> occ;
@@ -339,8 +332,6 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             q.setInteger("floor",floor);
             ArrayList<Room> rooms = new ArrayList<>(q.list());
 
-            /*ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select o from Room o join fetch o.building where o.floor="
-                    + floor + " and o.building.name='" + correctBuilding + "'").list());*/
             for (Room room : rooms) {
                 q = session.createQuery("select o from Occupy o   " +
                         "where o.room.floor= :floor and o.room.number= :number  and o.room.building.name= :building");
@@ -349,8 +340,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
                 q.setInteger("number",room.getNumber());
 
                 ArrayList<Occupy> occupies= new ArrayList<>(q.list());
-                /*ArrayList<Occupy> occupies = new ArrayList<>(session.createQuery("select o from Occupy o   where o.room.floor="
-                        + floor + " and o.room.number=" + room.getNumber() + " and o.room.building.name='" + correctBuilding + "'").list());*/
+
                 people = new ArrayList<>();
                 occ = new ArrayList<>();
                 for(Occupy occupy :occupies){
@@ -414,13 +404,11 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     public RoomPeopleDTO getRoomPeople(String building, String floorSt, String numberSt) {
         int number = Integer.parseInt(numberSt);
         int floor = Integer.parseInt(floorSt);
-        //String correctBuilding= building.replace("'", "''");
         Room room1;
         ArrayList<Occupy> o;
         ArrayList<Long> occ= new ArrayList<>();
         ArrayList<Person> people = new ArrayList<>();
         RoomPeopleDTO roomPeopleDTO = new RoomPeopleDTO();
-        //boolean check = true;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
 
@@ -433,8 +421,6 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             q.setInteger("floor", floor);
             q.setInteger("number",number);
             o = new ArrayList<>(q.list());
-            /*o = new ArrayList<>(session.createQuery("select o from Occupy o  where o.room.floor="
-                    + floor + " and o.room.number=" + number + " and o.room.building.name='" + correctBuilding + "'").list());*/
 
             q = session.createQuery("select o from Room o join fetch o.building " +
                     "where o.floor= :floor and o.number= :number and o.building.name= :building");
@@ -442,8 +428,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
             q.setInteger("floor", floor);
             q.setInteger("number",number);
             ArrayList<Room> rooms = new ArrayList<>(q.list());
-            /*ArrayList<Room> rooms = new ArrayList<>(session.createQuery("select o from Room o join fetch o.building where o.floor="
-                    + floor + " and o.number=" + number + " and o.building.name='" + correctBuilding + "'").list());*/
+
 
             for(Occupy occupy : o){
                 people.add(occupy.getPerson());
@@ -543,6 +528,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
 
         return rolesDTO;
     }
+
 
     @Override
     public ArrayList<String> listaAulePiano(String edificiopiano) {
@@ -645,7 +631,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         try {
             ServletContext context = getServletContext();
             String fullPath = context.getRealPath(addImageGWT);
-            //System.out.println("55555555555555555....."+fullPath+".....555555555555");
+
 
             File folder = new File(fullPath);
             File[] listOfFiles = folder.listFiles();
@@ -661,8 +647,7 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
         }
 
         for (String s : string) {
-            //System.out.println(s.substring(0,s.lastIndexOf('-')));
-            //System.out.println(s.substring(s.lastIndexOf('-')+1,s.lastIndexOf('.')));
+
             if (buildings.containsKey(s.substring(0, s.lastIndexOf('-')))) {
                 ArrayList<String> floors = new ArrayList<>();
                 floors = buildings.get(s.substring(0, s.lastIndexOf('-')));
@@ -773,16 +758,12 @@ public class AuleSVGWTServiceImpl extends RemoteServiceServlet implements AuleSV
     //--------------------------------------------DA APPROVARE-----------------------------
 
     public ArrayList<OccupyDTO> getOccupySearch(String part1, String part2) {
-        String sost1 = part1;
-        String sost2 = part2;
-        //sost1 = sost1.replaceAll("'","''");
-        //sost2 = sost2.replaceAll("'", "''");
+
         ArrayList<OccupyDTO> occupyDTO = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            //ArrayList<Occupy> occup = new ArrayList<>((session.createQuery("from Occupy where person.name='" + sost1 + "' and person.surname='" + sost2 + "'").list()));
             Query q = session.createQuery("from Occupy where person.name= :sost1 and person.surname= :sost2");
             q.setString("sost1",part1);
             q.setString("sost2",part2);
